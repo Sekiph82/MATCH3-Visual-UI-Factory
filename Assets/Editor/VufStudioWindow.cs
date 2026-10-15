@@ -149,12 +149,14 @@ namespace Match3.VisualFactory.Editor
                 new[] { "0.25x", "0.5x", "1x", "2x" });
             using (new EditorGUILayout.HorizontalScope())
             {
-                GUI.enabled = source != null && !reducedMotion && frames > 1;
+                bool canStep = source != null && frames > 1;
+                GUI.enabled = canStep && !reducedMotion;
                 if (GUILayout.Button(playing ? "Pause" : "Play"))
                 {
                     playing = !playing;
                     frameAccumulator = 0;
                 }
+                GUI.enabled = canStep;
                 if (GUILayout.Button("Previous")) { playing = false; frame = (frame + frames - 1) % frames; }
                 if (GUILayout.Button("Next")) { playing = false; frame = (frame + 1) % frames; }
                 GUI.enabled = true;
