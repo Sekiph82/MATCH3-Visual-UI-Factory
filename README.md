@@ -1,25 +1,55 @@
 # MATCH3 Visual & UI Factory
 
-A shared Unity 6.6 visual-authoring tool for Coral Rescue, Garage Legends, Dino Islands, The Fractured Realms, and Wonder Pop.
+**Five Match3 games, one shared Unity visual production system.** Current state: **VUF-M00 foundation under active development, not audited or production-ready.**
 
-## Current state
+Games: `Coral_Rescue`, `Garage_Legends`, `Dino_Islands`, `The_Fractured_Realms`, `Wonder_Pop`.
 
-**M00 bootstrap/prototype, NOT a production-ready factory.** The first editor window can inspect an explicitly selected source Texture2D, preview horizontal sprite-sheet frames, adjust playback rate, and inspect aspect/safe-area guides. It is not an art generator or proof of full UI/VFX/animation/game integration. Unsupported inspector features are explicitly labeled.
+## What works at source level today
 
-**Upstream integration remains blocked** until the Engine and Level Factory have independently closed their required milestones. This repository must never ship artwork to the Engine, implement match rules, or silently award rewards.
+- Unity 6000.6.5f1 authoring shell and **local UPM** shared package at `unity_package/`, referenced by `Packages/manifest.json` as `file:../unity_package`.
+- **Tools > MATCH3 > Visual Factory Dashboard** lists the ten VF modules with truthful feature support status.
+- **Tools > MATCH3 > Visual & UI Factory Studio** manually previews imported original/licensed Texture2D horizontal sprite strips, frame stepping/speed, five profile and eight state selectors, simulated phone/tablet ratio overlays. Animation/VFX editing, real UI screens, integration and export are **NOT IMPLEMENTED**.
+- Five original, editable **DRAFT** style profiles in `factory/visual_director/style_profiles.v1.json`; owner creative approval remains open.
+- Stable **28-ID Coral Rescue** interface inventory in `schemas/coral-experiences.v1.json`, including Home and Gameplay/HUD. These are specifications, not 28 implemented screens.
+- **VF-02 offline content-addressed PNG asset catalog** at `factory/asset_catalog/catalog.py`, with explicit review receipts, immutable approved history, owner-controlled explicit replacement and SHA-256 blob checks. Approval strings are audit metadata, **not proof of an authenticated human signature**.
+- Python structural validators, adversarial unit tests and source-only GitHub Actions workflow; no Unity compilation claim without real Unity logs.
 
-## Unity setup (non-destructive)
+## Open in Unity Hub (existing folder, do not create duplicate checkout)
 
-1. Fetch this repository into the already existing local `MATCH3-Visual-UI-Factory` checkout, only after checking local modifications. Do not overwrite uncommitted work.
-2. In Unity Hub, **Add project from disk** and select that existing folder. Use Editor **6000.6.5f1**.
-3. Open **Tools > MATCH3 > Visual & UI Factory Studio**. The M00 manual texture/sprite-preview window will appear.
-4. To test the preview, select a licensed/original Texture2D already imported into this VUF project. Set horizontal frame count and playback.
-5. Run `python -m unittest discover -s tests -v` for manifest negative tests. No paid API, credentials or auto asset downloads are required.
+Use **Unity 6000.6.5f1**. In Unity Hub select **Add project from disk** and browse to the already present:
 
-## Roadmap
+`C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory`
 
-One factory, five themed design systems; 28 Coral Rescue experience IDs (26 requested plus Home and Gameplay), layered responsive runtime UI, editable sprites/atlases, animation and VFX, QA with human review, and versioned Unity export packages. Full VUF-M00..M11 acceptance criteria and dependency gates are tracked only in root `TASKS.md`.
+Before updating the existing folder, inspect uncommitted local changes and remote divergence; never reset, force-pull, overwrite untracked files or create duplicate clones. This cloud operation has NOT synced or installed files on the owner's PC.
 
-## Release safety
+Unity may generate `Library/`, `Temp/` and package metadata on first opening; these are local caches and must not be committed. Unity visual QA/device tests remain outstanding.
 
-No output here is an approved creative master. Owner-reviewed art must carry rights and source receipts. The studio's prototype overlay is **not** a real iOS/Android device test, a physical haptics test, or a production asset pack. Never put Editor scripts, references or test code inside players.
+## Offline asset catalog, no paid APIs
+
+Choose a separate, owner-controlled **store outside the repository**; the catalog explicitly rejects blob storage inside the tracked GitHub source tree.
+
+```powershell
+python factory/asset_catalog/catalog.py --store "D:\MATCH3_VISUAL_ASSETS" init
+
+python factory/asset_catalog/catalog.py --store "D:\MATCH3_VISUAL_ASSETS" ingest --file "D:\source\my-original.png" --profile Coral_Rescue --key "tile.star" --rights original --source-receipt "LOCAL_SOURCE_REFERENCE"
+
+python factory/asset_catalog/catalog.py --store "D:\MATCH3_VISUAL_ASSETS" verify
+
+python factory/asset_catalog/catalog.py --store "D:\MATCH3_VISUAL_ASSETS" export-preview --profile Coral_Rescue
+```
+
+`ingest` returns a candidate `revision_id`. Only after real owner review can the owner explicitly authorize an `approve --revision-id ... --owner-receipt ...` command. Replacing an active approved asset also **requires** `--replaces-revision-id <current_id>`. Neither `approve` nor `export-preview` publishes to a game. `export-preview` always reports `TEST_ONLY`, with upstream Engine/LFX SHAs unpinned.
+
+## Structural checks
+
+```powershell
+python -m unittest discover -s tests -v
+python factory/validators/validate_design.py
+python Tools/validate_manifest.py Samples~/sample_manifest.json
+```
+
+The CI workflow checks Python and structure only. Actual Unity Editor compilation, manual art/VFX lab operation, source rights, real devices and game integration require separate evidence before PASS.
+
+## Design and ownership
+
+See [architecture](docs/ARCHITECTURE.md) and root [TASKS.md](TASKS.md) for the VF-01..VF-10 module map, VUF-M00..M11 milestones, development sequence and protected upstream integration gates. Google Drive carries prompts and audit evidence, not GitHub. No production game asset pixels are imported into MATCH3_ENGINE.
