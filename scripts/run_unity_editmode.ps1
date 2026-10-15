@@ -4,7 +4,8 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$EvidenceDirectory,
-    [string]$UnityExe = ''
+    [string]$UnityExe = '',
+    [string]$ExpectedUntrackedManifest = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -35,8 +36,61 @@ if ($null -eq $git) { throw 'Git is required to pin the exact source SHA.' }
 Push-Location -LiteralPath $project
 try {
     $dirty = @(& $git.Source status --porcelain=v1 --untracked-files=normal)
-    if ($LASTEXITCODE -ne 0 -or $dirty.Count -gt 0) {
-        throw 'Local checkout is not clean; preserve/inspect changes before running.'
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Cannot inspect local checkout status.'
+    }
+    $trackedDirty = @($dirty | Where-Object { -not $_.StartsWith('?? ') })
+    if ($trackedDirty.Count -gt 0) {
+        throw 'Tracked checkout changes are present; preserve/inspect them before running.'
+    }
+    $untrackedPaths = @($dirty | Where-Object { $_.StartsWith('?? ') } |
+        ForEach-Object { $_.Substring(3).Replace('\', '/') })
+    if ($untrackedPaths.Count -gt 0 -or -not [string]::IsNullOrWhiteSpace($ExpectedUntrackedManifest)) {
+        if ([string]::IsNullOrWhiteSpace($ExpectedUntrackedManifest)) {
+            throw 'Untracked checkout files require an external SHA-256 manifest; preserve/inspect them before running.'
+        }
+        $manifestPath = [IO.Path]::GetFullPath($ExpectedUntrackedManifest)
+        if ($manifestPath.StartsWith($project + [IO.Path]::DirectorySeparatorChar,
+                                     [StringComparison]::OrdinalIgnoreCase) -or
+            -not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
+            throw 'Expected untracked manifest must be an existing file outside the project checkout.'
+        }
+        try {
+            $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+            $entries = @($manifest.files)
+            $manifestPaths = @($entries | ForEach-Object { [string]$_.path })
+        }
+        catch {
+            throw 'Expected untracked manifest is not valid JSON with a files array.'
+        }
+        if ($manifestPaths.Count -ne $untrackedPaths.Count -or
+            @($untrackedPaths | Where-Object { $_ -notin $manifestPaths }).Count -gt 0 -or
+            @($manifestPaths | Group-Object | Where-Object Count -gt 1).Count -gt 0) {
+            throw 'Untracked files do not exactly match the external SHA-256 manifest.'
+        }
+        foreach ($entry in $entries) {
+            $relativePath = ([string]$entry.path).Replace('/', [IO.Path]::DirectorySeparatorChar)
+            if ([IO.Path]::IsPathRooted($relativePath) -or
+                $relativePath.Split([IO.Path]::DirectorySeparatorChar) -contains '..' -or
+                [string]$entry.sha256 -notmatch '^[0-9a-fA-F]{64}$') {
+                throw 'Expected untracked manifest contains an unsafe path or invalid SHA-256.'
+            }
+            $artifactPath = [IO.Path]::GetFullPath((Join-Path $project $relativePath))
+            if (-not $artifactPath.StartsWith($project + [IO.Path]::DirectorySeparatorChar,
+                                               [StringComparison]::OrdinalIgnoreCase) -or
+                -not (Test-Path -LiteralPath $artifactPath -PathType Leaf)) {
+                throw "Expected Unity-generated file is missing or outside the project: $($entry.path)"
+            }
+            $artifact = Get-Item -LiteralPath $artifactPath -Force
+            if ($artifact.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                throw "Expected Unity-generated file is a reparse point: $($entry.path)"
+            }
+            $actualHash = (Get-FileHash -LiteralPath $artifactPath -Algorithm SHA256).Hash
+            if ($actualHash -ne [string]$entry.sha256) {
+                throw "Expected Unity-generated file hash changed: $($entry.path)"
+            }
+        }
+        Write-Host "Preserving $($untrackedPaths.Count) external-manifest-verified Unity import files."
     }
     $sha = (& $git.Source rev-parse HEAD).Trim()
     if ($LASTEXITCODE -ne 0 -or $sha.Length -ne 40) {
@@ -53,11 +107,11 @@ try {
     }
     Write-Host "Testing exact source revision $sha, no GitHub Actions."
     $arguments = @(
-        '-batchmode', '-nographics', '-quit',
+        '-batchmode', '-nographics',
         '-projectPath', ('"' + $project + '"'),
         '-runTests', '-testPlatform', 'EditMode',
         '-testResults', ('"' + $xmlPath + '"'),
-        '-logFile', ('"' + $logPath + '"')
+        '-logFile', ('"' + $logPath + '"'), '-quit'
     )
     $process = Start-Process -FilePath $UnityExe -ArgumentList $arguments -PassThru -Wait
     if ($process.ExitCode -ne 0) {
