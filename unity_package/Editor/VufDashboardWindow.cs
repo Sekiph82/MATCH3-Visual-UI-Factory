@@ -23,7 +23,7 @@ namespace Match3.VisualFactory.Editor
         };
         private static readonly string[] States = {
             "DRAFT STYLE CONTRACTS", "OFFLINE PYTHON CATALOG", "MANUAL PNG INTAKE VIA CLI",
-            "PNG TRIM / 1x-3x PYTHON CLI SOURCE", "SPRITE CLIP BUILDER SOURCE", "PARTICLE PREFAB LAB SOURCE",
+            "PNG TRIM, DETERMINISTIC SHELF ATLAS + UNITY INSPECTOR", "SPRITE CLIP BUILDER SOURCE", "PARTICLE PREFAB LAB SOURCE",
             "7-SCREEN DISABLED uGUI PREFAB CANDIDATES", "RUNTIME SAFE AREA COMPONENT", "MANUAL PREFAB STRUCTURAL INSPECTOR",
             "LOCAL PACKAGE PREVIEW ONLY"
         };
@@ -64,8 +64,13 @@ namespace Match3.VisualFactory.Editor
                 if (GUILayout.Button("Interactive UI Composer", GUILayout.Height(34)))
                     VufUiComposerWindow.Open();
             }
-            if (GUILayout.Button("Manual Visual QA Studio", GUILayout.Height(32)))
-                VufQaStudioWindow.Open();
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("Sprite Atlas Inspector", GUILayout.Height(32)))
+                    VufAtlasPreviewWindow.Open();
+                if (GUILayout.Button("Manual Visual QA Studio", GUILayout.Height(32)))
+                    VufQaStudioWindow.Open();
+            }
             GUILayout.Space(8);
             EditorGUILayout.LabelField("VF MODULES | IMPLEMENTATION STATE", EditorStyles.boldLabel);
             scroll = EditorGUILayout.BeginScrollView(scroll);
