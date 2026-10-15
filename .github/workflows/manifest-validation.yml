@@ -1,8 +1,7 @@
 name: VUF source and manifest checks
+# COST CONTROL: no automatic workflow per commit or PR.
+# Explicit manual dispatch is optional; use scripts/run_source_checks.ps1 locally by default.
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -36,6 +35,8 @@ jobs:
           assert Path("unity_package/Editor/VufDashboardWindow.cs").is_file()
           assert not Path("Assets/Editor/VufStudioWindow.cs").exists()
           PY
+      - name: Offline VFX preset contract validation
+        run: python factory/vfx_builder/validate_presets.py
       - name: Package isolation and stable Unity GUID contract
         run: python Tools/validate_repo_structure.py
       - name: Python syntax compile

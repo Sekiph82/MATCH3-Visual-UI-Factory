@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R05 DIRECT DEVELOPMENT ACTIVE / VF-01..VF-05 PARTIAL SOURCE / UNITY + PYTHON INDEPENDENT AUDIT OPEN.
+**Status:** VUF R06 DIRECT DEVELOPMENT / R05 SOURCE CI 66/66 VERIFIED / VF-06 PARTICLE + VF-07 REAL UI + VF-08 SAFE AREA SOURCE DRAFT / UNITY R06 AUDIT OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -98,6 +98,24 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R06 DIRECT DEVELOPMENT / VERIFIED R05 CI / CONTROLLED-COST NEW TOOLS
+
+**Verified historical source regression (at exact prior commit only):** GitHub Actions run [38788803805](https://github.com/Sekiph82/MATCH3-Visual-UI-Factory/actions/runs/38788803805), at SHA `10a1b3bc09bef1238ced23fc54b9646e65369343`, job ID `116607670939`, reports `Ran 66 tests in 0.151s` followed by `OK`; all source, package structure and Python syntax job steps SUCCESS, no reported failures or skips. Logs were read directly through GitHub tool. **This is NOT evidence for R06 commits, Unity compilation or creative owner signoff.**
+
+**CI COST CONTAINMENT (owner bill awareness):** the existing workflow accumulated 75 push-triggered runs. R06 changes `.github/workflows/manifest-validation.yml` from automatic `push` and `pull_request` triggers to `workflow_dispatch` only, so normal incremental development does not auto-start GitHub-hosted runs. `scripts/run_source_checks.ps1` supplies free local Python source checks without installing dependencies, deleting files or cloning repositories. Avoid manually dispatching paid runners without owner approval; use local tests. The single R06 workflow-change commit could still be processed under the old workflow trigger; do not claim zero billing without GitHub billing statements.
+
+**VF-06 first functional authoring source:** new `unity_package/Editor/VufVfxLabWindow.cs` authoring UI, five ParticleSystem presets (BubbleRise, MatchBurst, StarSparkle, SoftDrift, PortalPulse), editable count/lifetime/speed/color/size, distinct testable candidate prefab path and reduced-motion deterministic **2D SKETCH**; actual Unity ParticleSystem shader/renderer preview is NOT simulated by this sketch. `factory/vfx_builder/presets.v1.json` + `validate_presets.py` define explicit bounded, candidate-only view events and reduced-motion fallback. Shader, haptics and audio testing, automated visual QA and real Unity ParticleSystem playback remain OPEN.
+
+**VF-07 initial real component source:** new `unity_package/Editor/VufUiComposerWindow.cs` builds non-overwriting GameObject uGUI Canvas, CanvasScaler, GraphicRaycaster, Image, Text and disabled Button candidate prefabs for seven reusable screen archetypes across five draft profiles. This is not the 28 fully working Coral experiences; callbacks are disabled until Engine view/action binding can be pinned. Unity 6000.6 uGUI package dependency is declared and editor asmdef explicitly references `UnityEngine.UI`.
+
+**VF-08 initial runtime component source:** `unity_package/Runtime/VufSafeAreaFitter.cs` observes `Screen.safeArea` changes and maps normalized RectTransform anchors. Editor simulated device guides are NOT real iPhone/Android tests.
+
+**VF-09 partial manual QA Studio source:** `unity_package/Editor/VufQaStudioWindow.cs` inspects imported candidate prefab uGUI components, enabled button bindings, Safe Area components, particle budget/material, texture Sprite importer and animation clip metadata, opens actual prefab in Unity for human inspection; never auto-accepts or simulates real Engine bindings. It is an Editor source prototype and not yet a real-device QA pass.
+
+**New tests/source checks:** `tests/test_vfx_lab_contracts.py` adds contract and explicitly disabled event tests; `Tools/validate_repo_structure.py` requires new Editor/Runtime scripts, fixed .meta GUIDs and exact uGUI dependency; new `factory/vfx_builder/validate_presets.py` checks no game state changes. New R06 source remains **UNTESTED on actual Unity and not post-change CI-verified** until direct fresh evidence exists. VUF milestones not independently PASS.
+
+**Next:** independently run free Python checks at exact R06 SHA in an allowed local environment; real Unity Editor import, authoring windows, particle prefab and uGUI/safe-area screenshot evidence; remediate all compile issues; then advance full Sprite/Shader manual QA Studio and VF-04 image masks/atlases. Continue only source-isolated development until ENG-M24 and LFX-M14 final independent PASS.
 
 ## 2026-10-15 | R05 DIRECT DEVELOPMENT / VF-04 PNG + VF-05 UNITY SPRITE CLIPS | NO AUDIT PASS
 
@@ -236,4 +254,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R05_DIRECT_DEVELOPMENT / NEXT: verify actual Python CI results and Unity 6000.6.5f1 compile, then finish VF-04 processing + VF-05 animation tooling and begin VF-06. Final Engine/LFX independent gates still block downstream integrations. No local Windows sync, physical device approval, paid provider use, creative signoff or audited Factory release is claimed.
+**CURRENT_OWNER:** CHATGPT_VUF_R06_DIRECT_DEVELOPMENT / NEXT: perform free local structural tests and real Unity 6000.6.5f1 package import/authoring inspections for VF-05/06/07/08; extend complete manual VFX/Animation/Screen QA after fixing evidence. Do not auto-trigger GitHub Actions. ENG/LFX downstream integration still gated; no owner asset or device approval, paid API, desktop sync or audited v1 release claimed.

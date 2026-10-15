@@ -14,5 +14,7 @@
   "author": {
     "name": "MATCH3 GAMES"
   },
-  "dependencies": {}
+  "dependencies": {
+    "com.unity.ugui": "2.6.0"
+  }
 }

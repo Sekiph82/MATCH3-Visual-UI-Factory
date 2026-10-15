@@ -12,7 +12,12 @@ Games: `Coral_Rescue`, `Garage_Legends`, `Dino_Islands`, `The_Fractured_Realms`,
 - Five original, editable **DRAFT** style profiles in `factory/visual_director/style_profiles.v1.json`; owner creative approval remains open.
 - Stable **28-ID Coral Rescue** interface inventory in `schemas/coral-experiences.v1.json`, including Home and Gameplay/HUD. These are specifications, not 28 implemented screens.
 - **VF-02 offline content-addressed PNG asset catalog** at `factory/asset_catalog/catalog.py`, with explicit review receipts, immutable approved history, owner-controlled explicit replacement and SHA-256 blob checks. Approval strings are audit metadata, **not proof of an authenticated human signature**.
-- Python structural validators, adversarial unit tests and source-only GitHub Actions workflow; no Unity compilation claim without real Unity logs.
+- Python structural validators and adversarial tests. **Historical verification:** 66/66 tests at source SHA `10a1b3bc09be...` passed on 2026-10-15 GitHub Actions [38788803805](https://github.com/Sekiph82/MATCH3-Visual-UI-Factory/actions/runs/38788803805); NOT proof that later source changes passed, and NOT a Unity compilation test.
+- **VF-06 draft particle prefab lab:** five preset families, manual controls and deterministic 2D motion sketch; Unity Scene/Game preview remains necessary.
+- **VF-07 draft interactive composer:** real Unity uGUI layered Canvas/Images/Text/disabled Buttons for seven base screen archetypes; no Game/Engine action bindings yet.
+- **VF-08 runtime safe-area component** for RectTransforms; real device evidence still required.
+- **VF-09 manual prefab QA Inspector:** browse candidate uGUI/ParticleSystem components, suspect unbound active buttons, safe area, missing renderer materials and image/clip import metadata. Real visuals, user experience and performance acceptance are still human/device-gated.
+- **VF-04 full PNG pixel decoder, alpha crop, 1×/2×/3× source transform** and candidate provenance receipt (external output only).
 
 ## Open in Unity Hub (existing folder, do not create duplicate checkout)
 
@@ -63,7 +68,7 @@ python factory/validators/validate_design.py
 python Tools/validate_manifest.py Samples~/sample_manifest.json
 ```
 
-The CI workflow checks Python and structure only. Actual Unity Editor compilation, manual art/VFX lab operation, source rights, real devices and game integration require separate evidence before PASS.
+**Cost control:** GitHub Actions source workflow is now opt-in **manual dispatch only**. Each automatic push/PR run has been disabled to avoid spending on a CI run per source commit. Run free/local source checks on the owner's existing checkout with `.\\scripts\\run_source_checks.ps1`. The script makes no source modifications or paid calls. Actual Unity Editor compilation, manual art/VFX lab operation, source rights, real devices and integration require separate evidence before PASS.
 
 ## Design and ownership
 

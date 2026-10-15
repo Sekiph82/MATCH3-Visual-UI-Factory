@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "stage": "AUTHORING_ONLY",
+  "profile_scope": "ANY_OF_FIVE",
+  "engine_side_effects_allowed": false,
+  "max_particle_count": 160,
+  "presets": [
+    {
+      "id": "BubbleRise",
+      "count": 20,
+      "lifetime_seconds": 0.85,
+      "start_speed": 2.1,
+      "start_size": 0.16,
+      "reduced_motion_fallback": "static_bubble",
+      "events": [
+        "VIEW_ONLY"
+      ],
+      "state": "CANDIDATE_NOT_OWNER_APPROVED"
+    },
+    {
+      "id": "MatchBurst",
+      "count": 42,
+      "lifetime_seconds": 0.5,
+      "start_speed": 4.5,
+      "start_size": 0.21,
+      "reduced_motion_fallback": "single_flash",
+      "events": [
+        "VIEW_ONLY"
+      ],
+      "state": "CANDIDATE_NOT_OWNER_APPROVED"
+    },
+    {
+      "id": "StarSparkle",
+      "count": 25,
+      "lifetime_seconds": 1,
+      "start_speed": 1.2,
+      "start_size": 0.1,
+      "reduced_motion_fallback": "static_star",
+      "events": [
+        "VIEW_ONLY"
+      ],
+      "state": "CANDIDATE_NOT_OWNER_APPROVED"
+    },
+    {
+      "id": "SoftDrift",
+      "count": 12,
+      "lifetime_seconds": 1.75,
+      "start_speed": 0.65,
+      "start_size": 0.14,
+      "reduced_motion_fallback": "none",
+      "events": [
+        "VIEW_ONLY"
+      ],
+      "state": "CANDIDATE_NOT_OWNER_APPROVED"
+    },
+    {
+      "id": "PortalPulse",
+      "count": 36,
+      "lifetime_seconds": 0.75,
+      "start_speed": 2.9,
+      "start_size": 0.18,
+      "reduced_motion_fallback": "static_ring",
+      "events": [
+        "VIEW_ONLY"
+      ],
+      "state": "CANDIDATE_NOT_OWNER_APPROVED"
+    }
+  ]
+}

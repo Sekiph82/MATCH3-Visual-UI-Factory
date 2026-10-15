@@ -2,7 +2,8 @@
   "name": "Match3.VisualFactory.Editor",
   "rootNamespace": "Match3.VisualFactory.Editor",
   "references": [
-    "Match3.VisualFactory.Runtime"
+    "Match3.VisualFactory.Runtime",
+    "UnityEngine.UI"
   ],
   "includePlatforms": [
     "Editor"

@@ -22,8 +22,10 @@ def validate_structure() -> dict:
         raise ValueError("runtime assembly unexpectedly tied to Editor")
     if editor.get("includePlatforms") != ["Editor"]:
         raise ValueError("Editor assembly may enter a player build")
-    if editor.get("references") != ["Match3.VisualFactory.Runtime"]:
-        raise ValueError("Editor consumer must reference runtime read-only contracts")
+    if editor.get("references") != ["Match3.VisualFactory.Runtime", "UnityEngine.UI"]:
+        raise ValueError("Editor must reference runtime and uGUI assemblies explicitly")
+    if package.get("dependencies", {}).get("com.unity.ugui") != "2.6.0":
+        raise ValueError("Unity 6000.6 uGUI core version is missing")
     wanted = [
         "Runtime.meta", "Editor.meta",
         "Runtime/Match3.VisualFactory.Runtime.asmdef",
@@ -32,6 +34,10 @@ def validate_structure() -> dict:
         "Editor/VufDashboardWindow.cs",
         "Editor/VufStudioWindow.cs",
         "Editor/VufSpriteClipBuilderWindow.cs",
+        "Editor/VufVfxLabWindow.cs",
+        "Editor/VufUiComposerWindow.cs",
+        "Editor/VufQaStudioWindow.cs",
+        "Runtime/VufSafeAreaFitter.cs",
     ]
     guids = []
     for name in wanted:
