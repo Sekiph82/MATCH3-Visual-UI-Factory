@@ -55,7 +55,7 @@ try {
     }
     Write-Host 'Unity project version pinned to 6000.6.5f1'
     if ($OpenUnity) {
-        $editor = Join-Path ${env:ProgramFiles} 'Unity/Hub/Editor/6000.6.5f1/Editor/Unity.exe'
+        $editor = Join-Path $env:ProgramFiles 'Unity/Hub/Editor/6000.6.5f1/Editor/Unity.exe'
         if (!(Test-Path -LiteralPath $editor)) {
             throw "Unity 6000.6.5f1 not found at standard install location: $editor. Use Unity Hub Add Project manually."
         }
