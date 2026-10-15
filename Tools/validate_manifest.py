@@ -47,9 +47,13 @@ def _safe_relative_path(value: object) -> str:
     if (path.startswith("/") or "\\" in path or ":" in path or
             "//" in path or "\x00" in path):
         _reject("asset path is not portable relative POSIX path")
-    parts = PurePosixPath(path).parts
-    if not parts or "." in parts or ".." in parts:
-        _reject("asset path contains traversal")
+    parts = path.split("/")
+    if (any(part in ("", ".", "..") or part.rstrip(" .") != part for part in parts)
+            or PurePosixPath(path).as_posix() != path):
+        _reject("asset path is not canonical or contains traversal")
+    if any(part.split(".")[0].upper() in {"CON", "PRN", "AUX", "NUL",
+            "COM1", "COM2", "COM3", "LPT1", "LPT2", "LPT3"} for part in parts):
+        _reject("asset path uses reserved Windows device name")
     if parts[0] in {"Assets", "ProjectSettings", "Packages", ".github"}:
         _reject("asset path points at source/runtime configuration")
     return path
