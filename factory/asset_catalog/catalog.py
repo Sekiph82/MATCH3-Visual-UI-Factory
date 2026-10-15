@@ -90,6 +90,8 @@ class AssetCatalog:
         self.db_path = self.store / "catalog.sqlite3"
 
     def _connect(self):
+        if self.store.is_symlink() or self.db_path.is_symlink():
+            raise CatalogError("catalog path must not be a symlink")
         if not self.db_path.is_file():
             raise CatalogError("Catalog missing: run 'init' explicitly")
         con = sqlite3.connect(str(self.db_path), timeout=10)
@@ -98,6 +100,8 @@ class AssetCatalog:
         return con
 
     def init(self):
+        if self.store.resolve().is_relative_to(Path(__file__).resolve().parents[2]):
+            raise CatalogError("asset store must be outside the GitHub source repository")
         self.store.mkdir(parents=True, exist_ok=True)
         if self.store.is_symlink():
             raise CatalogError("catalog root must not be symlink")
@@ -105,7 +109,12 @@ class AssetCatalog:
             con.executescript(SCHEMA)
 
     def _blob(self, digest: str) -> Path:
-        return self.store / "blobs" / "sha256" / digest[:2] / (digest + ".png")
+        blob_root = self.store / "blobs"
+        sha_root = blob_root / "sha256"
+        prefix_root = sha_root / digest[:2]
+        if any(p.is_symlink() for p in (self.store, blob_root, sha_root, prefix_root)):
+            raise CatalogError("unsafe content-store symlink")
+        return prefix_root / (digest + ".png")
 
     def ingest(self, source: Path, profile: str, asset_key: str,
                rights: str, source_receipt: str) -> dict:
