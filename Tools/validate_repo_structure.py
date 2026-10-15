@@ -51,6 +51,8 @@ def validate_structure() -> dict:
         "Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef",
         "Tests/Editor/VufCatalogEditModeTests.cs",
         "Runtime/VufSafeAreaFitter.cs",
+        "Runtime/VufUiTween.cs",
+        "Editor/VufUiTweenInspector.cs",
     ]
     tests = json.loads((PACKAGE / "Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef").read_text())
     if (tests.get("includePlatforms") != ["Editor"]

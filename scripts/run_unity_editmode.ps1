@@ -76,7 +76,7 @@ try {
     $skipped = [int]$testRun.GetAttribute('skipped')
     $overall = $testRun.GetAttribute('result')
     Write-Host "Unity EditMode: total=$executed failed=$failed skipped=$skipped result=$overall"
-    if ($executed -lt 6 -or $failed -ne 0 -or $skipped -ne 0 -or $overall -ne 'Passed') {
+    if ($executed -lt 8 -or $failed -ne 0 -or $skipped -ne 0 -or $overall -ne 'Passed') {
         throw 'EditMode result is not independently accepted; logs were preserved.'
     }
     Write-Host "Unity EditMode source tests passed at $sha. This is NOT a device test or art approval."

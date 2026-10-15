@@ -18,3 +18,24 @@ policies, clip interruption/replay, Unity Animator state graphs, UI tweens,
 2D bone/skeletal rigs, optional 3D rigs, and actual VFX/audio/haptic
 preview with reduced-motion alternatives. Animation Factory does NOT force all
 three methods into sprite sheets.
+
+## R12 | Real presentation-only CanvasGroup UI transitions (source)
+
+`unity_package/Runtime/VufUiTween.cs` now implements a deterministic,
+interruptible `CanvasGroup.alpha` ease-in/out transition using scaled or
+unscaled delta time. It exposes `Show()`, `Hide()`, `Advance(seconds)` and
+`SetReducedMotion(bool)`. During fading it suppresses UI raycasts/interactions
+until fully visible. Reduced motion immediately snaps to the requested
+visibility state.
+
+`unity_package/Editor/VufUiTweenInspector.cs` adds manual PlayMode buttons
+for Show/Hide and reduced-motion ON/OFF. The 28-screen candidate authoring
+tool attaches CanvasGroup + VufUiTween to modal, ceremony and overlay
+shells. Other screen types do not receive unwanted animation automatically.
+
+Two additional authored Unity EditMode tests cover reduced-motion snap and
+interruptible deterministic final state, bringing the current UPM authored
+EditMode suite to eight tests. The actual Unity Editor PlayMode visual result
+is still unverified. This is not a generalized skeletal-rig, 3D animation,
+Animator state graph or timeline authoring feature. No callbacks touch
+Engine board state, purchases or rewards.

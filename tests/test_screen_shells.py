@@ -76,7 +76,7 @@ class CoralScreenShellContracts(unittest.TestCase):
         package = json.loads((ROOT / "Packages/manifest.json").read_text())
         self.assertEqual(package["testables"], ["com.match3.visual-factory"])
         test_source = (ROOT / "unity_package/Tests/Editor/VufCatalogEditModeTests.cs").read_text()
-        self.assertEqual(test_source.count("[Test]"), 6)
+        self.assertEqual(test_source.count("[Test]"), 8)
         asm = json.loads((ROOT / "unity_package/Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef").read_text())
         self.assertEqual(asm["name"], "Match3.VisualFactory.Editor.Tests")
         self.assertEqual(asm["defineConstraints"], ["UNITY_INCLUDE_TESTS"])
@@ -90,6 +90,18 @@ class CoralScreenShellContracts(unittest.TestCase):
         self.assertNotIn("AssetDatabase.CreateAsset", code)
         self.assertNotIn("PrefabUtility.SaveAsPrefabAsset", code)
         self.assertNotIn("GrantReward", code)
+
+    def test_presentation_only_tween_has_reduced_motion_controls(self):
+        runtime = (ROOT / "unity_package/Runtime/VufUiTween.cs").read_text()
+        editor = (ROOT / "unity_package/Editor/VufUiTweenInspector.cs").read_text()
+        screen = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
+        self.assertIn("SetReducedMotion(bool enabled)", runtime)
+        self.assertIn("public void Advance(float seconds)", runtime)
+        self.assertIn("Group.blocksRaycasts", runtime)
+        self.assertIn("Application.isPlaying", editor)
+        self.assertIn("AddComponent<VufUiTween>()", screen)
+        self.assertNotIn("GrantReward", runtime)
+        self.assertNotIn("PlayerPrefs", runtime)
 
     def test_four_page_types_have_distinct_shell_layouts(self):
         script = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()

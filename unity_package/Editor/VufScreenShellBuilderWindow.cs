@@ -216,6 +216,8 @@ namespace Match3.VisualFactory.Editor
                 bool isBoard = spec.kind == "playable" || spec.kind == "mode";
                 if (isDialog)
                 {
+                    safe.gameObject.AddComponent<CanvasGroup>();
+                    safe.gameObject.AddComponent<VufUiTween>();
                     ContentCard(safe, "MODAL OR REWARD CEREMONY", surface, font,
                         new Vector2(.07f, .28f), new Vector2(.93f, .75f));
                 }

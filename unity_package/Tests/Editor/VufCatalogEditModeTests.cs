@@ -95,6 +95,53 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void UiTweenReducedMotionSnapsWithoutGameplay()
+        {
+            var go = new GameObject("VUF_TEST_TWEEN");
+            try
+            {
+                var tween = go.AddComponent<VufUiTween>();
+                var group = go.GetComponent<CanvasGroup>();
+                tween.SetReducedMotion(true);
+                tween.Hide();
+                Assert.That(group.alpha, Is.EqualTo(0f));
+                Assert.That(group.interactable, Is.False);
+                Assert.That(group.blocksRaycasts, Is.False);
+                tween.Show();
+                Assert.That(group.alpha, Is.EqualTo(1f));
+                Assert.That(group.interactable, Is.True);
+                Assert.That(tween.IsAnimating, Is.False);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void UiTweenInterruptionsReachDeterministicEndState()
+        {
+            var go = new GameObject("VUF_TEST_TWEEN_INTERRUPT");
+            try
+            {
+                var tween = go.AddComponent<VufUiTween>();
+                var group = go.GetComponent<CanvasGroup>();
+                tween.SetReducedMotion(false);
+                tween.Hide();
+                tween.Advance(tween.Duration / 2f);
+                Assert.That(group.alpha, Is.InRange(0.01f, 0.99f));
+                tween.Show();
+                tween.Advance(tween.Duration);
+                Assert.That(group.alpha, Is.EqualTo(1f).Within(0.0001f));
+                Assert.That(tween.IsAnimating, Is.False);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
         public void InvalidSpriteFrameSequenceRejected()
         {
             Assert.Throws<ArgumentOutOfRangeException>(

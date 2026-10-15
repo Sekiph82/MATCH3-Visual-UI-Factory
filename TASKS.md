@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R11 SOURCE DEVELOPMENT / READ-ONLY FIVE-TITLE PRODUCTION QUEUE / 131 PYTHON UNIT METHODS PLUS 6 UNITY EDITMODE TESTS DEFINED; NEW TESTS NOT EXECUTED.
+**Status:** VUF R12 SOURCE DEVELOPMENT / UI TWEEN REDUCED-MOTION/INTERRUPTION SOURCE / 132 PYTHON UNIT METHODS + 8 UNITY EDITMODE TESTS AUTHORED; CURRENT TESTS NOT EXECUTED.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -98,6 +98,14 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R12 SOURCE IMPLEMENTATION / UI TWEEN + REDUCED MOTION | OPEN UNITY TEST GATE
+
+- Added `unity_package/Runtime/VufUiTween.cs` for real presentation-only `CanvasGroup` fade, scaled/unscaled time, deterministic manual `Advance`, interruptible `Show/Hide`, and immediate reduced-motion mode. UI raycasts and CanvasGroup interaction are prevented until visible; underlying unbound Buttons remain disabled.
+- Added manual `VufUiTweenInspector.cs` in Unity Editor with PlayMode Show/Hide and reduced-motion controls. The 28-Screen Shell Builder now attaches this runtime UI component to modal/ceremony/overlay candidate types only. No rule, rewards, inventory, saves or paid provider changes.
+- Two Unity EditMode tests added to source, reaching eight authored test cases. The no-cost `scripts/run_unity_editmode.ps1` now requires eight passing zero-skip NUnit cases. Stable Unity .meta GUIDs and Python package structure contract amended. Source-defined Python methods increased to **132**.
+- **Not executed/verified:** current R08..R12 local Python suite, actual Unity Editor/PlayMode UI tween fade and on-device behavior. Source code alone is not module acceptance. Full 2D skeletal/3D animation workflows remain open; latest independently verified Python CI was R05 66/66.
+- No GitHub-hosted CI dispatch, Windows laptop changes, source cleanup, auto approval or production game integration.
 
 ## 2026-10-15 | R11 SOURCE IMPLEMENTATION / FIVE-GAME PRODUCTION QUEUE / OPEN AUDIT
 
@@ -311,4 +319,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R11_SOURCE_DEVELOPMENT / NEXT: verify current Python source and Unity EditMode 6000.6.5f1 without paid GitHub Actions; fix failures before independent audit. All production art, device, owner and final integration gates remain open.
+**CURRENT_OWNER:** CHATGPT_VUF_R12_SOURCE_DEVELOPMENT / NEXT: run exact HEAD local Python and Unity 6000.6.5f1 EditMode/PlayMode tests without GitHub Actions; remedy any failures, then continue real responsive/UI animation labs. Original art, owner aesthetic and device QA remain open; upstream Engine/LFX integration blocked.

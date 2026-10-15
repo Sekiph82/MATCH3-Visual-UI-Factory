@@ -18,6 +18,7 @@ Games: `Coral_Rescue`, `Garage_Legends`, `Dino_Islands`, `The_Fractured_Realms`,
 - **VF-02 explicit rollback:** previously approved asset revisions can be restored only with a matching expected active revision and review receipt; immutable history rows and original source files remain. SQLite audit metadata is not an authenticated owner signature.
 - **VF-02 Five-Game Production Queue:** offline, source-integrity-checked JSON portfolio report and read-only Unity Editor dashboard showing candidate backlog, recorded approvals, active revision counts and rollback events. No game publish or automatic owner approval.
 - **VF-08 runtime safe-area component** for RectTransforms; real device evidence still required.
+- **VF-05 UI tween runtime:** a small, dependency-free `CanvasGroup` presentation transition with inspector PlayMode controls and reduced-motion snap; 28-shell modal/ceremony/overlay candidates attach it. Unity runtime effect acceptance remains open.
 - **VF-09 manual prefab QA Inspector:** browse candidate uGUI/ParticleSystem components, suspect unbound active buttons, safe area, missing renderer materials and image/clip import metadata. Real visuals, user experience and performance acceptance are still human/device-gated.
 - **VF-04 offline PNG processor**: 1×/2×/3× trim/scaling, alpha keep/remove mask, and deterministic multi-sprite PNG atlas with exact sprite/UV ledger. All output is candidate-only, outside Git. Unity `Tools > MATCH3 > Sprite Atlas Inspector` provides read-only geometric preview, not production art acceptance.
 - **VF-09 independent pixel verifier** checks original SHA provenance, sprite rects, UV layout, atlas pixel-by-pixel parity and original/mask alpha composition, without writing any image data.
@@ -49,9 +50,10 @@ are NOT claimed completed by this cloud implementation.
 
 ## No-cost Unity EditMode tests (source harness, not executed here)
 
-Six Unity EditMode NUnit tests have been authored in the shared package to
+Eight Unity EditMode NUnit tests have been authored in the shared package to
 cover all 28 Coral catalog IDs, all five draft palettes, social/policy-off
-restrictions, no automatic marker approval and sprite-loop frame order.
+restrictions, no automatic marker approval, sprite-loop frame order,
+UI reduced-motion and interruption behavior.
 The host project declares the package as `testables`; the NUnit test assembly
 is Editor-only and excluded from player builds.
 
