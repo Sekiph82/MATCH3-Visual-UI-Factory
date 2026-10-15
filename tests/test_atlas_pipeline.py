@@ -52,8 +52,11 @@ class AtlasTests(unittest.TestCase):
             self.assertEqual(entry["original_sha256"],
                              hashlib.sha256(source.read_bytes()).hexdigest())
             u, v, uw, vh = entry["uv_rect_bottom_left"]
-            self.assertEqual([u * width, v * height, uw * width, vh * height],
-                             [x, height - y - h, w, h])
+            for actual, expected in zip(
+                [u * width, v * height, uw * width, vh * height],
+                [x, height - y - h, w, h]
+            ):
+                self.assertAlmostEqual(actual, expected, places=5)
 
     def test_strict_stability_independent_input_order(self):
         left = create_atlas_candidate(
