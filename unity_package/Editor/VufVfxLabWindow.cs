@@ -181,35 +181,10 @@ namespace Match3.VisualFactory.Editor
                     "An asset already exists at this path. Select a new candidate name.", "OK");
                 return;
             }
-            GameObject particleObject = new GameObject(
-                "VUF_" + preset + "_CANDIDATE");
+            GameObject particleObject = BuildCandidateParticleSystem(
+                preset.ToString(), burstCount, lifetime, speed, particleSize, tint);
             try
             {
-                ParticleSystem system = particleObject.AddComponent<ParticleSystem>();
-                var main = system.main;
-                main.playOnAwake = false;
-                main.loop = false;
-                main.duration = Mathf.Max(.11f, lifetime + .1f);
-                main.startLifetime = lifetime;
-                main.startSpeed = speed;
-                main.startSize = particleSize;
-                main.startColor = tint;
-                main.maxParticles = 160;
-                main.simulationSpace = ParticleSystemSimulationSpace.Local;
-                var emission = system.emission;
-                emission.rateOverTime = 0f;
-                emission.SetBursts(new[] {
-                    new ParticleSystem.Burst(0f, (short)burstCount)
-                });
-                var shape = system.shape;
-                shape.enabled = true;
-                shape.shapeType = ParticleSystemShapeType.Cone;
-                shape.angle = preset == Preset.BubbleRise ? 8f : 60f;
-                shape.radius = preset == Preset.SoftDrift ? .45f : .12f;
-                var sizeOverLifetime = system.sizeOverLifetime;
-                sizeOverLifetime.enabled = true;
-                sizeOverLifetime.size = new ParticleSystem.MinMaxCurve(1f,
-                    AnimationCurve.EaseInOut(0f, 1f, 1f, 0f));
                 // The ParticleSystem exists even if the active render pipeline has no
                 // compatible material; scene preview must explicitly report that.
                 ParticleSystemRenderer renderer = particleObject.GetComponent<ParticleSystemRenderer>();
@@ -258,6 +233,63 @@ namespace Match3.VisualFactory.Editor
             finally
             {
                 DestroyImmediate(particleObject);
+            }
+        }
+
+        // Constructs the real Unity ParticleSystem used by SaveCandidatePrefab, while
+        // keeping all construction available to EditMode tests without saving assets.
+        internal static GameObject BuildCandidateParticleSystem(string presetName,
+            int count, float particleLifetime, float particleSpeed, float size, Color color)
+        {
+            if (presetName != Preset.BubbleRise.ToString() &&
+                presetName != Preset.MatchBurst.ToString() &&
+                presetName != Preset.StarSparkle.ToString() &&
+                presetName != Preset.SoftDrift.ToString() &&
+                presetName != Preset.PortalPulse.ToString())
+                throw new ArgumentException("Unknown VUF particle preset.", nameof(presetName));
+            if (count < 1 || count > 160)
+                throw new ArgumentOutOfRangeException(nameof(count));
+            if (particleLifetime <= 0f || float.IsNaN(particleLifetime) ||
+                float.IsInfinity(particleLifetime))
+                throw new ArgumentOutOfRangeException(nameof(particleLifetime));
+            if (particleSpeed < 0f || float.IsNaN(particleSpeed) ||
+                float.IsInfinity(particleSpeed))
+                throw new ArgumentOutOfRangeException(nameof(particleSpeed));
+            if (size <= 0f || float.IsNaN(size) || float.IsInfinity(size))
+                throw new ArgumentOutOfRangeException(nameof(size));
+
+            GameObject particleObject = new GameObject("VUF_" + presetName + "_CANDIDATE");
+            try
+            {
+                ParticleSystem system = particleObject.AddComponent<ParticleSystem>();
+                var main = system.main;
+                main.playOnAwake = false;
+                main.loop = false;
+                main.duration = Mathf.Max(.11f, particleLifetime + .1f);
+                main.startLifetime = particleLifetime;
+                main.startSpeed = particleSpeed;
+                main.startSize = size;
+                main.startColor = color;
+                main.maxParticles = 160;
+                main.simulationSpace = ParticleSystemSimulationSpace.Local;
+                var emission = system.emission;
+                emission.rateOverTime = 0f;
+                emission.SetBursts(new[] { new ParticleSystem.Burst(0f, (short)count) });
+                var shape = system.shape;
+                shape.enabled = true;
+                shape.shapeType = ParticleSystemShapeType.Cone;
+                shape.angle = presetName == Preset.BubbleRise.ToString() ? 8f : 60f;
+                shape.radius = presetName == Preset.SoftDrift.ToString() ? .45f : .12f;
+                var sizeOverLifetime = system.sizeOverLifetime;
+                sizeOverLifetime.enabled = true;
+                sizeOverLifetime.size = new ParticleSystem.MinMaxCurve(1f,
+                    AnimationCurve.EaseInOut(0f, 1f, 1f, 0f));
+                return particleObject;
+            }
+            catch
+            {
+                DestroyImmediate(particleObject);
+                throw;
             }
         }
     }

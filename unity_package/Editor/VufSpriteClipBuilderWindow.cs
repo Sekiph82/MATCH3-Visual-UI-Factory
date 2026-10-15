@@ -229,29 +229,51 @@ namespace Match3.VisualFactory.Editor
                     "OK");
                 return;
             }
-            int[] sequence = BuildFrameSequence(sprites.Count, pingPong);
-            var keys = new ObjectReferenceKeyframe[sequence.Length + 1];
-            for (int i = 0; i < sequence.Length; i++)
-            {
-                keys[i] = new ObjectReferenceKeyframe {
-                    time = i / fps, value = sprites[sequence[i]]
-                };
-            }
-            keys[sequence.Length] = new ObjectReferenceKeyframe {
-                time = sequence.Length / fps,
-                value = sprites[loop ? sequence[0] : sequence[sequence.Length - 1]]
-            };
-            AnimationClip clip = new AnimationClip { frameRate = fps, name = Path.GetFileNameWithoutExtension(path) };
-            AnimationUtility.SetObjectReferenceCurve(clip,
-                EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite"),
-                keys);
-            AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
-            settings.loopTime = loop;
-            AnimationUtility.SetAnimationClipSettings(clip, settings);
+            AnimationClip clip = BuildCandidateClip(
+                Path.GetFileNameWithoutExtension(path), sprites, fps, pingPong, loop);
             AssetDatabase.CreateAsset(clip, path);
             AssetDatabase.SaveAssets();
             Selection.activeObject = clip;
             EditorGUIUtility.PingObject(clip);
+        }
+
+        // Builds a genuine Unity sprite-reference AnimationClip without creating an
+        // AssetDatabase file, so tests can inspect keyframes entirely in memory.
+        internal static AnimationClip BuildCandidateClip(string clipName,
+            IList<Sprite> sourceSprites, float framesPerSecond, bool usePingPong, bool shouldLoop)
+        {
+            if (sourceSprites == null || sourceSprites.Count < 2)
+                throw new ArgumentException("At least two sprites are required.", nameof(sourceSprites));
+            if (float.IsNaN(framesPerSecond) || float.IsInfinity(framesPerSecond) ||
+                framesPerSecond <= 0f)
+                throw new ArgumentOutOfRangeException(nameof(framesPerSecond));
+            for (int i = 0; i < sourceSprites.Count; ++i)
+                if (sourceSprites[i] == null)
+                    throw new ArgumentException("Sprite frames must not be null.", nameof(sourceSprites));
+
+            int[] sequence = BuildFrameSequence(sourceSprites.Count, usePingPong);
+            var keys = new ObjectReferenceKeyframe[sequence.Length + 1];
+            for (int i = 0; i < sequence.Length; i++)
+            {
+                keys[i] = new ObjectReferenceKeyframe {
+                    time = i / framesPerSecond, value = sourceSprites[sequence[i]]
+                };
+            }
+            keys[sequence.Length] = new ObjectReferenceKeyframe {
+                time = sequence.Length / framesPerSecond,
+                value = sourceSprites[shouldLoop ? sequence[0] : sequence[sequence.Length - 1]]
+            };
+            AnimationClip clip = new AnimationClip {
+                frameRate = framesPerSecond,
+                name = String.IsNullOrEmpty(clipName) ? "VUF_Candidate_Animation" : clipName
+            };
+            AnimationUtility.SetObjectReferenceCurve(clip,
+                EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite"),
+                keys);
+            AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
+            settings.loopTime = shouldLoop;
+            AnimationUtility.SetAnimationClipSettings(clip, settings);
+            return clip;
         }
     }
 }

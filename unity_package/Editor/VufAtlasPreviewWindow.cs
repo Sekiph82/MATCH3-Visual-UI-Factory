@@ -9,7 +9,7 @@ namespace Match3.VisualFactory.Editor
     public sealed class VufAtlasPreviewWindow : EditorWindow
     {
         [Serializable]
-        private sealed class AtlasSprite
+        internal sealed class AtlasSprite
         {
             public string asset_id;
             public int width;
@@ -20,7 +20,7 @@ namespace Match3.VisualFactory.Editor
         }
 
         [Serializable]
-        private sealed class AtlasManifest
+        internal sealed class AtlasManifest
         {
             public int schema_version;
             public string stage;
@@ -145,54 +145,62 @@ namespace Match3.VisualFactory.Editor
                 return;
             try
             {
-                var doc = JsonUtility.FromJson<AtlasManifest>(manifestText.text);
-                if (doc == null || doc.schema_version != 1 ||
-                    doc.stage != "CANDIDATE_NOT_APPROVED" ||
-                    doc.generator != "VF04_SHELF_PACK_V01" ||
-                    doc.width < 1 || doc.height < 1 ||
-                    doc.width != atlas.width || doc.height != atlas.height ||
-                    doc.sprites == null || doc.sprites.Length == 0 || doc.sprites.Length > 128)
-                    throw new ArgumentException("candidate schema/texture dimension mismatch");
-                var ids = new HashSet<string>(StringComparer.Ordinal);
-                var rectangles = new List<Rect>();
-                foreach (var item in doc.sprites)
-                {
-                    if (item == null || String.IsNullOrEmpty(item.asset_id) ||
-                        !ids.Add(item.asset_id) ||
-                        item.rotated || item.pixel_rect_top_left == null ||
-                        item.pixel_rect_top_left.Length != 4 ||
-                        item.uv_rect_bottom_left == null ||
-                        item.uv_rect_bottom_left.Length != 4)
-                        throw new ArgumentException("duplicate/unsupported sprite entry");
-                    int[] r = item.pixel_rect_top_left;
-                    if (r[0] < 0 || r[1] < 0 || r[2] <= 0 || r[3] <= 0 ||
-                        r[0] + r[2] > doc.width || r[1] + r[3] > doc.height ||
-                        item.width != r[2] || item.height != r[3])
-                        throw new ArgumentException("sprite rect outside atlas");
-                    float[] uv = item.uv_rect_bottom_left;
-                    float[] expected = {
-                        (float)r[0] / doc.width,
-                        (float)(doc.height - r[1] - r[3]) / doc.height,
-                        (float)r[2] / doc.width,
-                        (float)r[3] / doc.height
-                    };
-                    for (int i = 0; i < 4; i++)
-                        if (float.IsNaN(uv[i]) || Mathf.Abs(expected[i] - uv[i]) > 0.00001f)
-                            throw new ArgumentException("sprite rect UV mapping mismatch");
-                    Rect box = new Rect(r[0], r[1], r[2], r[3]);
-                    foreach (Rect other in rectangles)
-                        if (box.Overlaps(other))
-                            throw new ArgumentException("overlapping sprite rectangles");
-                    rectangles.Add(box);
-                }
-                mappedRects.AddRange(rectangles);
-                manifest = doc;
+                mappedRects.AddRange(ValidateCandidateGeometry(
+                    manifestText.text, atlas.width, atlas.height, out manifest));
             }
             catch (Exception ex)
             {
                 manifest = null;
                 error = "VF-04 Atlas inspection rejected: " + ex.Message;
             }
+        }
+
+        // Same geometry validation used by the inspector, callable with in-memory
+        // synthetic metadata and actual Texture2D dimensions without asset writes.
+        internal static Rect[] ValidateCandidateGeometry(string json,
+            int atlasWidth, int atlasHeight, out AtlasManifest document)
+        {
+            document = JsonUtility.FromJson<AtlasManifest>(json);
+            if (document == null || document.schema_version != 1 ||
+                document.stage != "CANDIDATE_NOT_APPROVED" ||
+                document.generator != "VF04_SHELF_PACK_V01" ||
+                document.width < 1 || document.height < 1 ||
+                document.width != atlasWidth || document.height != atlasHeight ||
+                document.sprites == null || document.sprites.Length == 0 ||
+                document.sprites.Length > 128)
+                throw new ArgumentException("candidate schema/texture dimension mismatch");
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            var rectangles = new List<Rect>();
+            foreach (AtlasSprite item in document.sprites)
+            {
+                if (item == null || String.IsNullOrEmpty(item.asset_id) ||
+                    !ids.Add(item.asset_id) || item.rotated ||
+                    item.pixel_rect_top_left == null || item.pixel_rect_top_left.Length != 4 ||
+                    item.uv_rect_bottom_left == null || item.uv_rect_bottom_left.Length != 4)
+                    throw new ArgumentException("duplicate/unsupported sprite entry");
+                int[] r = item.pixel_rect_top_left;
+                if (r[0] < 0 || r[1] < 0 || r[2] <= 0 || r[3] <= 0 ||
+                    r[0] + r[2] > document.width || r[1] + r[3] > document.height ||
+                    item.width != r[2] || item.height != r[3])
+                    throw new ArgumentException("sprite rect outside atlas");
+                float[] uv = item.uv_rect_bottom_left;
+                float[] expected = {
+                    (float)r[0] / document.width,
+                    (float)(document.height - r[1] - r[3]) / document.height,
+                    (float)r[2] / document.width,
+                    (float)r[3] / document.height
+                };
+                for (int i = 0; i < 4; i++)
+                    if (float.IsNaN(uv[i]) || float.IsInfinity(uv[i]) ||
+                        Mathf.Abs(expected[i] - uv[i]) > 0.00001f)
+                        throw new ArgumentException("sprite rect UV mapping mismatch");
+                Rect box = new Rect(r[0], r[1], r[2], r[3]);
+                foreach (Rect other in rectangles)
+                    if (box.Overlaps(other))
+                        throw new ArgumentException("overlapping sprite rectangles");
+                rectangles.Add(box);
+            }
+            return rectangles.ToArray();
         }
     }
 }

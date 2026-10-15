@@ -10,7 +10,7 @@ namespace Match3.VisualFactory.Editor
     public sealed class VufProductionQueueWindow : EditorWindow
     {
         [Serializable]
-        private sealed class Pending
+        internal sealed class Pending
         {
             public int id;
             public string asset_key;
@@ -19,7 +19,7 @@ namespace Match3.VisualFactory.Editor
         }
 
         [Serializable]
-        private sealed class Profile
+        internal sealed class Profile
         {
             public string profile_id;
             public int revision_count;
@@ -31,7 +31,7 @@ namespace Match3.VisualFactory.Editor
         }
 
         [Serializable]
-        private sealed class Portfolio
+        internal sealed class Portfolio
         {
             public int schema_version;
             public string stage;
@@ -131,49 +131,56 @@ namespace Match3.VisualFactory.Editor
             if (importedReport == null) return;
             try
             {
-                Portfolio document = JsonUtility.FromJson<Portfolio>(importedReport.text);
-                if (document == null || document.schema_version != 1 ||
-                    document.stage != "READ_ONLY_NOT_OWNER_APPROVAL" ||
-                    !document.source_integrity_verified ||
-                    document.profiles == null || document.profiles.Length != 5 ||
-                    document.total_verified_revisions < 0)
-                    throw new ArgumentException("invalid portfolio report schema/status");
-                HashSet<string> allowed = new HashSet<string>(new[] {
-                    "Coral_Rescue", "Garage_Legends", "Dino_Islands",
-                    "The_Fractured_Realms", "Wonder_Pop"
-                }, StringComparer.Ordinal);
-                int total = 0;
-                foreach (Profile profile in document.profiles)
-                {
-                    if (profile == null || !allowed.Remove(profile.profile_id) ||
-                        profile.revision_count < 0 || profile.pending_review_count < 0 ||
-                        profile.approval_receipts_count < 0 || profile.active_asset_count < 0 ||
-                        profile.rollback_events_count < 0 ||
-                        profile.revision_count !=
-                            profile.pending_review_count + profile.approval_receipts_count ||
-                        profile.active_asset_count > profile.approval_receipts_count ||
-                        profile.pending_preview == null || profile.pending_preview.Length > 100 ||
-                        profile.pending_preview.Length > profile.pending_review_count)
-                        throw new ArgumentException("invalid profile totals or duplicate game");
-                    HashSet<int> ids = new HashSet<int>();
-                    foreach (Pending item in profile.pending_preview)
-                    {
-                        if (item == null || item.id < 1 || item.revision < 1 ||
-                            String.IsNullOrEmpty(item.asset_key) ||
-                            String.IsNullOrEmpty(item.sha256) || item.sha256.Length != 64 ||
-                            !ids.Add(item.id))
-                            throw new ArgumentException("invalid pending revision record");
-                    }
-                    total += profile.revision_count;
-                }
-                if (allowed.Count != 0 || total != document.total_verified_revisions)
-                    throw new ArgumentException("portfolio total/profiles mismatch");
-                view = document;
+                view = ParsePortfolioReport(importedReport.text);
             }
             catch (Exception ex)
             {
                 error = "Cannot display untrusted/incomplete portfolio JSON: " + ex.Message;
             }
+        }
+
+        // Pure validation shared by the read-only window and synthetic EditMode tests.
+        // It parses an imported snapshot only; it has no catalog or approval side effects.
+        internal static Portfolio ParsePortfolioReport(string reportJson)
+        {
+            Portfolio document = JsonUtility.FromJson<Portfolio>(reportJson);
+            if (document == null || document.schema_version != 1 ||
+                document.stage != "READ_ONLY_NOT_OWNER_APPROVAL" ||
+                !document.source_integrity_verified ||
+                document.profiles == null || document.profiles.Length != 5 ||
+                document.total_verified_revisions < 0)
+                throw new ArgumentException("invalid portfolio report schema/status");
+            HashSet<string> allowed = new HashSet<string>(new[] {
+                "Coral_Rescue", "Garage_Legends", "Dino_Islands",
+                "The_Fractured_Realms", "Wonder_Pop"
+            }, StringComparer.Ordinal);
+            int total = 0;
+            foreach (Profile profile in document.profiles)
+            {
+                if (profile == null || !allowed.Remove(profile.profile_id) ||
+                    profile.revision_count < 0 || profile.pending_review_count < 0 ||
+                    profile.approval_receipts_count < 0 || profile.active_asset_count < 0 ||
+                    profile.rollback_events_count < 0 ||
+                    profile.revision_count !=
+                        profile.pending_review_count + profile.approval_receipts_count ||
+                    profile.active_asset_count > profile.approval_receipts_count ||
+                    profile.pending_preview == null || profile.pending_preview.Length > 100 ||
+                    profile.pending_preview.Length > profile.pending_review_count)
+                    throw new ArgumentException("invalid profile totals or duplicate game");
+                HashSet<int> ids = new HashSet<int>();
+                foreach (Pending item in profile.pending_preview)
+                {
+                    if (item == null || item.id < 1 || item.revision < 1 ||
+                        String.IsNullOrEmpty(item.asset_key) ||
+                        String.IsNullOrEmpty(item.sha256) || item.sha256.Length != 64 ||
+                        !ids.Add(item.id))
+                        throw new ArgumentException("invalid pending revision record");
+                }
+                total += profile.revision_count;
+            }
+            if (allowed.Count != 0 || total != document.total_verified_revisions)
+                throw new ArgumentException("portfolio total/profiles mismatch");
+            return document;
         }
     }
 }

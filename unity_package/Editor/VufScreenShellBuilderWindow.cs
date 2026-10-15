@@ -161,12 +161,6 @@ namespace Match3.VisualFactory.Editor
         {
             VufScreenCatalog.StyleInfo style = VufScreenCatalog.LoadStyle(
                 Profiles[profileIndex]);
-            var colors = style.palettes;
-            Color background = VufScreenCatalog.ParseColor(colors.background, "background");
-            Color surface = VufScreenCatalog.ParseColor(colors.surface, "surface");
-            Color accent = VufScreenCatalog.ParseColor(colors.cta, "cta");
-            Color ctaLabel = VufScreenCatalog.ParseColor(colors.cta_label, "cta_label");
-            Color font = VufScreenCatalog.ParseColor(colors.text, "text");
             string assetName = "VUF_" + style.id + "_" + spec.id + "_" +
                 spec.key + "_CANDIDATE";
             string path = EditorUtility.SaveFilePanelInProject(
@@ -181,6 +175,39 @@ namespace Match3.VisualFactory.Editor
                     "OK");
                 return;
             }
+            GameObject root = BuildCandidateHierarchy(spec, style, showCandidateGate);
+            try
+            {
+                GameObject asset = PrefabUtility.SaveAsPrefabAsset(root, path);
+                if (asset == null)
+                    throw new InvalidOperationException("Unity prefab writer returned null");
+                AssetDatabase.SaveAssets();
+                Selection.activeObject = asset;
+                EditorGUIUtility.PingObject(asset);
+            }
+            finally
+            {
+                DestroyImmediate(root);
+            }
+        }
+
+        // Shared by the manual save action and in-memory EditMode tests. This method
+        // never writes an asset; callers own and must destroy the returned hierarchy.
+        internal static GameObject BuildCandidateHierarchy(
+            VufScreenCatalog.ScreenInfo spec, VufScreenCatalog.StyleInfo style,
+            bool includeOwnerReviewWarning)
+        {
+            if (spec == null) throw new ArgumentNullException(nameof(spec));
+            if (style == null || style.palettes == null)
+                throw new ArgumentNullException(nameof(style));
+            var colors = style.palettes;
+            Color background = VufScreenCatalog.ParseColor(colors.background, "background");
+            Color surface = VufScreenCatalog.ParseColor(colors.surface, "surface");
+            Color accent = VufScreenCatalog.ParseColor(colors.cta, "cta");
+            Color ctaLabel = VufScreenCatalog.ParseColor(colors.cta_label, "cta_label");
+            Color font = VufScreenCatalog.ParseColor(colors.text, "text");
+            string assetName = "VUF_" + style.id + "_" + spec.id + "_" +
+                spec.key + "_CANDIDATE";
             GameObject root = new GameObject(assetName, typeof(RectTransform),
                 typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
                 typeof(VufCandidateScreenMarker));
@@ -245,21 +272,17 @@ namespace Match3.VisualFactory.Editor
                     spec.id + " | " + gate + " | CANDIDATE",
                     new Vector2(.04f, .015f), new Vector2(.96f, .07f),
                     19, font);
-                if (showCandidateGate)
+                if (includeOwnerReviewWarning)
                     Label(safe, "OwnerReviewWarning",
                         "OWNER ART AND DEVICE QA NOT COMPLETE",
                         new Vector2(.06f, .79f), new Vector2(.94f, .855f),
                         20, font);
-                GameObject asset = PrefabUtility.SaveAsPrefabAsset(root, path);
-                if (asset == null)
-                    throw new InvalidOperationException("Unity prefab writer returned null");
-                AssetDatabase.SaveAssets();
-                Selection.activeObject = asset;
-                EditorGUIUtility.PingObject(asset);
+                return root;
             }
-            finally
+            catch
             {
                 DestroyImmediate(root);
+                throw;
             }
         }
     }

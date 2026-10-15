@@ -72,6 +72,17 @@ def validate_structure() -> dict:
         if len(ids) != 1:
             raise ValueError("invalid or missing .meta GUID " + name)
         guids.extend(ids)
+    required_project_metas = [
+        ROOT / "Assets/README.md.meta",
+        PACKAGE / "package.json.meta",
+    ]
+    for meta in required_project_metas:
+        if not meta.is_file():
+            raise ValueError("missing stable project/package GUID .meta " + str(meta.relative_to(ROOT)))
+        ids = re.findall(r"(?m)^guid: ([0-9a-f]{32})$", meta.read_text())
+        if len(ids) != 1:
+            raise ValueError("invalid or missing .meta GUID " + str(meta.relative_to(ROOT)))
+        guids.extend(ids)
     if len(guids) != len(set(guids)):
         raise ValueError("duplicate Unity meta GUID")
     mirrors = [
