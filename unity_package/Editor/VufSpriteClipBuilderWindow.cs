@@ -14,6 +14,7 @@ namespace Match3.VisualFactory.Editor
         private Texture2D source;
         private readonly List<Sprite> sprites = new List<Sprite>();
         private int frameIndex;
+        private int sequenceCursor;
         private float fps = 12f;
         private bool loop = true;
         private bool pingPong;
@@ -55,10 +56,9 @@ namespace Match3.VisualFactory.Editor
             {
                 int count = (int)(elapsed / step);
                 elapsed -= count * step;
-                int length = BuildFrameSequence(sprites.Count, pingPong).Length;
                 int[] sequence = BuildFrameSequence(sprites.Count, pingPong);
-                int cursor = Array.IndexOf(sequence, frameIndex);
-                frameIndex = sequence[(Math.Max(cursor, 0) + count) % length];
+                sequenceCursor = (sequenceCursor + count) % sequence.Length;
+                frameIndex = sequence[sequenceCursor];
                 Repaint();
             }
         }
@@ -99,7 +99,12 @@ namespace Match3.VisualFactory.Editor
             {
                 GUI.enabled = !reducedMotion;
                 if (GUILayout.Button(playing ? "Pause" : "Play"))
+                {
+                    if (!playing)
+                        sequenceCursor = Array.IndexOf(
+                            BuildFrameSequence(sprites.Count, pingPong), frameIndex);
                     playing = !playing;
+                }
                 GUI.enabled = true;
                 if (GUILayout.Button("Previous"))
                 {
@@ -112,7 +117,16 @@ namespace Match3.VisualFactory.Editor
                     frameIndex = (frameIndex + 1) % sprites.Count;
                 }
             }
-            frameIndex = EditorGUILayout.IntSlider("Frame scrub", frameIndex, 0, sprites.Count - 1);
+            int scrubbedFrame = EditorGUILayout.IntSlider(
+                "Frame scrub", frameIndex, 0, sprites.Count - 1);
+            if (scrubbedFrame != frameIndex)
+            {
+                playing = false;
+                frameIndex = scrubbedFrame;
+                sequenceCursor = Array.IndexOf(
+                    BuildFrameSequence(sprites.Count, pingPong), frameIndex);
+            }
+            if (reducedMotion) playing = false;
             Sprite current = sprites[frameIndex];
             Rect target = GUILayoutUtility.GetRect(250, 400, 165, 400,
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
@@ -151,6 +165,7 @@ namespace Match3.VisualFactory.Editor
         {
             playing = false;
             frameIndex = 0;
+            sequenceCursor = 0;
             elapsed = 0;
             sprites.Clear();
             if (source == null) return;
