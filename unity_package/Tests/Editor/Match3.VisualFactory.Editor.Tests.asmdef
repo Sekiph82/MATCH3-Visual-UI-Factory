@@ -1,0 +1,27 @@
+{
+  "name": "Match3.VisualFactory.Editor.Tests",
+  "rootNamespace": "Match3.VisualFactory.Tests",
+  "references": [
+    "Match3.VisualFactory.Runtime",
+    "Match3.VisualFactory.Editor",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "noEngineReferences": false
+}

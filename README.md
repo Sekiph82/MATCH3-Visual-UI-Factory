@@ -15,6 +15,7 @@ Games: `Coral_Rescue`, `Garage_Legends`, `Dino_Islands`, `The_Fractured_Realms`,
 - Python structural validators and adversarial tests. **Historical verification:** 66/66 tests at source SHA `10a1b3bc09be...` passed on 2026-10-15 GitHub Actions [38788803805](https://github.com/Sekiph82/MATCH3-Visual-UI-Factory/actions/runs/38788803805); NOT proof that later source changes passed, and NOT a Unity compilation test.
 - **VF-06 draft particle prefab lab:** five preset families, manual controls and deterministic 2D motion sketch; Unity Scene/Game preview remains necessary.
 - **VF-07 draft interactive composer:** seven base screen archetypes plus a data-driven 28-ID Coral shell builder using real Unity uGUI Canvas/Images/Text/disabled Buttons, exact screen IDs, a candidate marker and game draft palette tokens. No Game/Engine action bindings or finished polished graphics yet.
+- **VF-02 explicit rollback:** previously approved asset revisions can be restored only with a matching expected active revision and review receipt; immutable history rows and original source files remain. SQLite audit metadata is not an authenticated owner signature.
 - **VF-08 runtime safe-area component** for RectTransforms; real device evidence still required.
 - **VF-09 manual prefab QA Inspector:** browse candidate uGUI/ParticleSystem components, suspect unbound active buttons, safe area, missing renderer materials and image/clip import metadata. Real visuals, user experience and performance acceptance are still human/device-gated.
 - **VF-04 offline PNG processor**: 1×/2×/3× trim/scaling, alpha keep/remove mask, and deterministic multi-sprite PNG atlas with exact sprite/UV ledger. All output is candidate-only, outside Git. Unity `Tools > MATCH3 > Sprite Atlas Inspector` provides read-only geometric preview, not production art acceptance.
@@ -44,6 +45,27 @@ uses hard reset, force push, deletes, worktrees or duplicate clones. If local
 changes or divergence are found, it stops without overwriting anything. The
 actual local run and Unity import still require on-machine execution and
 are NOT claimed completed by this cloud implementation.
+
+## No-cost Unity EditMode tests (source harness, not executed here)
+
+Six Unity EditMode NUnit tests have been authored in the shared package to
+cover all 28 Coral catalog IDs, all five draft palettes, social/policy-off
+restrictions, no automatic marker approval and sprite-loop frame order.
+The host project declares the package as `testables`; the NUnit test assembly
+is Editor-only and excluded from player builds.
+
+After a clean, owner-approved synchronization of the existing Windows
+checkout, local Unity 6000.6.5f1 can run the suite **without GitHub Actions**:
+
+```powershell
+.\scripts\run_unity_editmode.ps1 -EvidenceDirectory "D:\MATCH3_TEST_EVIDENCE\VUF_R10"
+```
+
+This command is available **but has not been executed** in this cloud coding
+session. It writes logs/XML only to the supplied external evidence location,
+retains results even when tests fail and does not delete or install anything.
+Unity first import may still generate its ordinary `Library/` and `Temp/`
+cache in the local checkout. It is not a device/art acceptance test.
 
 ## Offline asset catalog, no paid APIs
 

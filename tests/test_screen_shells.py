@@ -72,6 +72,16 @@ class CoralScreenShellContracts(unittest.TestCase):
         self.assertIn("doc.screens.Length != 28", script)
         self.assertIn("Incomplete game Style Bible set", script)
 
+    def test_unity_editmode_test_suite_is_source_only_and_discoverable(self):
+        package = json.loads((ROOT / "Packages/manifest.json").read_text())
+        self.assertEqual(package["testables"], ["com.match3.visual-factory"])
+        test_source = (ROOT / "unity_package/Tests/Editor/VufCatalogEditModeTests.cs").read_text()
+        self.assertEqual(test_source.count("[Test]"), 6)
+        asm = json.loads((ROOT / "unity_package/Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef").read_text())
+        self.assertEqual(asm["name"], "Match3.VisualFactory.Editor.Tests")
+        self.assertEqual(asm["defineConstraints"], ["UNITY_INCLUDE_TESTS"])
+        self.assertIn("TestAssemblies", asm["optionalUnityReferences"])
+
     def test_four_page_types_have_distinct_shell_layouts(self):
         script = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
         for section in ("MODAL OR REWARD CEREMONY", "ENGINE BOARD SLOT",

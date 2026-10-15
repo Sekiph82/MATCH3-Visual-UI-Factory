@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R09 SOURCE DEVELOPMENT / VF-02 HISTORY+ROLLBACK SOURCE / 125 PYTHON TEST METHODS DEFINED; LATEST VERIFIED HOSTED R05 66/66, CURRENT UNITY/PYTHON TESTS OPEN.
+**Status:** VUF R10 SOURCE DEVELOPMENT / EDITOR-ONLY UNITY EDITMODE TEST ASSEMBLY + FREE LOCAL TEST RUNNER AUTHORED / 126 PYTHON METHODS DEFINED; NEW TESTS NOT EXECUTED, R05 HOSTED 66/66 HISTORICAL.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -98,6 +98,16 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R10 UNITY TEST HARNESS SOURCE / NO PAID CI / OPEN EXECUTION GATE
+
+**Unity EditMode test harness authored (not executed):** the UPM package now contains `unity_package/Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef`, isolated by Editor platform and `UNITY_INCLUDE_TESTS`, plus six NUnit tests in `VufCatalogEditModeTests.cs`. Tests cover exact 28 Corona Rescue contract IDs and gate status, all five Style Bible palettes, policy-off social/events, candidate marker never auto-approved, ping-pong sprite frame sequence and invalid frame count. `unity_package/Editor/AssemblyInfo.cs` permits dedicated Editor test assembly friend access. All new Unity scripts/folders carry stable .meta GUIDs. Host `Packages/manifest.json` declares `testables: ["com.match3.visual-factory"]`. `Tools/validate_repo_structure.py` verifies Unity test assembly isolation, stable metadata and authored package parity.
+
+**No-cost local runner prepared:** `scripts/run_unity_editmode.ps1` requires the exact existing clean local checkout, Unity 6000.6.5f1 and a separate external evidence folder. It intentionally does not run by itself; when launched it saves Unity batch log and NUnit XML, validates six or more passed/zero failed/skipped EditMode cases, and performs no cache cleanup or hosted GitHub Action. User Windows filesystem remains UNTOUCHED.
+
+**Source verification:** the Python test definition count increased from 125 to **126**, plus six authored Unity NUnit cases. Source check and real Unity EditMode tests have **not been executed for R08/R09/R10 commits**. Last independently read hosted run remains R05 66/66 success, not evidence for these new changes. No module or milestone PASS is claimed. Do not manufacture Unity evidence, artwork approvals or free disk assumptions.
+
+**Next:** execute the existing local source checks and Unity Editor import after safe owner-side synchronization, fix proven errors and add meaningful Unity prefab-render/device QA before any VUF milestone acceptance. GH Actions manual-only, Engine/LFX final integration gates unchanged.
 
 ## 2026-10-15 | R09 SOURCE / VF-02 REVISION ROLLBACK | UNVERIFIED
 
@@ -293,4 +303,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R09_SOURCE_DEVELOPMENT / NEXT: run free Python source checks at current commit and real Unity 6000.6.5f1 editor tests before closure. All art, device and downstream integration acceptance remains open; no GitHub Actions dispatch or local Windows changes.
+**CURRENT_OWNER:** CHATGPT_VUF_R10_SOURCE_DEVELOPMENT / NEXT: inspect local Python and actual Unity 6000.6.5f1 EditMode results at exact SHA, fix any R08-10 failures, then extend VF-07 visual controls and VF-09 real device checks. Automatic GitHub Actions OFF; local Windows untouched; upstream release and owner art approval gates OPEN.

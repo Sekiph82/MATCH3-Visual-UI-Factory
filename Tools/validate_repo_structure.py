@@ -16,6 +16,8 @@ def validate_structure() -> dict:
     editor = json.loads((PACKAGE / "Editor/Match3.VisualFactory.Editor.asmdef").read_text())
     if project["dependencies"].get("com.match3.visual-factory") != "file:../unity_package":
         raise ValueError("project does not import actual local UPM package")
+    if project.get("testables") != ["com.match3.visual-factory"]:
+        raise ValueError("package EditMode tests must be discoverable in Unity Test Runner")
     if package.get("name") != "com.match3.visual-factory":
         raise ValueError("package identity mismatch")
     if runtime.get("name") != "Match3.VisualFactory.Runtime" or runtime.get("includePlatforms"):
@@ -43,8 +45,18 @@ def validate_structure() -> dict:
         "Runtime/VufCandidateScreenMarker.cs",
         "Editor/Resources/coral-experiences.v1.json",
         "Editor/Resources/style_profiles.v1.json",
+        "Editor/AssemblyInfo.cs",
+        "Tests.meta", "Tests/Editor.meta",
+        "Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef",
+        "Tests/Editor/VufCatalogEditModeTests.cs",
         "Runtime/VufSafeAreaFitter.cs",
     ]
+    tests = json.loads((PACKAGE / "Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef").read_text())
+    if (tests.get("includePlatforms") != ["Editor"]
+            or tests.get("defineConstraints") != ["UNITY_INCLUDE_TESTS"]
+            or "TestAssemblies" not in tests.get("optionalUnityReferences", [])
+            or tests.get("name") != "Match3.VisualFactory.Editor.Tests"):
+        raise ValueError("EditMode test assembly must be isolated from normal builds")
     guids = []
     for name in wanted:
         path = PACKAGE / name
