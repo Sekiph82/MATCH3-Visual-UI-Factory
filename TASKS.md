@@ -5,12 +5,19 @@
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
 
-## VUF-R13-C001 | CODEX LOCAL TEST VERIFICATION | ASSIGNED / NOT RUN
+## VUF-R13-C001 | CODEX LOCAL TEST VERIFICATION | BLOCKED / EMPTY LOCAL CHECKOUT / TESTS NOT RUN
 
 **Prompt:** https://docs.google.com/document/d/1mnfSEvkx7j65gOkOBT5elYWEn80btPA8n5gZbzfe17M/edit
 **Owner delegation:** Codex is authorized to test the existing Visual Factory checkout using local Python 3.11+ and actual Unity 6000.6.5f1 without running GitHub Actions or other billed CI. Necessary small VUF-only error fixes and tests are permitted with non-destructive Git discipline; no local cleanup, reset, duplicate clone/worktree, paid API, original artwork modification, Engine/LFX/game writes, or broad feature work.
 **Actual evidence required:** clean source SHA, Python suite and guards, real Unity Editor import/compilation, eight authored EditMode test cases, explicit failures/skips, cautious manual window/prefab/VFX/atlas checks and external small logs/XML. The status remains OPEN until Codex returns logs for independent review. ChatGPT alone updates this TASKS.md status. The only previously verified hosted baseline is R05 66/66 at SHA `10a1b3bc09bef1238ced23fc54b9646e65369343`; this does not verify R08..R12.
 **Prompt/storage policy:** full prompt and future Codex log reside in the project's Google Drive folders, not as separate Github coordination trackers.
+**Actual 2026-10-15 Codex preflight:** Expected local folder exists but is EMPTY (no .git, TASKS.md or scripts). Python 3.12.10 and Unity 6000.6.5f1 are present; Python 0 and Unity 0 tests ran; both NOT RUN. Remote main was ec29c6e1fdede5fe5038fc71cd3ae653469a1cd0 when checked. Owner evidence: C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R13-C001\\VUF-R13-C001-preflight-blocker.txt, SHA256 41C0CA3DF173D533B78AF4DC500E8D2540C3F52BD7C29C03BD3987755F25358C. No modifications or cloned checkout. Do not claim PASS from this preflight.
+
+## VUF-R13-C002 | SAFE FIRST CLONE INTO VERIFIED EMPTY CHECKOUT + RESUME C001 | ASSIGNED / NOT RUN
+
+**Codex prompt:** https://docs.google.com/document/d/10OZOIedi5uA7Y4VvDCP93sUXb6647rm1e8u4tCdV-uY/edit
+**Scope:** Verify the exact existing owner folder is empty including hidden entries, not a symlink or junction, and then permit ONE non-destructive git clone of `Sekiph82/MATCH3-Visual-UI-Factory` main directly into that same folder. This authorization overrides C001's 'no clone' rule ONLY for this verified truly empty destination. No cleanup, deletion, reset, force, duplicate clone/worktree, downloads/installs, paid GitHub Actions or unrelated project modifications.
+**Next:** immediately run all previously requested C001 local Python, Unity Editor + EditMode and selected actual GUI/prefab smoke tests; fix minimal verified errors and rerun at exact final SHA. Keep evidence outside Git and report exact counts. C002 is OPEN pending real Codex results, independent review and owner acceptance. ChatGPT manages this sole TASKS.md lifecycle tracker.
 
 ## PROPOSED execution sequence and release boundaries
 
