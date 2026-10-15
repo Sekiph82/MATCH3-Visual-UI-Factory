@@ -321,6 +321,49 @@ class AssetCatalog:
             return {"verified_revisions": len(rows), "active_assets":
                     con.execute("SELECT COUNT(*) FROM active").fetchone()[0]}
 
+    def portfolio_report(self) -> dict:
+        """Read-only production queue. Stored receipts are NOT identity verified."""
+        checked = self.verify()
+        profiles = []
+        with self._connect() as con:
+            for profile in sorted(PROFILES):
+                values = con.execute(
+                    """SELECT COUNT(*) AS total,
+                    SUM(CASE WHEN p.revision_id IS NULL THEN 1 ELSE 0 END) AS candidates,
+                    SUM(CASE WHEN p.revision_id IS NOT NULL THEN 1 ELSE 0 END) AS approved
+                    FROM revisions r LEFT JOIN approvals p ON p.revision_id=r.id
+                    WHERE r.profile=?""", (profile,)
+                ).fetchone()
+                active = con.execute(
+                    "SELECT COUNT(*) FROM active WHERE profile=?", (profile,)
+                ).fetchone()[0]
+                restorations = con.execute(
+                    "SELECT COUNT(*) FROM restorations WHERE profile=?", (profile,)
+                ).fetchone()[0]
+                pending = con.execute(
+                    """SELECT r.id, r.asset_key, r.revision, r.sha256
+                    FROM revisions r LEFT JOIN approvals p ON p.revision_id=r.id
+                    WHERE r.profile=? AND p.revision_id IS NULL
+                    ORDER BY r.id LIMIT 100""", (profile,)
+                ).fetchall()
+                profiles.append({
+                    "profile_id": profile,
+                    "revision_count": values["total"],
+                    "pending_review_count": values["candidates"] or 0,
+                    "approval_receipts_count": values["approved"] or 0,
+                    "active_asset_count": active,
+                    "rollback_events_count": restorations,
+                    "pending_preview": [dict(row) for row in pending]
+                })
+        return {
+            "schema_version": 1,
+            "stage": "READ_ONLY_NOT_OWNER_APPROVAL",
+            "generated_utc": datetime.now(timezone.utc).isoformat(),
+            "source_integrity_verified": True,
+            "profiles": profiles,
+            "total_verified_revisions": checked["verified_revisions"]
+        }
+
     def preview_manifest(self, profile: str) -> dict:
         if profile not in PROFILES:
             raise CatalogError("unknown game profile")
@@ -367,6 +410,8 @@ def main(argv=None):
     history.add_argument("--profile", required=True, choices=sorted(PROFILES))
     history.add_argument("--key", required=True)
     sub.add_parser("verify")
+    portfolio = sub.add_parser("portfolio-report")
+    portfolio.add_argument("--output-file", type=Path, required=True)
     preview = sub.add_parser("export-preview")
     preview.add_argument("--profile", required=True, choices=sorted(PROFILES))
     args = parser.parse_args(argv)
@@ -389,6 +434,16 @@ def main(argv=None):
             result = catalog.history(args.profile, args.key)
         elif args.command == "verify":
             result = catalog.verify()
+        elif args.command == "portfolio-report":
+            result = catalog.portfolio_report()
+            target = args.output_file
+            root = Path(__file__).resolve().parents[2]
+            if (target.is_symlink() or target.resolve().is_relative_to(root)
+                    or not target.parent.is_dir()):
+                raise CatalogError("portfolio output must be external with existing parent folder")
+            with target.open("x", encoding="utf-8", newline="\n") as stream:
+                json.dump(result, stream, indent=2, ensure_ascii=False, sort_keys=True)
+                stream.write("\n")
         else:
             result = catalog.preview_manifest(args.profile)
         print(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True))

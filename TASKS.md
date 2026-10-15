@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R10 SOURCE DEVELOPMENT / EDITOR-ONLY UNITY EDITMODE TEST ASSEMBLY + FREE LOCAL TEST RUNNER AUTHORED / 126 PYTHON METHODS DEFINED; NEW TESTS NOT EXECUTED, R05 HOSTED 66/66 HISTORICAL.
+**Status:** VUF R11 SOURCE DEVELOPMENT / READ-ONLY FIVE-TITLE PRODUCTION QUEUE / 131 PYTHON UNIT METHODS PLUS 6 UNITY EDITMODE TESTS DEFINED; NEW TESTS NOT EXECUTED.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -23,7 +23,7 @@ Each VF number is a functional module. VUF numbers are milestone/independent aud
 | Functional module | System role / required acceptance | Primary VUF phases | Current verified scope |
 | --- | --- | --- | --- |
 | VF-01 Visual Director / Style Bible | Five distinctive style bibles, design tokens, silhouettes, original/language/age rules, owner sample review | M00/M02/M03/M09 | Draft five-profile JSON + structural validators source, NO creative approval |
-| VF-02 Asset Catalog / Versioning | Original/licensed source receipt, immutable content-addressed revision, explicit owner review and rollback | M00/M01/M04/M11 | SQLite candidate/approval and external blob catalog source; runtime tests NOT independently verified |
+| VF-02 Asset Catalog / Versioning | Original/licensed SHA256 masters, candidate review, version records and explicit rollback | M00/M01/M04/M11 | Offline SQLite catalog, append-only approvals/restoration events, read-only five-game report and Unity Queue SOURCE; authenticated approval/Unity QA OPEN |
 | VF-03 Modular AI / Batch Intake | External manual import first, optional paid API adapters default OFF, measured cost and provenance, no overwrite | M04 | Offline VF-02 PNG intake path source only; provider/batch adapters NOT IMPLEMENTED |
 | VF-04 Image Processing | Non-destructive alpha/crop/segmentation/masking/resolutions/atlas, preserve original SHA | M05/M06 | PNG trim/scale, external alpha keep/remove mask, deterministic no-rotation atlas candidate tools and Unity atlas inspector SOURCE; PSD layers, paint editor, GPU/Unity native SpriteAtlas NOT IMPLEMENTED; R07 tests open |
 | VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Sprite .anim builder, manual frame scrub/ping-pong/reduced motion Editor SOURCE; Unity compile, full skeleton/3D/tween workflows open |
@@ -98,6 +98,14 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R11 SOURCE IMPLEMENTATION / FIVE-GAME PRODUCTION QUEUE / OPEN AUDIT
+
+- VF-02 `AssetCatalog.portfolio_report()` checks SHA integrity and reports five game profiles: pending candidate review, recorded approval counts, active masters, explicit restorations and up to 100 candidate IDs/SHAs for each title. No image pixels or raw local paths are included.
+- `portfolio-report --output-file` creates a fresh UTF-8 read-only JSON report outside the Git repository and refuses to overwrite existing files.
+- Unity Editor source `VufProductionQueueWindow.cs` consumes a manually imported report, validates five-profile consistency and displays each game's backlog without any approval/publish/game-mutation button. Dashboard links to it; stable Unity GUID and package source gate added.
+- New Python tests: empty/candidate/approved/tampered portfolio reports, CLI UTF-8 output and no overwrite, plus read-only Unity source checks. Total is **131 test methods defined, not 131 PASS**; six Unity EditMode test cases remain unexecuted.
+- R08-R11 still need real local Python/Unity 6000.6.5f1 tests at pinned commit. Last independently verified hosted tests were R05 66/66, not the new source. Automatic GitHub Actions remain disabled. No owner Windows, Engine/LFX or five-game repo changes.
 
 ## 2026-10-15 | R10 UNITY TEST HARNESS SOURCE / NO PAID CI / OPEN EXECUTION GATE
 
@@ -303,4 +311,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R10_SOURCE_DEVELOPMENT / NEXT: inspect local Python and actual Unity 6000.6.5f1 EditMode results at exact SHA, fix any R08-10 failures, then extend VF-07 visual controls and VF-09 real device checks. Automatic GitHub Actions OFF; local Windows untouched; upstream release and owner art approval gates OPEN.
+**CURRENT_OWNER:** CHATGPT_VUF_R11_SOURCE_DEVELOPMENT / NEXT: verify current Python source and Unity EditMode 6000.6.5f1 without paid GitHub Actions; fix failures before independent audit. All production art, device, owner and final integration gates remain open.

@@ -82,6 +82,15 @@ class CoralScreenShellContracts(unittest.TestCase):
         self.assertEqual(asm["defineConstraints"], ["UNITY_INCLUDE_TESTS"])
         self.assertIn("TestAssemblies", asm["optionalUnityReferences"])
 
+    def test_production_queue_is_view_only_and_cannot_approve(self):
+        code = (ROOT / "unity_package/Editor/VufProductionQueueWindow.cs").read_text()
+        self.assertIn("READ_ONLY_NOT_OWNER_APPROVAL", code)
+        self.assertIn("pending_review_count", code)
+        self.assertIn("approval_receipts_count", code)
+        self.assertNotIn("AssetDatabase.CreateAsset", code)
+        self.assertNotIn("PrefabUtility.SaveAsPrefabAsset", code)
+        self.assertNotIn("GrantReward", code)
+
     def test_four_page_types_have_distinct_shell_layouts(self):
         script = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
         for section in ("MODAL OR REWARD CEREMONY", "ENGINE BOARD SLOT",

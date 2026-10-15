@@ -50,3 +50,27 @@ a Unity production pack, downloads artwork or modifies a game repository.
 True production approval and independent audit require additional real
 owner authority, rights and final dependency checks. R09 code/test results
 are currently NOT independently verified at the new exact commit.
+
+## Five-game Visual Production Queue | R11 source prototype
+
+For a **read-only, integrity-checked five-game portfolio snapshot**, choose a
+fresh output name in the external content folder. The CLI refuses to overwrite
+an existing JSON file or write into the Git checkout:
+
+```powershell
+python -B factory/asset_catalog/catalog.py --store "D:\MATCH3_VISUAL_ASSETS" portfolio-report --output-file "D:\MATCH3_VISUAL_ASSETS\portfolio_001.json"
+```
+
+The report contains all five profiles, total revision counts, pending-review
+candidates (up to 100 IDs/keys/SHAs per game), counts of recorded approvals,
+current active assets and recorded rollback events. Every blob is checked
+against its source SHA before preparing the report. Raw PNG source pixels,
+owner credentials and unrestricted filesystem paths are NOT copied into
+the report. `READ_ONLY_NOT_OWNER_APPROVAL` is the only supported stage.
+
+Import a **COPY** of this JSON into the existing Unity authoring project.
+Open **Tools > MATCH3 > Visual Production Queue** to inspect the counts
+and backlog; this is a read-only snapshot, not a live database connection.
+The Unity window never approves an asset or changes files/games. Existing
+report files are never overwritten. No GUI preview counts should be treated
+as evidence that a real human owner approved copyright, originality or art.

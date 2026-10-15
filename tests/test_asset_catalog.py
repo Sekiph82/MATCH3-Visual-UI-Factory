@@ -245,6 +245,47 @@ class AssetCatalogTests(unittest.TestCase):
         with self.assertRaises(CatalogError):
             self.catalog.history("Coral_Rescue", "../escape")
 
+    def test_portfolio_report_lists_all_five_without_approving(self):
+        report = self.catalog.portfolio_report()
+        self.assertEqual(report["stage"], "READ_ONLY_NOT_OWNER_APPROVAL")
+        self.assertEqual(len(report["profiles"]), 5)
+        self.assertEqual(report["total_verified_revisions"], 0)
+        self.assertTrue(all(p["pending_review_count"] == 0 for p in report["profiles"]))
+
+    def test_portfolio_report_keeps_candidate_and_approval_counts_separate(self):
+        v1 = self.ingest()
+        report = self.catalog.portfolio_report()
+        coral = next(p for p in report["profiles"] if p["profile_id"] == "Coral_Rescue")
+        self.assertEqual(coral["pending_review_count"], 1)
+        self.assertEqual(coral["active_asset_count"], 0)
+        self.assertEqual(coral["pending_preview"][0]["id"], v1["revision_id"])
+        self.catalog.approve(v1["revision_id"], "human-reviewed")
+        v2 = self.ingest(b"\\x44\\x55\\x66\\xff")
+        report = self.catalog.portfolio_report()
+        coral = next(p for p in report["profiles"] if p["profile_id"] == "Coral_Rescue")
+        self.assertEqual(coral["pending_review_count"], 1)
+        self.assertEqual(coral["approval_receipts_count"], 1)
+        self.assertEqual(coral["active_asset_count"], 1)
+        self.assertEqual(coral["revision_count"], 2)
+
+    def test_portfolio_report_rejects_corrupted_store_bytes(self):
+        v1 = self.ingest()
+        self.catalog._blob(v1["sha256"]).write_bytes(b"corrupted")
+        with self.assertRaises(CatalogError):
+            self.catalog.portfolio_report()
+
+    def test_portfolio_cli_writes_utf8_json_without_overwriting(self):
+        external = Path(self.temp.name) / "portfolio_read_only.json"
+        args = ["--store", str(self.store), "portfolio-report",
+                "--output-file", str(external)]
+        self.assertEqual(main(args), 0)
+        raw = external.read_bytes()
+        report = json.loads(raw.decode("utf-8"))
+        self.assertEqual(report["stage"], "READ_ONLY_NOT_OWNER_APPROVAL")
+        self.assertEqual(len(report["profiles"]), 5)
+        self.assertEqual(main(args), 2)
+        self.assertEqual(external.read_bytes(), raw)
+
     def test_cli_initializes_and_verifies(self):
         with tempfile.TemporaryDirectory() as folder:
             store = Path(folder) / "new"

@@ -41,6 +41,7 @@ def validate_structure() -> dict:
         "Editor/VufQaStudioWindow.cs",
         "Editor/VufAtlasPreviewWindow.cs",
         "Editor/VufScreenShellBuilderWindow.cs",
+        "Editor/VufProductionQueueWindow.cs",
         "Editor/VufScreenCatalog.cs",
         "Runtime/VufCandidateScreenMarker.cs",
         "Editor/Resources/coral-experiences.v1.json",

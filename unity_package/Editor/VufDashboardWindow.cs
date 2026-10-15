@@ -22,7 +22,7 @@ namespace Match3.VisualFactory.Editor
             "VF-10  Unity Integration / Export"
         };
         private static readonly string[] States = {
-            "DRAFT STYLE CONTRACTS", "OFFLINE PYTHON CATALOG", "MANUAL PNG INTAKE VIA CLI",
+            "DRAFT STYLE CONTRACTS", "OFFLINE CATALOG + READ-ONLY FIVE-GAME QUEUE", "MANUAL PNG INTAKE VIA CLI",
             "PNG TRIM, DETERMINISTIC SHELF ATLAS + UNITY INSPECTOR", "SPRITE CLIP BUILDER SOURCE", "PARTICLE PREFAB LAB SOURCE",
             "7 COMMON ARCHETYPES + 28 DRAFT CORAL SHELLS", "RUNTIME SAFE AREA COMPONENT", "MANUAL PREFAB STRUCTURAL INSPECTOR",
             "LOCAL PACKAGE PREVIEW ONLY"
@@ -47,6 +47,8 @@ namespace Match3.VisualFactory.Editor
                 "No approved artwork or production exports. Upstream integration is gated.",
                 MessageType.Info);
             profile = EditorGUILayout.Popup("Selected game", profile, Profiles);
+            if (GUILayout.Button("Five-Game Production Queue (read-only)", GUILayout.Height(32)))
+                VufProductionQueueWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Preview", GUILayout.Height(34)))
