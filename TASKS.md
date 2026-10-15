@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R06 DIRECT DEVELOPMENT / R05 SOURCE CI 66/66 VERIFIED / VF-06 PARTICLE + VF-07 REAL UI + VF-08 SAFE AREA SOURCE DRAFT / UNITY R06 AUDIT OPEN.
+**Status:** VUF R07 DIRECT DEVELOPMENT / VF-04 TRIM + MASK + ATLAS / VF-09 SOURCE PIXEL VERIFIER / 108 UNIT METHODS WRITTEN; ONLY R05 66/66 HOSTED RUN VERIFIED; UNITY AND R07 TESTS OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -25,12 +25,12 @@ Each VF number is a functional module. VUF numbers are milestone/independent aud
 | VF-01 Visual Director / Style Bible | Five distinctive style bibles, design tokens, silhouettes, original/language/age rules, owner sample review | M00/M02/M03/M09 | Draft five-profile JSON + structural validators source, NO creative approval |
 | VF-02 Asset Catalog / Versioning | Original/licensed source receipt, immutable content-addressed revision, explicit owner review and rollback | M00/M01/M04/M11 | SQLite candidate/approval and external blob catalog source; runtime tests NOT independently verified |
 | VF-03 Modular AI / Batch Intake | External manual import first, optional paid API adapters default OFF, measured cost and provenance, no overwrite | M04 | Offline VF-02 PNG intake path source only; provider/batch adapters NOT IMPLEMENTED |
-| VF-04 Image Processing | Non-destructive alpha/crop/segmentation/masking/resolutions/atlas, preserve original SHA | M05/M06 | NOT IMPLEMENTED |
-| VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Manual sheet frame preview in Unity C# source only; real Editor not yet verified |
-| VF-06 VFX Lab | Shader/particles/audio/haptic triggers/combo chaining, interruption/replay/reduced motion | M07/M09 | NOT IMPLEMENTED |
-| VF-07 UI Composer | Layered interactive button/prefab, 28 Coral experiences + reusable 5-theme screens, real state/locale binding | M03/M08/M10 | 28 Coral contract IDs only; actual screens NOT IMPLEMENTED |
-| VF-08 Responsive Preview | Safe areas, mobile ratios, tablet, touch accessibility and real-device evidence | M03/M08/M09 | Simulated Editor guide code only; no mobile device tests |
-| VF-09 Validation / Visual QA | Automated art/rights/render/perf + complete manual Sprite/VFX/UI Studio, separate owner/device PASS | M09/M10 | Offline schema/source tests authored; running evidence NOT YET VERIFIED |
+| VF-04 Image Processing | Non-destructive alpha/crop/segmentation/masking/resolutions/atlas, preserve original SHA | M05/M06 | PNG trim/scale, external alpha keep/remove mask, deterministic no-rotation atlas candidate tools and Unity atlas inspector SOURCE; PSD layers, paint editor, GPU/Unity native SpriteAtlas NOT IMPLEMENTED; R07 tests open |
+| VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Sprite .anim builder, manual frame scrub/ping-pong/reduced motion Editor SOURCE; Unity compile, full skeleton/3D/tween workflows open |
+| VF-06 VFX Lab | Shader/particles/audio/haptic triggers/combo chaining, interruption/replay/reduced motion | M07/M09 | Five candidate ParticleSystem preset prefab builder + 2D sketch SOURCE; shaders/audio/haptic GPU/replay/device QA open |
+| VF-07 UI Composer | Layered interactive button/prefab, 28 Coral experiences + reusable 5-theme screens, real state/locale binding | M03/M08/M10 | Seven disabled/unbound real-uGUI structural prefab archetypes SOURCE; all 28 finished Coral screens and bindings remain open |
+| VF-08 Responsive Preview | Safe areas, mobile ratios, tablet, touch accessibility and real-device evidence | M03/M08/M09 | Runtime Screen.safeArea fitter SOURCE plus simulated Editor device guides; physical phone/tablet tests open |
+| VF-09 Validation / Visual QA | Automated art/rights/render/perf + complete manual Sprite/VFX/UI Studio, separate owner/device PASS | M09/M10 | Independent atlas/mask original-to-output SHA/pixel verifier, manual prefab/atlas inspection SOURCE; newest tests/Unity/device performance unverified |
 | VF-10 Unity Packaging / Release | Versioned UPM, SpriteAtlas, Animator, prefabs, Addressables optional, deterministic export/rollback | M08/M10/M11 | Local UPM package SOURCE and preview contract; no production export |
 
 **Nine production output families covered:** (1) UI Screens, (2) UI Components, (3) Game Tiles incl. special/obstacle/booster, (4) Characters/mascots, (5) Environments/worlds, (6) UI/character/transition Animations, (7) gameplay VFX, (8) Rewards/collections, **(9) Marketing Assets (app icon, splash, store screenshots)**. The marketing export deliverables belong to VF-04 and VF-10 and must have separate platform aspect/dimension/rights QA and explicit owner acceptance. All families follow request -> candidate -> QA -> owner approval -> immutable versioned export -> Unity/consumer import -> device/release test. Real rewards remain Engine grant events only.
@@ -98,6 +98,24 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R07 SOURCE DEVELOPMENT / VF-04 ATLAS + MASK & VF-09 SOURCE PIXEL QA | OPEN TEST GATE
+
+**User directive:** continue direct development without needless pauses. The changes below were actually published in this Visual Factory repository. No device/production release is claimed.
+
+**VF-04 deterministic atlas SOURCE:** `factory/image_processor/atlas_pipeline.py` builds original-pixel-preserving unrotated PNG sprite atlas candidates from explicitly named source PNG files. Deterministic shelf packing (max 128 sprites, maximum 4096 edge/16.8M RGBA pixels), configurable transparent padding/edge extrusion, bottom-left Unity UV coordinates, per-sprite original SHA and output atlas SHA. External candidate folder only; no overwrite or source mutation. `tests/test_atlas_pipeline.py` adds 12 defined pixel/layout/symlink/overflow/invariance tests.
+
+**VF-04 alpha masking SOURCE:** `factory/image_processor/alpha_mask.py` reads original and same-sized RGBA mask file, outputs keep/remove mask-alpha pixel composition with original RGB unchanged and original/mask/output SHA-256 receipt. Separate external, non-overwritten `CANDIDATE_NOT_APPROVED` outputs; `tests/test_alpha_mask.py` has 10 tests. This is not a painting/select-brush GUI, PSD layer authoring or automatic background removal.
+
+**VF-04 Unity atlas Inspector SOURCE:** `unity_package/Editor/VufAtlasPreviewWindow.cs` now checks candidate JSON schema, sprite ID uniqueness, bounds, normalized bottom-left UV, overlap and draws labelled sprite rectangles over a selected imported Texture2D. Dashboard menu opens the inspector; stable Unity .meta GUID and `Tools/validate_repo_structure.py` source gate added. **This does not prove source hashes or real Unity Editor compilation**, and is not Unity SpriteAtlas packaging.
+
+**VF-09 independently replayed pixel QA SOURCE:** `factory/validators/verify_candidates.py` re-reads original PNGs and output candidate pixels/receipts, verifies source SHA, atlas UV/geometry/overlap and sprite pixels, or mask alpha arithmetic/RGB immutability. `tests/test_verify_candidates.py` adds 10 tests with forged hashes/UVs/original mutation/altered output. Success returns `REVIEW_REQUIRED`, not owner approval.
+
+**PNG edge hardening:** `png_pipeline.py` now fails closed on RGB `tRNS` transparency PNG that would otherwise be silently decoded opaque; regression test added. Unsupported indexed/grayscale/interlaced/ICC color-managed PNG must be normalized by a separate verified converter before original masters are approved.
+
+**Test status:** Nine Python test source modules now contain **108 discovered-style `test_*` methods**. This is a SOURCE COUNT, **NOT 108 PASS**. Last independently inspected hosted run remains R05 SHA `10a1b3bc09bef1238ced23fc54b9646e65369343`, 66/66 PASS on [run 38788803805](https://github.com/Sekiph82/MATCH3-Visual-UI-Factory/actions/runs/38788803805). R06/R07 source has not been run in the owner's Unity Editor or by Python. The workflow is manual-only to avoid paid automatic GH Actions. No free local user's Windows machine was accessed by the connector, no paid API or content generation enabled.
+
+**Next bounded verification:** on a permitted Windows checkout, run `scripts/run_source_checks.ps1`, correct any unit failures; open Unity 6000.6.5f1 and check actual package compilation, Atlas Inspector VFX Animation UI prefab source, exports and real device behavior. Advance masks/atlas into editable Studio and accessible, working 28 Coral UI templates only after these hard gates. Do not mark VUF-M00/M05/M06/M09 PASS or release from source-code claims.
 
 ## 2026-10-15 | R06 DIRECT DEVELOPMENT / VERIFIED R05 CI / CONTROLLED-COST NEW TOOLS
 
@@ -254,4 +272,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R06_DIRECT_DEVELOPMENT / NEXT: perform free local structural tests and real Unity 6000.6.5f1 package import/authoring inspections for VF-05/06/07/08; extend complete manual VFX/Animation/Screen QA after fixing evidence. Do not auto-trigger GitHub Actions. ENG/LFX downstream integration still gated; no owner asset or device approval, paid API, desktop sync or audited v1 release claimed.
+**CURRENT_OWNER:** CHATGPT_VUF_R07_DIRECT_DEVELOPMENT / NEXT: free local Python suite at exact SHA + actual Unity 6000.6.5f1 import for Atlas/Mask, SpriteClip, VFX/uGUI/QA windows. Fix failures, then advance VF-04/07/09. Hosted GH Actions manual-only cost guard; final Engine/LFX gates still block integration. No Windows sync, owner creative/device signoff or audited VUF release claimed.
