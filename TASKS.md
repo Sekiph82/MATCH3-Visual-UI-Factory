@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R12 SOURCE DEVELOPMENT / UI TWEEN REDUCED-MOTION/INTERRUPTION SOURCE / 132 PYTHON UNIT METHODS + 8 UNITY EDITMODE TESTS AUTHORED; CURRENT TESTS NOT EXECUTED.
+**Status:** VUF-R13 LOCAL PYTHON/UNITY EDITMODE REPORTED VERIFIED AT 796a84b (125 PASS, 7 OS SKIP; UNITY 8/8 PASS); GUI/DEVICE/ART ACCEPTANCE OPEN. NEXT C004 HEADLESS EDITOR COVERAGE.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -13,11 +13,25 @@
 **Prompt/storage policy:** full prompt and future Codex log reside in the project's Google Drive folders, not as separate Github coordination trackers.
 **Actual 2026-10-15 Codex preflight:** Expected local folder exists but is EMPTY (no .git, TASKS.md or scripts). Python 3.12.10 and Unity 6000.6.5f1 are present; Python 0 and Unity 0 tests ran; both NOT RUN. Remote main was ec29c6e1fdede5fe5038fc71cd3ae653469a1cd0 when checked. Owner evidence: C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R13-C001\\VUF-R13-C001-preflight-blocker.txt, SHA256 41C0CA3DF173D533B78AF4DC500E8D2540C3F52BD7C29C03BD3987755F25358C. No modifications or cloned checkout. Do not claim PASS from this preflight.
 
-## VUF-R13-C002 | SAFE FIRST CLONE INTO VERIFIED EMPTY CHECKOUT + RESUME C001 | ASSIGNED / NOT RUN
+## VUF-R13-C002 | EMPTY CHECKOUT BOOTSTRAP AND SOURCE TESTS | COMPLETED / 7 OS SKIP / GUI OPEN
 
 **Codex prompt:** https://docs.google.com/document/d/10OZOIedi5uA7Y4VvDCP93sUXb6647rm1e8u4tCdV-uY/edit
 **Scope:** Verify the exact existing owner folder is empty including hidden entries, not a symlink or junction, and then permit ONE non-destructive git clone of `Sekiph82/MATCH3-Visual-UI-Factory` main directly into that same folder. This authorization overrides C001's 'no clone' rule ONLY for this verified truly empty destination. No cleanup, deletion, reset, force, duplicate clone/worktree, downloads/installs, paid GitHub Actions or unrelated project modifications.
 **Next:** immediately run all previously requested C001 local Python, Unity Editor + EditMode and selected actual GUI/prefab smoke tests; fix minimal verified errors and rerun at exact final SHA. Keep evidence outside Git and report exact counts. C002 is OPEN pending real Codex results, independent review and owner acceptance. ChatGPT manages this sole TASKS.md lifecycle tracker.
+
+## VUF-R13-C003 | LOCAL VERIFIED SOURCE PUSH | COMPLETE; GRAPHICAL QA BLOCKED
+
+**Codex evidence:** https://drive.google.com/file/d/1ySBukG50NnjYQ7rlQ2YpUqMYu3ZiHB1v/view
+**Published tested source:** `796a84b38e2325910b45898e0bd55ddbcb911236` on GitHub `main`, matching user-reported local main after normal non-force push; zero ahead/behind. ChatGPT confirmed GitHub HEAD at this exact SHA. Three scoped repair commits published. GitHub Actions remains workflow_dispatch only; last seen hosted runs are old R05.
+**C002 real local test evidence (reused by C003 without code change):** Python 3.12.10 reported **132 executed, 125 PASS, 7 Windows symlink SKIP, 0 fail/error**. Real Unity 6000.6.5f1 import and **8/8 EditMode NUnit PASS**, no reported compiler error/markered warning. The uploaded C002/C003 Codex logs are evidence. Raw Windows log/XML SHA hashes were supplied by Codex but not recomputed independently by ChatGPT.
+**C003 unresolved:** Codex session had no native Windows GUI; Visual Factory Dashboard, 28 screens, UI Composer, Production Queue, Sprite Clip, Atlas Inspector, Particle Lab, manual QA, responsive PlayMode and real iPhone/Android device/art review all **NOT RUN**. First-import 24 untracked files were preserved with 24/24 SHA-match evidence: 21 ProjectSettings YAML, two stable Unity .meta GUID files and packages-lock.json. Two untracked metas threaten portable import GUID stability until selectively versioned. No files were deleted, no paid CI.
+**Milestone authority:** Source test success is NOT independent production VUF-M00..M11 PASS. Engine/LFX final dependencies and owner art/device approval remain open.
+
+## VUF-R13-C004 | OFFLINE HEADLESS UNITY INTEGRATION AND SAFE PROJECT METADATA | ASSIGNED / NOT RUN
+
+**Codex task:** https://docs.google.com/document/d/1KgA5R4QmBUR4AHNSCZhEdUk1XQT3P6NehMze_h4MHC8/edit
+**Purpose:** No need to repeat inaccessible native GUI attempts. Safely fast-forward existing local checkout to current `main` (including this TASKS.md status update) only if no local tracked/untracked conflicts; classify existing 24 first-import files, preserve stable GUID sidecars and selected portable settings without blanket git adds. Add *actual Unity batchmode EditMode integration tests* for in-memory uGUI screen hierarchies, candidate markers and disabled Buttons, modal/mode/page layouts, five profiles, reduced-motion tween, atlas geometry, and genuine ParticleSystem source setup where testable. The interactive visual/device/owner gates remain NOT RUN until a real graphical session is available. Test real Python and Unity at final code SHA before normal non-force push.
+**Safety:** No GitHub Actions/paid API, deleting caches, files or 24 untracked files, force/reset/clone/worktree, or changes to Engine/LFX/game repos. ChatGPT maintains TASKS.md status and later reviews Codex evidence.
 
 ## PROPOSED execution sequence and release boundaries
 
