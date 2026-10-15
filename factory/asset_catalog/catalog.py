@@ -52,6 +52,29 @@ CREATE TABLE IF NOT EXISTS active (
  revision_id INTEGER NOT NULL REFERENCES approvals(revision_id),
  PRIMARY KEY(profile, asset_key)
 );
+CREATE TABLE IF NOT EXISTS restorations (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ profile TEXT NOT NULL,
+ asset_key TEXT NOT NULL,
+ from_revision_id INTEGER NOT NULL REFERENCES approvals(revision_id),
+ to_revision_id INTEGER NOT NULL REFERENCES approvals(revision_id),
+ owner_receipt TEXT NOT NULL,
+ restored_utc TEXT NOT NULL
+);
+-- Immutable history records cannot silently disappear or be rewritten.
+-- Active pointers are intentionally mutable only via approval/rollback methods.
+CREATE TRIGGER IF NOT EXISTS freeze_revision_update
+ BEFORE UPDATE ON revisions BEGIN SELECT RAISE(ABORT, 'immutable revision'); END;
+CREATE TRIGGER IF NOT EXISTS freeze_revision_delete
+ BEFORE DELETE ON revisions BEGIN SELECT RAISE(ABORT, 'immutable revision'); END;
+CREATE TRIGGER IF NOT EXISTS freeze_approval_update
+ BEFORE UPDATE ON approvals BEGIN SELECT RAISE(ABORT, 'immutable approval'); END;
+CREATE TRIGGER IF NOT EXISTS freeze_approval_delete
+ BEFORE DELETE ON approvals BEGIN SELECT RAISE(ABORT, 'immutable approval'); END;
+CREATE TRIGGER IF NOT EXISTS freeze_restoration_update
+ BEFORE UPDATE ON restorations BEGIN SELECT RAISE(ABORT, 'immutable restoration'); END;
+CREATE TRIGGER IF NOT EXISTS freeze_restoration_delete
+ BEFORE DELETE ON restorations BEGIN SELECT RAISE(ABORT, 'immutable restoration'); END;
 """
 
 class CatalogError(ValueError):
@@ -97,8 +120,8 @@ class AssetCatalog:
         if self.store.resolve().is_relative_to(Path(__file__).resolve().parents[2]):
             raise CatalogError("asset store must be outside the GitHub source repository")
         self.store.mkdir(parents=True, exist_ok=True)
-        if self.store.is_symlink():
-            raise CatalogError("catalog root must not be symlink")
+        if self.store.is_symlink() or self.db_path.is_symlink():
+            raise CatalogError("catalog root/database must not be symlink")
         with sqlite3.connect(str(self.db_path)) as con:
             con.executescript(SCHEMA)
 
@@ -190,6 +213,81 @@ class AssetCatalog:
                 (revision["profile"], revision["asset_key"], revision_id))
         return {"active_revision_id": revision_id, "previous_active_revision_id": current}
 
+    def rollback(self, target_revision_id: int, expected_active_revision_id: int,
+                 owner_receipt: str) -> dict:
+        """Restore a *previously approved* master, logging an immutable event.
+
+        This only re-points one active revision. Historic blobs and revisions are
+        never deleted. Receipt is audit metadata, not authenticated owner identity.
+        """
+        owner_receipt = required_text(owner_receipt, "owner rollback receipt")
+        if (type(target_revision_id) is not int or type(expected_active_revision_id) is not int
+                or target_revision_id <= 0 or expected_active_revision_id <= 0
+                or target_revision_id == expected_active_revision_id):
+            raise CatalogError("rollback needs distinct positive target and expected-active IDs")
+        with self._connect() as con:
+            con.execute("BEGIN IMMEDIATE")
+            target = con.execute(
+                """SELECT r.* FROM revisions r
+                JOIN approvals p ON p.revision_id=r.id
+                WHERE r.id=?""", (target_revision_id,)
+            ).fetchone()
+            if target is None:
+                raise CatalogError("rollback target was never approved")
+            active = con.execute(
+                "SELECT revision_id FROM active WHERE profile=? AND asset_key=?",
+                (target["profile"], target["asset_key"])
+            ).fetchone()
+            if active is None or active["revision_id"] != expected_active_revision_id:
+                raise CatalogError("stale expected-active revision or wrong asset")
+            original = self._blob(target["sha256"])
+            if (original.is_symlink() or not original.is_file()
+                    or hashlib.sha256(original.read_bytes()).hexdigest() != target["sha256"]):
+                raise CatalogError("rollback target original blob missing or modified")
+            con.execute(
+                """INSERT INTO restorations
+                (profile,asset_key,from_revision_id,to_revision_id,owner_receipt,restored_utc)
+                VALUES(?,?,?,?,?,?)""",
+                (target["profile"], target["asset_key"], expected_active_revision_id,
+                 target_revision_id, owner_receipt, datetime.now(timezone.utc).isoformat())
+            )
+            changed = con.execute(
+                """UPDATE active SET revision_id=?
+                WHERE profile=? AND asset_key=? AND revision_id=?""",
+                (target_revision_id, target["profile"], target["asset_key"],
+                 expected_active_revision_id)
+            )
+            if changed.rowcount != 1:
+                raise CatalogError("rollback compare-and-swap failed")
+        return {"active_revision_id": target_revision_id,
+                "previous_active_revision_id": expected_active_revision_id,
+                "stage": "OWNER_REVIEW_RECEIPT_REQUIRED"}
+
+    def history(self, profile: str, asset_key: str) -> dict:
+        if profile not in PROFILES or not isinstance(asset_key, str) or not KEY_PATTERN.fullmatch(asset_key):
+            raise CatalogError("unknown history key/profile")
+        with self._connect() as con:
+            revisions = con.execute(
+                """SELECT r.id, r.revision, r.sha256, r.created_utc,
+                CASE WHEN a.revision_id IS NULL THEN 0 ELSE 1 END AS approved
+                FROM revisions r LEFT JOIN approvals a ON a.revision_id=r.id
+                WHERE r.profile=? AND r.asset_key=? ORDER BY r.revision""",
+                (profile, asset_key)
+            ).fetchall()
+            restores = con.execute(
+                """SELECT id,from_revision_id,to_revision_id,owner_receipt,restored_utc
+                FROM restorations WHERE profile=? AND asset_key=? ORDER BY id""",
+                (profile, asset_key)
+            ).fetchall()
+            active = con.execute(
+                "SELECT revision_id FROM active WHERE profile=? AND asset_key=?",
+                (profile, asset_key)
+            ).fetchone()
+        return {"profile": profile, "asset_key": asset_key,
+                "active_revision_id": active["revision_id"] if active else None,
+                "revisions": [dict(row) for row in revisions],
+                "restorations": [dict(row) for row in restores]}
+
     def verify(self) -> dict:
         with self._connect() as con:
             rows = con.execute("SELECT id,sha256 FROM revisions ORDER BY id").fetchall()
@@ -200,6 +298,22 @@ class AssetCatalog:
             ).fetchall()
             if active:
                 raise CatalogError("active revision missing approval record")
+            inconsistent = con.execute(
+                """SELECT a.revision_id FROM active a
+                JOIN revisions r ON r.id=a.revision_id
+                WHERE a.profile!=r.profile OR a.asset_key!=r.asset_key"""
+            ).fetchone()
+            if inconsistent:
+                raise CatalogError("active revision points to wrong profile/asset")
+            invalid_restoration = con.execute(
+                """SELECT s.id FROM restorations s
+                JOIN revisions old ON old.id=s.from_revision_id
+                JOIN revisions target ON target.id=s.to_revision_id
+                WHERE old.profile != s.profile OR old.asset_key != s.asset_key
+                OR target.profile != s.profile OR target.asset_key != s.asset_key"""
+            ).fetchone()
+            if invalid_restoration:
+                raise CatalogError("restoration refers to unrelated historic asset")
             for row in rows:
                 blob = self._blob(row["sha256"])
                 if blob.is_symlink() or not blob.is_file() or hashlib.sha256(blob.read_bytes()).hexdigest() != row["sha256"]:
@@ -245,6 +359,13 @@ def main(argv=None):
     approve.add_argument("--revision-id", required=True, type=int)
     approve.add_argument("--owner-receipt", required=True)
     approve.add_argument("--replaces-revision-id", type=int)
+    restore = sub.add_parser("rollback")
+    restore.add_argument("--target-revision-id", type=int, required=True)
+    restore.add_argument("--expected-active-revision-id", type=int, required=True)
+    restore.add_argument("--owner-receipt", required=True)
+    history = sub.add_parser("history")
+    history.add_argument("--profile", required=True, choices=sorted(PROFILES))
+    history.add_argument("--key", required=True)
     sub.add_parser("verify")
     preview = sub.add_parser("export-preview")
     preview.add_argument("--profile", required=True, choices=sorted(PROFILES))
@@ -260,6 +381,12 @@ def main(argv=None):
         elif args.command == "approve":
             result = catalog.approve(args.revision_id, args.owner_receipt,
                                      args.replaces_revision_id)
+        elif args.command == "rollback":
+            result = catalog.rollback(args.target_revision_id,
+                                      args.expected_active_revision_id,
+                                      args.owner_receipt)
+        elif args.command == "history":
+            result = catalog.history(args.profile, args.key)
         elif args.command == "verify":
             result = catalog.verify()
         else:

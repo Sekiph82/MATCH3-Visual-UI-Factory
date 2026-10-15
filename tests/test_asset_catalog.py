@@ -161,6 +161,90 @@ class AssetCatalogTests(unittest.TestCase):
             fresh.ingest(self.source, "Coral_Rescue", "tile.star", "original", "receipt")
         self.assertFalse((fresh.store / "blobs").exists())
 
+    def test_rollback_to_previously_approved_revision(self):
+        v1 = self.ingest()
+        self.catalog.approve(v1["revision_id"], "owner-accept-v1")
+        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        self.catalog.approve(v2["revision_id"], "owner-accept-v2", v1["revision_id"])
+        restored = self.catalog.rollback(v1["revision_id"], v2["revision_id"], "owner-restore-v1")
+        self.assertEqual(restored["active_revision_id"], v1["revision_id"])
+        self.assertEqual(self.catalog.preview_manifest("Coral_Rescue")["assets"][0]["sha256"],
+                         v1["sha256"])
+        self.assertTrue(self.catalog._blob(v2["sha256"]).is_file())
+        history = self.catalog.history("Coral_Rescue", "tile.star")
+        self.assertEqual(len(history["revisions"]), 2)
+        self.assertEqual(len(history["restorations"]), 1)
+        self.assertEqual(history["restorations"][0]["to_revision_id"], v1["revision_id"])
+
+    def test_rollback_wrong_expected_active_fails_closed(self):
+        v1 = self.ingest()
+        self.catalog.approve(v1["revision_id"], "owner-accept-v1")
+        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        self.catalog.approve(v2["revision_id"], "owner-accept-v2", v1["revision_id"])
+        with self.assertRaises(CatalogError):
+            self.catalog.rollback(v1["revision_id"], v1["revision_id"], "stale-receipt")
+        with self.assertRaises(CatalogError):
+            self.catalog.rollback(v1["revision_id"], 999, "stale-receipt")
+        self.assertEqual(self.catalog.history("Coral_Rescue", "tile.star")["restorations"], [])
+        self.assertEqual(self.catalog.history("Coral_Rescue", "tile.star")["active_revision_id"],
+                         v2["revision_id"])
+
+    def test_rollback_unapproved_candidate_is_rejected(self):
+        v1 = self.ingest()
+        self.catalog.approve(v1["revision_id"], "owner-v1")
+        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        with self.assertRaises(CatalogError):
+            self.catalog.rollback(v2["revision_id"], v1["revision_id"], "owner-v2")
+        self.assertEqual(self.catalog.verify()["active_assets"], 1)
+
+    def test_rollback_preserves_profile_and_asset_isolation(self):
+        v1 = self.ingest()
+        self.catalog.approve(v1["revision_id"], "owner-v1")
+        other = self.ingest(game="Garage_Legends")
+        self.catalog.approve(other["revision_id"], "garage-owner")
+        with self.assertRaises(CatalogError):
+            self.catalog.rollback(other["revision_id"], v1["revision_id"], "wrong-owner")
+        self.assertEqual(self.catalog.history("Garage_Legends", "tile.star")["restorations"], [])
+
+    def test_revision_and_approval_history_are_sqlite_append_only(self):
+        revision = self.ingest()
+        self.catalog.approve(revision["revision_id"], "owner-v1")
+        with sqlite3.connect(self.catalog.db_path) as con:
+            with self.assertRaises(sqlite3.IntegrityError):
+                con.execute("UPDATE revisions SET rights='licensed' WHERE id=?",
+                            (revision["revision_id"],))
+            with self.assertRaises(sqlite3.IntegrityError):
+                con.execute("DELETE FROM approvals WHERE revision_id=?",
+                            (revision["revision_id"],))
+        self.assertEqual(self.catalog.verify()["verified_revisions"], 1)
+
+    def test_restoration_events_are_sqlite_append_only(self):
+        v1 = self.ingest()
+        self.catalog.approve(v1["revision_id"], "owner-v1")
+        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        self.catalog.approve(v2["revision_id"], "owner-v2", v1["revision_id"])
+        self.catalog.rollback(v1["revision_id"], v2["revision_id"], "owner-restore")
+        with sqlite3.connect(self.catalog.db_path) as con:
+            with self.assertRaises(sqlite3.IntegrityError):
+                con.execute("DELETE FROM restorations")
+            with self.assertRaises(sqlite3.IntegrityError):
+                con.execute("UPDATE restorations SET owner_receipt='fake'")
+
+    def test_rollback_rejects_modified_target_bytes(self):
+        v1 = self.ingest()
+        self.catalog.approve(v1["revision_id"], "owner-v1")
+        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        self.catalog.approve(v2["revision_id"], "owner-v2", v1["revision_id"])
+        self.catalog._blob(v1["sha256"]).write_bytes(b"corrupt")
+        with self.assertRaises(CatalogError):
+            self.catalog.rollback(v1["revision_id"], v2["revision_id"], "owner-restore")
+
+    def test_history_wrong_profile_and_key_rejected(self):
+        with self.assertRaises(CatalogError):
+            self.catalog.history("nonexistent", "tile.star")
+        with self.assertRaises(CatalogError):
+            self.catalog.history("Coral_Rescue", "../escape")
+
     def test_cli_initializes_and_verifies(self):
         with tempfile.TemporaryDirectory() as folder:
             store = Path(folder) / "new"
