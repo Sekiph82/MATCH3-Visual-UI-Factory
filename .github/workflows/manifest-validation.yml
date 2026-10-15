@@ -36,6 +36,10 @@ jobs:
           assert Path("unity_package/Editor/VufDashboardWindow.cs").is_file()
           assert not Path("Assets/Editor/VufStudioWindow.cs").exists()
           PY
+      - name: Package isolation and stable Unity GUID contract
+        run: python Tools/validate_repo_structure.py
+      - name: Python syntax compile
+        run: python -m compileall -q Tools factory tests
       - name: Synthetic TEST_ONLY sample
         run: python Tools/validate_manifest.py Samples~/sample_manifest.json
       - name: Assert Unity version and project structure
