@@ -29,6 +29,45 @@
 
 Each VUF output package carries: schema version, engine API version, level pack compatibility, game/profile ID, theme version, surface/component ID, state variant (Ready, Loading, Offline, Error, Owned, Claimed, Disabled, Pending where relevant), localization text binding, icon/action key, aspect/safe-area policy, accessibility shape/contrast/focus, animation/reduced-motion binding, asset source/licence/SHA-256, dependency hashes, generated artifact manifest and fallback keys. It must not embed runtime secrets or executable remote code. A screen is constructed from independently themed layers, buttons and actual localized text; a single flattened AI PNG must never pretend to implement tappable runtime UI.
 
+## Owner-supplied Coral Rescue concept reference and screen inventory | 2026-10-15
+
+**IMPORTANT: NO CORAL/GAME ART INSIDE MATCH3_ENGINE.** The owner shared three partial Coral Rescue concept sheets in ChatGPT (not a complete approved production pack). They may be visually reviewed as conceptual references ONLY when the gated Visual Factory or Coral Rescue G01 phase begins. Do not ingest them into Engine or Engine CI, copy them automatically from chat into GitHub, assert commercial asset licence/approval, or claim 28 finished game screens. Source image bytes have NOT been uploaded or incorporated by this TASKS change.
+
+The owner specified **26 named Coral Rescue UI/game experiences**. Home and the core playable Gameplay/HUD are indispensable additional screens, yielding **28 total screen/experience IDs**, not 28 flat screenshots. A screen may be a page, playable scene, modal, event ceremony, overlay or mode. Reuse interactive Unity components, layers, localized runtime text and animation instead of baking controls into PNG.
+
+| ID | Screen or experience | Reusable VUF visual work | Functional/age-policy authority |
+| --- | --- | --- | --- |
+| 01 | World Map / Bölüm Haritası | Scrollable layered ocean region map, level pins, paths, stars, locks | Engine level progression, Coral G04 |
+| 02 | Level Start / Bölüm Başlangıcı | Objective panel, booster picks, Play CTA | Engine goal/inventory, Coral G02/G03 |
+| 03 | Level Won / Zafer | 1/2/3-star results, animated reward, Continue | Engine results/reward ledger, Coral G02/G07 |
+| 04 | Level Failed / Başarısızlık | Retry, heart status, conditional extra move | Engine failure/recovery, age/offer policy |
+| 05 | Reef Restoration | Repair, cleaning, coral placement, ambient growth | Coral G04/G07 persistent progress |
+| 06 | Marine Collection | Species cards, rarity and earned/locked tabs | Engine earned album, Coral G04/G07 |
+| 07 | My Aquarium | Layered owner-customizable tank, decor and marine creatures | Coral G04/G07 new save-backed decor feature, requires game-specific implementation |
+| 08 | New Region Unlocked | Ocean realm unlock reveal and ceremony | Engine unlock receipt, Coral G04 |
+| 09 | Daily Rewards | 7-day rewards and Claim action | Engine claim-once ledger, Coral G07 |
+| 10 | Tasks & Missions | Daily, weekly, story mission tabs and reward states | Engine task ledger, Coral G07 |
+| 11 | Shop | Coin/gem only if wallet supports; boosters; offers | Engine entitlement, Coral G12; consent and real store products |
+| 12 | Treasure & Rewards | Chests, reward ceremonies, transparency and collection states | Engine earned-only fairness, Coral G07 |
+| 13 | Events Hub | Event cards, active/upcoming/expired and offline states | Engine LiveOps/age flags, Coral G12 |
+| 14 | Season Pass | Free rewards and separately gated premium pathway | Not presumed implemented/allowed: Engine/Coral opt-in policy and verified commerce first |
+| 15 | Endless Mode | Endless board entry, current and best score | ENG-M20-015, Coral G12-011 |
+| 16 | Time Attack | Timed board and run result | ENG-M20-015, Coral G12-011 |
+| 17 | Tournament | Optional bracket/ranking/reward view | Default OFF, no paid entry/wagering; ENG-M20/21 and age policy |
+| 18 | Weekly Records | Week progress, verified best, historical badge | ENG-M08/20 personal records, Coral G12 |
+| 19 | Friends | Eligible opt-in list, invites, verified heart gifts | ENG-M21 age/consent/privacy/abuse, disabled if ineligible |
+| 20 | Leaderboard | Friends and event ranking, hidden/disabled states | ENG-M21 restrictions; no child public social |
+| 21 | Player Profile | Achievements, stats, name/avatar and privacy | Engine achievement ledger and age/consent |
+| 22 | Splash & Loading | Logo, ocean splash, loading/offline/retry | Coral G02/G08 startup flow |
+| 23 | Tutorial | First three-level coachmark and swipe hint overlays | ENG-M10 and Coral G03; not standalone full-screen only |
+| 24 | Pause & Settings | Pause modal plus settings view/toggles | Engine pause/resume and accessible settings |
+| 25 | Out of Lives | True recovery countdown and available alternatives | Engine hearts, COR-G07 |
+| 26 | Welcome Back | True capped catch-up reward state | ENG-M20-013, age limits, exactly-once grant |
+| 27 | Home (required baseline) | Premium coral title Home layout and navigation | Engine neutral Home routes, Coral G02 |
+| 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
+
+**Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
 ## Factory milestones (all PLANNED/GATED; no claimed execution)
 
 ### VUF-M00 | Source audit, scope, secure baseline
@@ -41,7 +80,7 @@ Each VUF output package carries: schema version, engine API version, level pack 
 
 ### VUF-M01 | Versioned asset, UI and animation contracts
 - [ ] VUF-M01-001 Implement typed five-profile visual manifest with stable game/theme IDs and upstream SHA pins.
-- [ ] VUF-M01-002 Implement full 17-player-surface screen inventory and required interactive states; allow shared components without 680 separate flat images.
+- [ ] VUF-M01-002 Implement 5-profile x 17 Engine UiSurfaceKind x 8-state SYMBOLIC contract mapping to all 26 owner Coral Rescue screens plus Home and Gameplay/HUD (28 total), including route/overlay IDs, applicable state and required dynamic text/icon/action bindings; no imported game pixels in Engine.
 - [ ] VUF-M01-003 Map UI action IDs, dynamic text, localization, visible/disabled accessibility reason and fallback keys.
 - [ ] VUF-M01-004 Map logical piece/special/combo/goal/obstacle states to view-only skin keys; no gameplay logic forks.
 - [ ] VUF-M01-005 Negative validation: duplicate/missing/unbound asset IDs, unknown state, cross-theme leak, invalid version and unsafe paths.
@@ -58,7 +97,7 @@ Each VUF output package carries: schema version, engine API version, level pack 
 
 ### VUF-M03 | Layered screen and UI component factory
 - [ ] VUF-M03-001 Component generator for CTA, cards, modals, badges, counters, tabs, progress bars and disabled/pending/claimed feedback.
-- [ ] VUF-M03-002 Master screen templates: Home, WorldMap, HUD, Results, Pause, Settings, Shop, DailyRewards, Tasks, Fail, Life, Booster, Collection, Achievements, Store, Account, Consent.
+- [ ] VUF-M03-002 Layered interactive templates, modal/ceremony/mode variants for all 28 Coral Rescue experiences in the inventory, with reusable consent/account/booster/surface components for all five themed games; no flattened unclickable full-screen images.
 - [ ] VUF-M03-003 Runtime text/icon placement stays separate from artwork and supports EN/TR plus pseudo-long localized strings.
 - [ ] VUF-M03-004 Safe-area, tall phone, compact phone and tablet layout with usable touch targets and no cropped background text.
 - [ ] VUF-M03-005 Five-title theme swap never changes the semantic UI route graph or player state.
@@ -81,7 +120,7 @@ Each VUF output package carries: schema version, engine API version, level pack 
 **Exit:** Complete five-title sample atlas packs with no unsupported runtime assumptions.
 
 ### VUF-M06 | Backgrounds, characters and maps
-- [ ] VUF-M06-001 Layered world/chapter maps and gameplay backdrops, not single frozen full-UI images.
+- [ ] VUF-M06-001 Layered World/Chapter maps, Gameplay backdrops, reef restoration, Marine Collection, My Aquarium decoration, and New Region reveal scene layers; no flattened runtime buttons or text.
 - [ ] VUF-M06-002 Character/mascot reference sheets with consistent poses and silhouette identity.
 - [ ] VUF-M06-003 Parallax/background/screen scaling exports and relevant overlays.
 - [ ] VUF-M06-004 Title/theme naming, provenance and version pinning through generation and export.
@@ -104,7 +143,7 @@ Each VUF output package carries: schema version, engine API version, level pack 
 **Exit:** Working external Unity consumer of one export per five neutral game profiles.
 
 ### VUF-M09 | Automated visual QA and rights acceptance
-- [ ] VUF-M09-001 Render comparable named-state screenshots across five profiles and phone/tablet aspect ratios.
+- [ ] VUF-M09-001 Test rendered five-profile screen/component state matrices and Coral 28-experience inventory across phone/tablet ratios (Ready/Loading/Offline/Error/Owned/Claimed/Disabled/Pending where applicable); record explicit N/A/disabled evidence, no fake feature availability.
 - [ ] VUF-M09-002 Accessibility: color-independent shapes, contrast, text fitting, focus, hit targets, reduced motion and translated long strings.
 - [ ] VUF-M09-003 Visual consistency regression, missing overlays, resolution sharpness, safe area and image fidelity checks.
 - [ ] VUF-M09-004 Original/licensed artwork and font receipts, approved source revisions and no forbidden lookalikes.
@@ -113,7 +152,7 @@ Each VUF output package carries: schema version, engine API version, level pack 
 
 ### VUF-M10 | Five-profile executable vertical slice
 - [ ] VUF-M10-001 Five neutral Engine profiles consume real LevelFactory representative level packs with real visual exports.
-- [ ] VUF-M10-002 Home -> World -> Level -> Results -> Collection/Daily/Shop/offline state sample in each theme.
+- [ ] VUF-M10-002 Five-profile runnable Home -> World -> LevelStart -> Gameplay -> Results -> Collection/Daily/Shop/offline vertical slice; include one Coral reef-restoration/aquarium/region visual sample without claiming every Coral G02 runtime screen is already shipped.
 - [ ] VUF-M10-003 Actual Unity EditMode/PlayMode plus positive/negative rendering and UI-route integration tests.
 - [ ] VUF-M10-004 Real build content manifest, platform texture/memory/frame budgets and mobile smoke where available.
 - [ ] VUF-M10-005 Demonstrate updated art/theme cannot alter gameplay, scoring, saves or level difficulty.
