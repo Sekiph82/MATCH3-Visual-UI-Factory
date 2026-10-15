@@ -1,13 +1,13 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** PROPOSED / OWNER DESIGN REVIEW / NOT STARTED.
+**Status:** VUF-M00 EARLY REPOSITORY BOOTSTRAP IN_PROGRESS / UPSTREAM INTEGRATION BLOCKED / NO INDEPENDENT PASS.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
 
 ## PROPOSED execution sequence and release boundaries
 
-**Do not implement Factory code, generate production asset packs, modify the owner's local checkout or launch paid image APIs before the owner adopts this design and both upstream phases independently close.**
+**Owner's newer directive (2026-10-15):** Begin implementing the Visual & UI Factory directly with ChatGPT. This is a narrow, explicit **R03 early-bootstrap exception** to the old no-parallel-setup prohibition: stand-alone VUF source, local-free toolchain, manual preview, structural schemas, and isolated tests MAY proceed in this repository now. The Engine and Level Factory remain mandatory independently audited prerequisites for binding their final contracts, real gameplay integration, production export, full Studio acceptance and VUF v1 release. No VUF code/art may be copied into Engine; no LFX/game repo edits are authorized by this exception. Do not generate production asset packs, modify the owner's Windows checkout, perform cleanup or launch paid APIs before their own authorization and gates.
 
 1. MATCH3_ENGINE: ENG-M00..ENG-M24 independent PASS/CLOSED. Engine defines five neutral GameProfiles, player-facing surface/state interfaces, immutable presentation events, responsive layout and stable asset keys. No finished branded game assets or Game-repo implementation are required for engine acceptance.
 2. Match3-Level-Factory: LFX-M00..LFX-M14 independent PASS/CLOSED. LFX-M08 preview uses original neutral placeholders and five mock themes until Visual Factory begins, and exports accepted sample level packs/fixtures.
@@ -68,7 +68,16 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
 
-## Factory milestones (all PLANNED/GATED; no claimed execution)
+## 2026-10-15 | VUF-M00 early-bootstrap execution record (owner R03)
+
+- Owner requests ChatGPT implement the entire five-game Visual/UI Factory, beginning with setup. This supersedes the earlier *setup* prohibition only, **not** upstream acceptance, owner artistic review, licence, genuine device/Unity test or final release gates.
+- Google Drive project workspace established at https://drive.google.com/drive/folders/1apwUpKSDc_QJJSk8Y3TWw9X-_Wu4quj0, with the six required numbered Drive-only prompt/log/audit/evidence/release subfolders. No fabricated Codex logs or independent approvals.
+- Tracked Unity 6000.6.5f1 root project manifest/EditorWindow prototype, minimal safe Git ignore, M00 manual sprite-sheet/image preview, TEST_ONLY five-profile structural manifest validator, adversarial unittest source and source-check CI workflow published to GitHub main. See README.md. This is a functional code-start, **not** 11 completed modules.
+- Editor preview supports an imported source Texture2D, horizontal frame playback, 0.25/0.5/1/2x, frame scrub, symbolic state/theme selection and simulated device ratios/safe-area. Other studios are explicitly UNSUPPORTED. Source/originality rights are not independently verified and the preview never self-approves artwork.
+- **Tests:** Unity compilation, actual Editor Studio run, Windows local checkout sync, physical phone tests, image-generation providers, Engine/LFX compatibility and independent audit are **NOT VERIFIED**. CI configuration is source only until an actual job result is inspected; never mark M00 PASS from writing test definitions.
+- **Task ownership:** VUF-M00-003 and VUF-M00-005 are IN_PROGRESS / READY_FOR_FOCUSED_VERIFICATION. M00-001/002/004 are open, with upstream final SHA/policy decisions required. None of VUF-M00..M11 are PASS/CLOSED.
+
+## Factory milestones (M00 EARLY BOOTSTRAP / ALL OTHER PHASES GATED; no PASS claimed)
 
 ### VUF-M00 | Source audit, scope, secure baseline
 - [ ] VUF-M00-001 Freeze existing Engine M09 and LFX M08 APIs by exact SHA; extract screen/state/asset key inventory and legal restrictions.
@@ -177,4 +186,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** OWNER_REVIEW_PROPOSED_DEPENDENCY_MODEL. This planning tracker creates no Unity build, graphics, commercial licence, paid API usage, real-device approval or independently audited PASS.
+**CURRENT_OWNER:** CHATGPT_VUF_M00_EARLY_BOOTSTRAP / NEXT: independently inspect structural tests and real Unity 6000.6.5f1 Editor opening before any milestone PASS. Upstream final Engine/LFX gates remain enforced for integrated phases. No physical device approval, finished graphics, paid API usage or audited v1 release is claimed.
