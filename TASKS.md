@@ -40,6 +40,11 @@
 **Reported real Windows local tests:** Python 3.12.10 **132 executed, 125 PASS, 7 OS symlink SKIP, 0 FAIL/ERROR**; five VFX presets and structure/manifest validators PASS. Unity 6000.6.5f1 real EditMode **13 PASS, 0 FAIL/SKIP/INCONCLUSIVE**; 140 in-memory Coral ID × theme constructions, ParticleSystem presets, Atlas geometry, sprite animation, production queue and tween checks. C004 tracked 24 previously generated project settings/metas/package lock files individually, documented by matching SHA and no deletion. This does not prove GUI visual quality.
 **Remaining open:** Native Unity GUI windows, rendered candidate assets, responsive real phone/tablet behavior, physical device tests, complete premium artwork and owner legal/visual acceptance NOT RUN. This is not independent VUF milestone closure.
 
+## VUF-R15-C005 | CODEX LOCAL PYTHON/UNITY REGRESSION | ASSIGNED / NOT RUN
+
+**Codex test/remediation prompt:** https://docs.google.com/document/d/1Kf36IB9qHSlbpfj_XCcgjwdub8a2Mpgu5tRorsgDbJk/edit
+**Source baseline:** R15 published code SHA `61184a6e4c9d1b70764cde17d378d81b9e763ef6`. Safely fast-forward existing owner checkout only when clean; run REAL local `scripts/run_source_checks.ps1` (151 Python source-defined methods, 7 Windows OS symlink SKIPs possible) and `scripts/run_unity_editmode.ps1` (16 Unity NUnit source-defined methods) at exact final SHA, including R14 offline batch and R15 responsive wireframe. Repair only observed VUF problems, retest after final commit, normal non-force Git push if needed. No paid GitHub Actions, deletes, cache clearance, other repo modifications or owner art/device approval claims. ChatGPT retains sole lifecycle status control.
+
 ## VUF-R15 | VF-08 STATIC RESPONSIVE WIREFRAME AUTHORING | CURRENT UNITY TESTS OPEN
 
 **New Unity Editor source:** `unity_package/Editor/VufResponsiveGeometry.cs` models anchored RectTransform child positions inside synthetic screen presets and the estimated SafeAreaFitter inset. `VufResponsivePreviewWindow.cs` draws a read-only overlay of actual candidate prefab text/button rectangles; highlights candidate-only marker, policy-off screens, potential safe-area escape and too-small tap targets. Five synthetic phone/tablet/landscape presets are included. Dashboard links to this tool. All new scripts include stable .meta GUIDs and package structure source guard updates.
