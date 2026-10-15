@@ -5,6 +5,13 @@
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
 
+## VUF-R13-C001 | CODEX LOCAL TEST VERIFICATION | ASSIGNED / NOT RUN
+
+**Prompt:** https://docs.google.com/document/d/1mnfSEvkx7j65gOkOBT5elYWEn80btPA8n5gZbzfe17M/edit
+**Owner delegation:** Codex is authorized to test the existing Visual Factory checkout using local Python 3.11+ and actual Unity 6000.6.5f1 without running GitHub Actions or other billed CI. Necessary small VUF-only error fixes and tests are permitted with non-destructive Git discipline; no local cleanup, reset, duplicate clone/worktree, paid API, original artwork modification, Engine/LFX/game writes, or broad feature work.
+**Actual evidence required:** clean source SHA, Python suite and guards, real Unity Editor import/compilation, eight authored EditMode test cases, explicit failures/skips, cautious manual window/prefab/VFX/atlas checks and external small logs/XML. The status remains OPEN until Codex returns logs for independent review. ChatGPT alone updates this TASKS.md status. The only previously verified hosted baseline is R05 66/66 at SHA `10a1b3bc09bef1238ced23fc54b9646e65369343`; this does not verify R08..R12.
+**Prompt/storage policy:** full prompt and future Codex log reside in the project's Google Drive folders, not as separate Github coordination trackers.
+
 ## PROPOSED execution sequence and release boundaries
 
 **OWNER ADOPTED R04 (2026-10-15):** The full ten-module VF-01..VF-10 Visual/UI Factory plan is adopted, and ChatGPT is authorized to implement **stand-alone VUF repository source and isolated verification now**, beyond the earlier R03 setup-only exception. The final independently audited Engine and LFX release gates still block shared contract freeze, real Engine replay/level bindings, five-title integration, production asset package publishing and VUF-M11 release. Never write art or Factory behavior into the Engine, change LFX/game repos, claim creative approval or modify owner-local Windows files without an actual safe access/sync path. No paid image API, surprise subscription, destructive cleanup, or automatic commercial image rights assumption. **VF module progress is separate from VUF milestone audit status.**
