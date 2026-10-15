@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "profile_id": "Wonder_Pop",
+  "status": "DRAFT_NO_PRODUCTION_ASSETS",
+  "style_bible": "factory/visual_director/style_profiles.v1.json",
+  "engine_dependency": "GATED_BY_FINAL_ENGINE_AUDIT",
+  "level_factory_dependency": "GATED_BY_FINAL_LEVEL_FACTORY_AUDIT",
+  "asset_store": "EXTERNAL_OWNER_CONTROLLED",
+  "production_export_enabled": false
+}
