@@ -24,7 +24,7 @@ namespace Match3.VisualFactory.Editor
         private static readonly string[] States = {
             "DRAFT STYLE CONTRACTS", "OFFLINE PYTHON CATALOG", "MANUAL PNG INTAKE VIA CLI",
             "PNG TRIM, DETERMINISTIC SHELF ATLAS + UNITY INSPECTOR", "SPRITE CLIP BUILDER SOURCE", "PARTICLE PREFAB LAB SOURCE",
-            "7-SCREEN DISABLED uGUI PREFAB CANDIDATES", "RUNTIME SAFE AREA COMPONENT", "MANUAL PREFAB STRUCTURAL INSPECTOR",
+            "7 COMMON ARCHETYPES + 28 DRAFT CORAL SHELLS", "RUNTIME SAFE AREA COMPONENT", "MANUAL PREFAB STRUCTURAL INSPECTOR",
             "LOCAL PACKAGE PREVIEW ONLY"
         };
         private int profile;
@@ -68,6 +68,8 @@ namespace Match3.VisualFactory.Editor
             {
                 if (GUILayout.Button("Sprite Atlas Inspector", GUILayout.Height(32)))
                     VufAtlasPreviewWindow.Open();
+                if (GUILayout.Button("28-Screen Shell Builder", GUILayout.Height(32)))
+                    VufScreenShellBuilderWindow.Open();
                 if (GUILayout.Button("Manual Visual QA Studio", GUILayout.Height(32)))
                     VufQaStudioWindow.Open();
             }

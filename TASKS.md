@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R07 DIRECT DEVELOPMENT / VF-04 TRIM + MASK + ATLAS / VF-09 SOURCE PIXEL VERIFIER / 108 UNIT METHODS WRITTEN; ONLY R05 66/66 HOSTED RUN VERIFIED; UNITY AND R07 TESTS OPEN.
+**Status:** VUF R08 DIRECT DEVELOPMENT / VF-07 28 CORAL uGUI CANDIDATE SHELLS + FIVE THEME MIRRORS SOURCE / 117 UNIT METHODS DEFINED; R08 PYTHON + UNITY NOT YET VERIFIED; LATEST HOSTED VERIFIED R05 66/66.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -28,7 +28,7 @@ Each VF number is a functional module. VUF numbers are milestone/independent aud
 | VF-04 Image Processing | Non-destructive alpha/crop/segmentation/masking/resolutions/atlas, preserve original SHA | M05/M06 | PNG trim/scale, external alpha keep/remove mask, deterministic no-rotation atlas candidate tools and Unity atlas inspector SOURCE; PSD layers, paint editor, GPU/Unity native SpriteAtlas NOT IMPLEMENTED; R07 tests open |
 | VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Sprite .anim builder, manual frame scrub/ping-pong/reduced motion Editor SOURCE; Unity compile, full skeleton/3D/tween workflows open |
 | VF-06 VFX Lab | Shader/particles/audio/haptic triggers/combo chaining, interruption/replay/reduced motion | M07/M09 | Five candidate ParticleSystem preset prefab builder + 2D sketch SOURCE; shaders/audio/haptic GPU/replay/device QA open |
-| VF-07 UI Composer | Layered interactive button/prefab, 28 Coral experiences + reusable 5-theme screens, real state/locale binding | M03/M08/M10 | Seven disabled/unbound real-uGUI structural prefab archetypes SOURCE; all 28 finished Coral screens and bindings remain open |
+| VF-07 UI Composer | Layered interactive button/prefab, 28 Coral experiences + reusable 5-theme screens, real state/locale binding | M03/M08/M10 | Seven standard uGUI archetypes + new data-driven 28 exact-ID Coral candidate prefab SHELLS SOURCE, five draft palettes and immutable candidate metadata; real gameplay actions, polished 28 visual designs, localization and device tests OPEN |
 | VF-08 Responsive Preview | Safe areas, mobile ratios, tablet, touch accessibility and real-device evidence | M03/M08/M09 | Runtime Screen.safeArea fitter SOURCE plus simulated Editor device guides; physical phone/tablet tests open |
 | VF-09 Validation / Visual QA | Automated art/rights/render/perf + complete manual Sprite/VFX/UI Studio, separate owner/device PASS | M09/M10 | Independent atlas/mask original-to-output SHA/pixel verifier, manual prefab/atlas inspection SOURCE; newest tests/Unity/device performance unverified |
 | VF-10 Unity Packaging / Release | Versioned UPM, SpriteAtlas, Animator, prefabs, Addressables optional, deterministic export/rollback | M08/M10/M11 | Local UPM package SOURCE and preview contract; no production export |
@@ -98,6 +98,20 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R08 DIRECT DEVELOPMENT / ALL 28 CORAL EXPERIENCE CANDIDATE SHELLS | UNITY NOT TESTED
+
+**Owner directive:** continue working without frequent progress messages, no background promises, no paid CI/API. Authoring-only changes are scoped to this repository.
+
+**28-ID UI infrastructure at source level:** `unity_package/Editor/VufScreenCatalog.cs` loads immutable draft Coral contract data mirrored in `unity_package/Editor/Resources/coral-experiences.v1.json` from canonical `schemas/coral-experiences.v1.json`. Rejects non-28, duplicate IDs or keys, unsupported page kinds, missing Home/Gameplay, enabled demo status, fake approval stage or unknown feature-policy gates. Paired five-profile draft style mirror `style_profiles.v1.json` retains each title's distinct original draft color palette. `Tools/validate_repo_structure.py` checks byte-for-byte parity for both mirrors, plus stable C# .meta GUIDs.
+
+**`Tools > MATCH3 > 28-Screen Shell Builder`**: `VufScreenShellBuilderWindow.cs` now offers a selector for all 28 named Coral experiences and 5 game palettes; builds one new non-overwritten uGUI `Canvas` candidate prefab with safe-area content, page/modal/ceremony/overlay/board/mode visual skeleton, placeholder art slots, `interactable=false` action button, visible Engine/policy-disabled gate, and owner-unapproved notice. Runtime `VufCandidateScreenMarker.cs` persists exact `COR-01..28` ID, profile, kind, gate and `CANDIDATE_NOT_APPROVED`. Dashboard exposes the builder. Manual QA Studio reads marker and flags policy-off screens and any doctored candidate status.
+
+**Important scope:** 28 layout **SHELLS are NOT 28 final designed/functional screens**. No claim about original illustrated artwork, true tap actions, animation/VFX bindings, layout robustness under localization, cloud social permissions, Engine replay, device/Unity compilation or owner creative approval. Policy-off screens stay disabled until Engine policy is resolved. Non-Coral game screen inventory is still draft.
+
+**Source QA:** nine new defined unittest cases in `tests/test_screen_shells.py` cover 28 IDs, Home/Gameplay, five policy-off social/events, source-to-package byte parity, disabled real button code, candidate-only marker and Editor contract. **This is 117 source-defined test methods across ten test files, not 117 verified passes.** Historical R05 run 38788803805 remains only exact-SHA hosted PASS 66/66. GitHub Actions remains manual-dispatch only; zero new workflow job was requested. Unity and current Python R08 source tests OPEN.
+
+**NEXT:** run local free source/unit suite and real Unity 6000.6.5f1 Editor import at exact HEAD before any status PASS; fix observed compile, screen preview, and prefab-save issues. Then implement truly editable screen region/component layout, dynamic text/device simulator and complete physical asset review. Maintain ENG-M24/LFX-M14 final integration gates.
 
 ## 2026-10-15 | R07 SOURCE DEVELOPMENT / VF-04 ATLAS + MASK & VF-09 SOURCE PIXEL QA | OPEN TEST GATE
 
@@ -272,4 +286,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R07_DIRECT_DEVELOPMENT / NEXT: free local Python suite at exact SHA + actual Unity 6000.6.5f1 import for Atlas/Mask, SpriteClip, VFX/uGUI/QA windows. Fix failures, then advance VF-04/07/09. Hosted GH Actions manual-only cost guard; final Engine/LFX gates still block integration. No Windows sync, owner creative/device signoff or audited VUF release claimed.
+**CURRENT_OWNER:** CHATGPT_VUF_R08_DIRECT_DEVELOPMENT / NEXT: free local source parity test and genuine Unity 6000.6.5f1 editor import of 28-Screen Shell Builder, correct UX or C# errors before announcing any PASS. Keep all 28 final art/completion and five-game integration gates OPEN. GH Actions manual-only; no Windows checkout touched, no owner/device acceptance.

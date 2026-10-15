@@ -1,0 +1,83 @@
+"""R08 authoring-only 28-screen contract and byte-parity checks."""
+import copy
+import json
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "Tools"))
+from validate_repo_structure import validate_structure
+
+CANONICAL = ROOT / "schemas/coral-experiences.v1.json"
+MIRROR = ROOT / "unity_package/Editor/Resources/coral-experiences.v1.json"
+STYLES = ROOT / "factory/visual_director/style_profiles.v1.json"
+STYLE_MIRROR = ROOT / "unity_package/Editor/Resources/style_profiles.v1.json"
+
+
+class CoralScreenShellContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.screens = json.loads(CANONICAL.read_text())["screens"]
+
+    def test_28_coral_draft_experiences_present(self):
+        self.assertEqual(len(self.screens), 28)
+        self.assertEqual([s["id"] for s in self.screens],
+                         ["COR-%02d" % i for i in range(1, 29)])
+        self.assertEqual([s["key"] for s in self.screens][-2:],
+                         ["home", "gameplay_hud"])
+
+    def test_all_28_remain_gated_and_not_claimed_complete(self):
+        self.assertTrue(all(s["available_in_demo"] is False for s in self.screens))
+        self.assertTrue(all(s["runtime_ui_required"] is True for s in self.screens))
+        self.assertTrue(all(s["feature_gate"] in (
+            "REQUIRES_ENGINE_OR_GAME_BINDING",
+            "OFF_UNTIL_ENGINE_POLICY_CONFIRMED"
+        ) for s in self.screens))
+
+    def test_social_and_event_pages_default_off(self):
+        features = {s["key"]: s for s in self.screens}
+        for key in ("friends", "leaderboard", "tournament", "season_pass", "events_hub"):
+            self.assertEqual(features[key]["feature_gate"],
+                             "OFF_UNTIL_ENGINE_POLICY_CONFIRMED")
+
+    def test_coral_unity_package_mirror_is_byte_identical(self):
+        self.assertEqual(CANONICAL.read_bytes(), MIRROR.read_bytes())
+        self.assertEqual(STYLES.read_bytes(), STYLE_MIRROR.read_bytes())
+
+    def test_repo_structure_pins_mirrors_and_unity_meta(self):
+        result = validate_structure()
+        self.assertGreaterEqual(result["unique_guids"], 15)
+
+    def test_real_uGUI_buttons_are_disabled_in_screen_shell_source(self):
+        script = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
+        self.assertIn("AddComponent<Button>()", script)
+        self.assertIn("button.interactable = false", script)
+        self.assertIn("PrefabUtility.SaveAsPrefabAsset", script)
+        self.assertIn("VufCandidateScreenMarker", script)
+        self.assertIn("VufSafeAreaFitter", script)
+        self.assertIn("OFF_UNTIL_ENGINE_POLICY_CONFIRMED", script)
+        self.assertNotIn("PlayerPrefs", script)
+
+    def test_runtime_marker_always_remains_unapproved(self):
+        script = (ROOT / "unity_package/Runtime/VufCandidateScreenMarker.cs").read_text()
+        self.assertIn('candidateStatus = "CANDIDATE_NOT_APPROVED"', script)
+        self.assertNotIn('candidateStatus = "APPROVED"', script)
+        self.assertNotIn("GrantReward", script)
+
+    def test_editor_loader_rejects_unexpected_schema_or_status(self):
+        script = (ROOT / "unity_package/Editor/VufScreenCatalog.cs").read_text()
+        self.assertIn("CONTRACT_DRAFT_NOT_IMPLEMENTED", script)
+        self.assertIn("DRAFT_NOT_OWNER_APPROVED", script)
+        self.assertIn("doc.screens.Length != 28", script)
+        self.assertIn("Incomplete game Style Bible set", script)
+
+    def test_four_page_types_have_distinct_shell_layouts(self):
+        script = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
+        for section in ("MODAL OR REWARD CEREMONY", "ENGINE BOARD SLOT",
+                        "HERO / COLLECTION SLOT", "BOOSTER / SCORE HUD SLOT"):
+            self.assertIn(section, script)
+
+
+if __name__ == "__main__":
+    unittest.main()

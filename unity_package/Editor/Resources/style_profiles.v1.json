@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "status": "DRAFT_NOT_OWNER_APPROVED",
+  "common": {
+    "minimum_touch_target_dp": 44,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "safe_area_policy": "notched-phone-and-tablet",
+    "reduced_motion": true,
+    "no_flattened_interactive_ui": true,
+    "ui_states": [
+      "Ready",
+      "Loading",
+      "Offline",
+      "Error",
+      "Owned",
+      "Claimed",
+      "Disabled",
+      "Pending"
+    ],
+    "tile_silhouettes": [
+      "circle",
+      "triangle",
+      "diamond",
+      "star",
+      "crescent",
+      "shield"
+    ]
+  },
+  "profiles": [
+    {
+      "id": "Coral_Rescue",
+      "title": "Coral Rescue",
+      "art_direction": "Luminous underwater restoration; glassy but legible coral textures",
+      "palettes": {
+        "background": "#062E43",
+        "surface": "#155D73",
+        "accent": "#4DE3CF",
+        "cta": "#FFE47A",
+        "cta_label": "#173343",
+        "text": "#FFFFFF"
+      },
+      "silhouette_language": "Rounded fins, bubbles, shells; base tiles must remain six distinguishable shapes",
+      "mascot_roles": [
+        "dolphin",
+        "tropical_fish"
+      ],
+      "environment_layers": [
+        "deep_ocean",
+        "reef_midground",
+        "coral_foreground",
+        "particle_light"
+      ],
+      "motion": "fluid easing and short bubble bursts"
+    },
+    {
+      "id": "Garage_Legends",
+      "title": "Garage Legends",
+      "art_direction": "Premium mechanical garage; lacquered metal, enamel and subtle specular highlights",
+      "palettes": {
+        "background": "#131922",
+        "surface": "#303D48",
+        "accent": "#F59E53",
+        "cta": "#FFD15C",
+        "cta_label": "#1B2533",
+        "text": "#FFFFFF"
+      },
+      "silhouette_language": "Tools, gears, bolts and vehicle parts with distinct cuts",
+      "mascot_roles": [
+        "mechanic"
+      ],
+      "environment_layers": [
+        "garage_rear",
+        "workbench",
+        "vehicle",
+        "glow"
+      ],
+      "motion": "spring-tight snapping, short spark trails"
+    },
+    {
+      "id": "Dino_Islands",
+      "title": "Dino Islands",
+      "art_direction": "Colorful prehistoric adventure; friendly sculpted creatures and lush layered islands",
+      "palettes": {
+        "background": "#163D31",
+        "surface": "#34715A",
+        "accent": "#AEDC6D",
+        "cta": "#FBE184",
+        "cta_label": "#23402E",
+        "text": "#FFFFFF"
+      },
+      "silhouette_language": "Fossils, eggs, leaves and gemstones with thick readable outer shape",
+      "mascot_roles": [
+        "juvenile_dinosaur"
+      ],
+      "environment_layers": [
+        "volcano_sky",
+        "island_mid",
+        "foliage_front",
+        "ambient"
+      ],
+      "motion": "playful squash and settle, never overbusy"
+    },
+    {
+      "id": "The_Fractured_Realms",
+      "title": "The Fractured Realms",
+      "art_direction": "Atmospheric elemental fantasy; faceted relics, light portals and arcane stone",
+      "palettes": {
+        "background": "#15162F",
+        "surface": "#333258",
+        "accent": "#BCA7F5",
+        "cta": "#E4D99A",
+        "cta_label": "#292644",
+        "text": "#FFFFFF"
+      },
+      "silhouette_language": "Elements represented by both silhouette and rune, never hue alone",
+      "mascot_roles": [
+        "elemental_guardian"
+      ],
+      "environment_layers": [
+        "realm_sky",
+        "ancient_ruins",
+        "portal",
+        "magic_dust"
+      ],
+      "motion": "layered glows with strict reduced-motion parity"
+    },
+    {
+      "id": "Wonder_Pop",
+      "title": "Wonder Pop",
+      "art_direction": "Warm playful accessible toybox without urgency or purchase pressure",
+      "palettes": {
+        "background": "#25435D",
+        "surface": "#447896",
+        "accent": "#F8ABC3",
+        "cta": "#FFE995",
+        "cta_label": "#303853",
+        "text": "#FFFFFF"
+      },
+      "silhouette_language": "Big friendly geometric toys with high contrast and non-color labels",
+      "mascot_roles": [
+        "friendly_star"
+      ],
+      "environment_layers": [
+        "soft_sky",
+        "toy_hills",
+        "foreground_ribbon",
+        "confetti"
+      ],
+      "motion": "short gentle delight, child-safe calm alternative",
+      "restrictions": [
+        "no_child_public_social",
+        "no_premium_pressure",
+        "no_fake_urgency"
+      ]
+    }
+  ]
+}

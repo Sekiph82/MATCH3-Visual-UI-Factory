@@ -85,6 +85,18 @@ namespace Match3.VisualFactory.Editor
                 string path = AssetDatabase.GetAssetPath(candidate);
                 bool prefab = PrefabUtility.IsPartOfPrefabAsset(candidate);
                 findings.Add("PREFAB: " + (prefab ? path : "NOT A PREFAB ASSET"));
+                VufCandidateScreenMarker[] markers =
+                    candidate.GetComponentsInChildren<VufCandidateScreenMarker>(true);
+                foreach (VufCandidateScreenMarker marker in markers)
+                {
+                    findings.Add("SCREEN: " + marker.ScreenId + " | " + marker.ScreenKey +
+                        " | " + marker.ProfileId + " | " + marker.ScreenKind);
+                    findings.Add("FEATURE GATE: " + marker.FeatureGate);
+                    if (marker.CandidateStatus != "CANDIDATE_NOT_APPROVED")
+                        findings.Add("BLOCKED: candidate's approval stage was tampered with.");
+                    if (marker.FeatureGate == "OFF_UNTIL_ENGINE_POLICY_CONFIRMED")
+                        findings.Add("BLOCKED: policy-gated screen cannot be enabled yet.");
+                }
                 Canvas[] canvases = candidate.GetComponentsInChildren<Canvas>(true);
                 Button[] buttons = candidate.GetComponentsInChildren<Button>(true);
                 Text[] labels = candidate.GetComponentsInChildren<Text>(true);

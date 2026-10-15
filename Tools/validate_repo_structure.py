@@ -27,7 +27,7 @@ def validate_structure() -> dict:
     if package.get("dependencies", {}).get("com.unity.ugui") != "2.6.0":
         raise ValueError("Unity 6000.6 uGUI core version is missing")
     wanted = [
-        "Runtime.meta", "Editor.meta",
+        "Runtime.meta", "Editor.meta", "Editor/Resources.meta",
         "Runtime/Match3.VisualFactory.Runtime.asmdef",
         "Editor/Match3.VisualFactory.Editor.asmdef",
         "Runtime/VisualAssetManifest.cs",
@@ -38,6 +38,11 @@ def validate_structure() -> dict:
         "Editor/VufUiComposerWindow.cs",
         "Editor/VufQaStudioWindow.cs",
         "Editor/VufAtlasPreviewWindow.cs",
+        "Editor/VufScreenShellBuilderWindow.cs",
+        "Editor/VufScreenCatalog.cs",
+        "Runtime/VufCandidateScreenMarker.cs",
+        "Editor/Resources/coral-experiences.v1.json",
+        "Editor/Resources/style_profiles.v1.json",
         "Runtime/VufSafeAreaFitter.cs",
     ]
     guids = []
@@ -54,6 +59,22 @@ def validate_structure() -> dict:
         guids.extend(ids)
     if len(guids) != len(set(guids)):
         raise ValueError("duplicate Unity meta GUID")
+    mirrors = [
+        (ROOT / "schemas/coral-experiences.v1.json",
+         PACKAGE / "Editor/Resources/coral-experiences.v1.json"),
+        (ROOT / "factory/visual_director/style_profiles.v1.json",
+         PACKAGE / "Editor/Resources/style_profiles.v1.json")
+    ]
+    for canonical, packaged in mirrors:
+        if canonical.read_bytes() != packaged.read_bytes():
+            raise ValueError("Unity catalog mirror stale: " + packaged.name)
+    coral = json.loads(mirrors[0][0].read_text(encoding="utf-8"))
+    if len(coral["screens"]) != 28 or len({
+            item["key"] for item in coral["screens"]}) != 28:
+        raise ValueError("Coral draft coverage is not 28 unique experiences")
+    if [x["id"] for x in coral["screens"]] != [
+            "COR-%02d" % n for n in range(1, 29)]:
+        raise ValueError("Coral stable identifiers have drifted")
     if (ROOT / "Assets/Editor/VufStudioWindow.cs").exists():
         raise ValueError("stale duplicate Editor script in host project")
     if not (ROOT / "scripts/prepare_visual_factory.ps1").is_file():
