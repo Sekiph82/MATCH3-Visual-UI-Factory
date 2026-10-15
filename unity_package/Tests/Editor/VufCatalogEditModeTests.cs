@@ -334,7 +334,7 @@ namespace Match3.VisualFactory.Tests
                 Assert.That(emission.rateOverTime.constant, Is.EqualTo(0f));
                 var bursts = new ParticleSystem.Burst[1];
                 Assert.That(emission.GetBursts(bursts), Is.EqualTo(1));
-                Assert.That(bursts[0].count, Is.EqualTo(42));
+                Assert.That(bursts[0].count.constant, Is.EqualTo(42));
                 Assert.That(system.shape.enabled, Is.True);
                 Assert.That(system.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Cone));
                 Assert.That(system.shape.angle, Is.EqualTo(60f));
