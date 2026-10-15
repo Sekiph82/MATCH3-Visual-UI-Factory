@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF-R13 LOCAL PYTHON/UNITY EDITMODE REPORTED VERIFIED AT 796a84b (125 PASS, 7 OS SKIP; UNITY 8/8 PASS); GUI/DEVICE/ART ACCEPTANCE OPEN. NEXT C004 HEADLESS EDITOR COVERAGE.
+**Status:** VUF R14 SOURCE DEVELOPMENT / VF-03 OFFLINE BATCH SOURCE (19 NEW UNVERIFIED TESTS). LAST REAL LOCAL C004 SHA a4493cd8: PYTHON 125 PASS + 7 WINDOWS SKIP; UNITY EDITMODE 13/13 PASS. GUI/DEVICE/ART ACCEPTANCE OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -27,11 +27,25 @@
 **C003 unresolved:** Codex session had no native Windows GUI; Visual Factory Dashboard, 28 screens, UI Composer, Production Queue, Sprite Clip, Atlas Inspector, Particle Lab, manual QA, responsive PlayMode and real iPhone/Android device/art review all **NOT RUN**. First-import 24 untracked files were preserved with 24/24 SHA-match evidence: 21 ProjectSettings YAML, two stable Unity .meta GUID files and packages-lock.json. Two untracked metas threaten portable import GUID stability until selectively versioned. No files were deleted, no paid CI.
 **Milestone authority:** Source test success is NOT independent production VUF-M00..M11 PASS. Engine/LFX final dependencies and owner art/device approval remain open.
 
-## VUF-R13-C004 | OFFLINE HEADLESS UNITY INTEGRATION AND SAFE PROJECT METADATA | ASSIGNED / NOT RUN
+## VUF-R13-C004 | OFFLINE HEADLESS UNITY INTEGRATION AND SAFE PROJECT METADATA | SOURCE TEST COMPLETE; VISUAL QA OPEN
 
 **Codex task:** https://docs.google.com/document/d/1KgA5R4QmBUR4AHNSCZhEdUk1XQT3P6NehMze_h4MHC8/edit
 **Purpose:** No need to repeat inaccessible native GUI attempts. Safely fast-forward existing local checkout to current `main` (including this TASKS.md status update) only if no local tracked/untracked conflicts; classify existing 24 first-import files, preserve stable GUID sidecars and selected portable settings without blanket git adds. Add *actual Unity batchmode EditMode integration tests* for in-memory uGUI screen hierarchies, candidate markers and disabled Buttons, modal/mode/page layouts, five profiles, reduced-motion tween, atlas geometry, and genuine ParticleSystem source setup where testable. The interactive visual/device/owner gates remain NOT RUN until a real graphical session is available. Test real Python and Unity at final code SHA before normal non-force push.
 **Safety:** No GitHub Actions/paid API, deleting caches, files or 24 untracked files, force/reset/clone/worktree, or changes to Engine/LFX/game repos. ChatGPT maintains TASKS.md status and later reviews Codex evidence.
+
+## VUF-R13-C004 | CODEx ACTUAL LOCAL RESULTS AT PINNED SHA a4493cd8
+
+**Owner-provided full Codex report (fetched):** https://drive.google.com/file/d/1bkHT5J3VvnYA6x5GEsIpCAaN4C9gL0XO/view
+**Actual published SHA:** `a4493cd8192b7c7744cc1e8c18034aae28492d9d`; independent GitHub connector confirmed this remote main.
+**Reported real Windows local tests:** Python 3.12.10 **132 executed, 125 PASS, 7 OS symlink SKIP, 0 FAIL/ERROR**; five VFX presets and structure/manifest validators PASS. Unity 6000.6.5f1 real EditMode **13 PASS, 0 FAIL/SKIP/INCONCLUSIVE**; 140 in-memory Coral ID × theme constructions, ParticleSystem presets, Atlas geometry, sprite animation, production queue and tween checks. C004 tracked 24 previously generated project settings/metas/package lock files individually, documented by matching SHA and no deletion. This does not prove GUI visual quality.
+**Remaining open:** Native Unity GUI windows, rendered candidate assets, responsive real phone/tablet behavior, physical device tests, complete premium artwork and owner legal/visual acceptance NOT RUN. This is not independent VUF milestone closure.
+
+## VUF-R14 | VF-03 OFFLINE BATCH CANDIDATE INTAKE SOURCE DEVELOPMENT | LOCAL TEST GATE OPEN
+
+- `factory/asset_generator/offline_batch.py`: offline source-root constrained, link/junction/traversal rejecting manifest of 1..64 original/licensed PNGs, full CRC/dimension checks, per-item pinned SHA256, 64MiB aggregate memory ceiling, five-profile asset-key isolation and deterministic stale-baseline dry-run `plan_sha256`.
+- `AssetCatalog.ingest_batch`: explicit `--commit` only, checks the unchanged original plan and catalog revision count; single SQLite transaction for all candidate revisions, write-once SHA256 content-addressed PNG masters, NEVER updates active/approved revisions. A failed transaction may leave unreferenced immutable blobs (no automatic deletion).
+- `tests/test_offline_batch.py`: 19 added source-defined methods for all-or-nothing DB behavior, dry-run zero writes, stale receipt/replay, changed originals, rights/schema/path rejection, linked-source simulation, CRC and CLI. Latest reported C004 test results apply ONLY to old SHA `a4493cd8`; these new 19 tests and modified catalog **NOT YET EXECUTED**.
+- R14 carries NO paid provider, cost grant, automated owner approval, Unity game integration or production release. Do not call this VF-03 or VUF milestone PASS before real local Python regression and independent source audit. Last verified Unity EditMode remains 13/13 on C004 SHA.
 
 ## PROPOSED execution sequence and release boundaries
 
@@ -52,7 +66,7 @@ Each VF number is a functional module. VUF numbers are milestone/independent aud
 | --- | --- | --- | --- |
 | VF-01 Visual Director / Style Bible | Five distinctive style bibles, design tokens, silhouettes, original/language/age rules, owner sample review | M00/M02/M03/M09 | Draft five-profile JSON + structural validators source, NO creative approval |
 | VF-02 Asset Catalog / Versioning | Original/licensed SHA256 masters, candidate review, version records and explicit rollback | M00/M01/M04/M11 | Offline SQLite catalog, append-only approvals/restoration events, read-only five-game report and Unity Queue SOURCE; authenticated approval/Unity QA OPEN |
-| VF-03 Modular AI / Batch Intake | External manual import first, optional paid API adapters default OFF, measured cost and provenance, no overwrite | M04 | Offline VF-02 PNG intake path source only; provider/batch adapters NOT IMPLEMENTED |
+| VF-03 Modular AI / Batch Intake | External manual import first, optional paid API adapters default OFF, measured cost and provenance, no overwrite | M04 | Offline batch PNG candidate intake SOURCE with 64-item/64MiB budgets, SHA pinned originals, dry-run consent plan, SQLite all-or-nothing revision writes and 19 NEW UNVERIFIED unit methods; paid provider adapters OFF/not implemented |
 | VF-04 Image Processing | Non-destructive alpha/crop/segmentation/masking/resolutions/atlas, preserve original SHA | M05/M06 | PNG trim/scale, external alpha keep/remove mask, deterministic no-rotation atlas candidate tools and Unity atlas inspector SOURCE; PSD layers, paint editor, GPU/Unity native SpriteAtlas NOT IMPLEMENTED; R07 tests open |
 | VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Sprite .anim builder, manual frame scrub/ping-pong/reduced motion Editor SOURCE; Unity compile, full skeleton/3D/tween workflows open |
 | VF-06 VFX Lab | Shader/particles/audio/haptic triggers/combo chaining, interruption/replay/reduced motion | M07/M09 | Five candidate ParticleSystem preset prefab builder + 2D sketch SOURCE; shaders/audio/haptic GPU/replay/device QA open |
@@ -347,4 +361,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R12_SOURCE_DEVELOPMENT / NEXT: run exact HEAD local Python and Unity 6000.6.5f1 EditMode/PlayMode tests without GitHub Actions; remedy any failures, then continue real responsive/UI animation labs. Original art, owner aesthetic and device QA remain open; upstream Engine/LFX integration blocked.
+**CURRENT_OWNER:** CHATGPT_VUF_R14_OFFLINE_BATCH_SOURCE / NEXT: free local Windows Python run at R14 exact SHA to validate newly added 19 batch tests plus unchanged Unity 13 EditMode, then VF-03 scope expansion. No GitHub Actions, paid API, changes to owner local files or approval/release claims.

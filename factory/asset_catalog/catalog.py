@@ -184,6 +184,83 @@ class AssetCatalog:
                 "profile": profile, "asset_key": asset_key, "sha256": digest,
                 "stage": "CANDIDATE"}
 
+    def ingest_batch(self, items: list[dict], expected_revision_count: int) -> list[dict]:
+        """VF-03: atomically append candidate DB rows from verified original bytes.
+
+        The source bytes are already captured by the offline preflight, so the
+        import cannot silently swap files after a successful SHA verification.
+        No approval/active selection is changed. A failed transaction may leave
+        unused content-addressed blobs, which are NEVER automatically deleted.
+        """
+        if (type(expected_revision_count) is not int or expected_revision_count < 0
+                or not isinstance(items, list) or not 1 <= len(items) <= 64):
+            raise CatalogError("invalid batch size or baseline revision count")
+        prepared = []
+        seen = set()
+        total_bytes = 0
+        for item in items:
+            if not isinstance(item, dict):
+                raise CatalogError("invalid batch candidate record")
+            profile, key = item.get("profile"), item.get("asset_key")
+            rights, receipt = item.get("rights"), item.get("source_receipt")
+            original = item.get("png_bytes")
+            if profile not in PROFILES or not isinstance(key, str) or not KEY_PATTERN.fullmatch(key):
+                raise CatalogError("invalid game profile or semantic key")
+            if (profile, key) in seen:
+                raise CatalogError("duplicate profile/asset key within batch")
+            seen.add((profile, key))
+            if rights not in ("original", "licensed"):
+                raise CatalogError("batch item needs declared original/licensed rights")
+            receipt = required_text(receipt, "batch source receipt")
+            if not isinstance(original, bytes) or len(original) > MAX_FILE_BYTES:
+                raise CatalogError("invalid or oversized source PNG bytes")
+            total_bytes += len(original)
+            if total_bytes > 64 * 1024 * 1024:
+                raise CatalogError("batch memory budget exceeds 64 MiB")
+            width, height = png_dimensions(original)
+            digest = hashlib.sha256(original).hexdigest()
+            if item.get("sha256") != digest:
+                raise CatalogError("captured batch source SHA-256 mismatch")
+            prepared.append((profile, key, rights, receipt, original, width, height, digest))
+
+        if self.store.is_symlink() or self.db_path.is_symlink() or not self.db_path.is_file():
+            raise CatalogError("batch store not initialized or unsafe")
+        written = []
+        with closing(self._connect()) as con, con:
+            con.execute("BEGIN IMMEDIATE")
+            current = con.execute("SELECT COUNT(*) FROM revisions").fetchone()[0]
+            if current != expected_revision_count:
+                raise CatalogError("stale batch baseline; re-plan against current catalog")
+            for profile, key, rights, receipt, original, width, height, digest in prepared:
+                blob = self._blob(digest)
+                blob.parent.mkdir(parents=True, exist_ok=True)
+                if blob.is_symlink():
+                    raise CatalogError("unsafe batch blob symlink")
+                try:
+                    with blob.open("xb") as out:
+                        out.write(original)
+                        out.flush()
+                        os.fsync(out.fileno())
+                except FileExistsError:
+                    pass
+                if blob.is_symlink() or hashlib.sha256(blob.read_bytes()).hexdigest() != digest:
+                    raise CatalogError("batch blob collision or tampering")
+                revision = con.execute(
+                    "SELECT COALESCE(MAX(revision),0)+1 FROM revisions WHERE profile=? AND asset_key=?",
+                    (profile, key)).fetchone()[0]
+                cursor = con.execute(
+                    """INSERT INTO revisions
+                    (profile,asset_key,revision,sha256,width,height,rights,source_receipt,created_utc)
+                    VALUES (?,?,?,?,?,?,?,?,?)""",
+                    (profile, key, revision, digest, width, height,
+                     rights, receipt, datetime.now(timezone.utc).isoformat()))
+                written.append({
+                    "revision_id": cursor.lastrowid, "revision": revision,
+                    "profile_id": profile, "asset_key": key, "sha256": digest,
+                    "stage": "CANDIDATE_NOT_APPROVED"
+                })
+        return written
+
     def approve(self, revision_id: int, owner_receipt: str,
                 replaces_revision_id: int | None = None) -> dict:
         owner_receipt = required_text(owner_receipt, "owner approval receipt")
