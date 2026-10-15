@@ -59,23 +59,17 @@ class CatalogError(ValueError):
 
 
 def png_dimensions(data: bytes) -> tuple[int, int]:
-    if len(data) < 33 or not data.startswith(PNG_SIG):
-        raise CatalogError("Only valid PNG IHDR files are supported in v0.1")
-    size, chunk = struct.unpack(">I4s", data[8:16])
-    if size != 13 or chunk != b"IHDR":
-        raise CatalogError("PNG IHDR missing or malformed")
-    ihdr = data[16:29]
-    expected_crc = struct.unpack(">I", data[29:33])[0]
-    if zlib.crc32(chunk + ihdr) & 0xffffffff != expected_crc:
-        raise CatalogError("PNG IHDR CRC mismatch")
-    width, height, bit_depth, color_type, compression, filtering, interlace = struct.unpack(">IIBBBBB", ihdr)
-    if not 1 <= width <= 8192 or not 1 <= height <= 8192:
-        raise CatalogError("PNG dimensions out of bounds")
-    if bit_depth not in (1, 2, 4, 8, 16) or color_type not in (0, 2, 3, 4, 6):
-        raise CatalogError("unsupported PNG color type or depth")
-    if (compression, filtering, interlace) not in ((0, 0, 0), (0, 0, 1)):
-        raise CatalogError("unsupported PNG IHDR methods")
-    return width, height
+    """Validate full CRC-filtered/decompressed PNG, not merely 33 header bytes."""
+    # Direct catalog CLI execution has the factory subtree on sys.path, not repo root.
+    root = str(Path(__file__).resolve().parents[2])
+    if root not in sys.path:
+        sys.path.insert(0, root)
+    from factory.image_processor.png_pipeline import decode_png, ImageError
+    try:
+        width, height, _ = decode_png(data)
+        return width, height
+    except ImageError as exc:
+        raise CatalogError("invalid/unsupported source PNG: " + str(exc)) from exc
 
 
 def required_text(value: str, name: str) -> str:
