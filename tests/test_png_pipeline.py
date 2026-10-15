@@ -145,6 +145,14 @@ class PngPipelineTests(unittest.TestCase):
         with self.assertRaises(ImageError):
             encode_png(9999, 1, b"\0" * 39996)
 
+    def test_reject_export_into_original_source_parent(self):
+        with self.assertRaises(ImageError):
+            create_candidate_exports(self.original, self.root)
+
+    def test_reject_export_inside_git_checkout(self):
+        with self.assertRaises(ImageError):
+            create_candidate_exports(self.original, ROOT / "generated")
+
     def test_output_symlink_is_rejected(self):
         outside = self.root / "outside"
         outside.mkdir()
