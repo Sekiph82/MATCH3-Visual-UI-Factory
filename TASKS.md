@@ -33,6 +33,8 @@ Each VF number is a functional module. VUF numbers are milestone/independent aud
 | VF-09 Validation / Visual QA | Automated art/rights/render/perf + complete manual Sprite/VFX/UI Studio, separate owner/device PASS | M09/M10 | Offline schema/source tests authored; running evidence NOT YET VERIFIED |
 | VF-10 Unity Packaging / Release | Versioned UPM, SpriteAtlas, Animator, prefabs, Addressables optional, deterministic export/rollback | M08/M10/M11 | Local UPM package SOURCE and preview contract; no production export |
 
+**Nine production output families covered:** (1) UI Screens, (2) UI Components, (3) Game Tiles incl. special/obstacle/booster, (4) Characters/mascots, (5) Environments/worlds, (6) UI/character/transition Animations, (7) gameplay VFX, (8) Rewards/collections, **(9) Marketing Assets (app icon, splash, store screenshots)**. The marketing export deliverables belong to VF-04 and VF-10 and must have separate platform aspect/dimension/rights QA and explicit owner acceptance. All families follow request -> candidate -> QA -> owner approval -> immutable versioned export -> Unity/consumer import -> device/release test. Real rewards remain Engine grant events only.
+
 **Visual Production Dashboard:** one game selector and ten module states now exists as a truthful Unity Editor UI source; later shows candidate production queue, outstanding review, approved/active pins, exports and QA receipts. Each unavailable button/tab must display unsupported reasons, not imply functionality.
 
 ### Implementation sequence R04
