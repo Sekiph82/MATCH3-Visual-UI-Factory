@@ -135,6 +135,15 @@ class PngPipelineTests(unittest.TestCase):
         with self.assertRaises(ImageError):
             decode_png(self.original.read_bytes() + b"trailing")
 
+    def test_rgb_transparency_colorkey_is_not_silently_dropped(self):
+        ihdr = struct.pack(">IIBBBBB", 1, 1, 8, 2, 0, 0, 0)
+        png = (PNG_SIGNATURE + _chunk(b"IHDR", ihdr)
+               + _chunk(b"tRNS", b"\x00\xff\x00\x00\x00\x00")
+               + _chunk(b"IDAT", zlib.compress(b"\x00\xff\x00\x00"))
+               + _chunk(b"IEND", b""))
+        with self.assertRaises(ImageError):
+            decode_png(png)
+
     def test_disallow_interlaced_png_and_huge_dimensions(self):
         header = struct.pack(">IIBBBBB", 1, 1, 8, 6, 0, 0, 1)
         blob = PNG_SIGNATURE + _chunk(b"IHDR", header) + _chunk(
