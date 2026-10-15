@@ -23,7 +23,7 @@ namespace Match3.VisualFactory.Editor
         };
         private static readonly string[] States = {
             "DRAFT STYLE CONTRACTS", "OFFLINE PYTHON CATALOG", "MANUAL PNG INTAKE VIA CLI",
-            "PLANNED", "FRAME PREVIEW ONLY", "PLANNED",
+            "PNG TRIM / 1x-3x PYTHON CLI SOURCE", "SPRITE CLIP BUILDER SOURCE", "PLANNED",
             "PLANNED", "SIMULATED DEVICE GUIDES", "STRUCTURAL CHECKS ONLY",
             "LOCAL PACKAGE PREVIEW ONLY"
         };
@@ -49,10 +49,12 @@ namespace Match3.VisualFactory.Editor
             profile = EditorGUILayout.Popup("Selected game", profile, Profiles);
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Open Manual Sprite Preview", GUILayout.Height(34)))
+                if (GUILayout.Button("Sprite Preview", GUILayout.Height(34)))
                     VufStudioWindow.Open();
+                if (GUILayout.Button("Sprite Animation Builder", GUILayout.Height(34)))
+                    VufSpriteClipBuilderWindow.Open();
                 GUI.enabled = false;
-                GUILayout.Button("Publish Pack (NOT IMPLEMENTED)", GUILayout.Height(34));
+                GUILayout.Button("Publish (NOT READY)", GUILayout.Height(34));
                 GUI.enabled = true;
             }
             GUILayout.Space(8);
