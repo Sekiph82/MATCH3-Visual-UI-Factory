@@ -240,8 +240,11 @@ def create_candidate_exports(source: Path, output_dir: Path,
     outputs["candidate_manifest.json"] = (json.dumps(
         receipt, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     ).encode("utf-8")
-    if output_dir.is_symlink() or output_dir.resolve().is_relative_to(source.resolve()):
-        raise ImageError("unsafe candidate output directory")
+    root = output_dir.resolve()
+    repo_root = Path(__file__).resolve().parents[2]
+    if (output_dir.is_symlink() or root.is_relative_to(repo_root)
+            or source.resolve().is_relative_to(root)):
+        raise ImageError("candidates must be outside repo and separate from original source")
     if output_dir.exists() and not output_dir.is_dir():
         raise ImageError("candidate output is not directory")
     output_dir.mkdir(parents=True, exist_ok=True)
