@@ -68,6 +68,11 @@ class ManifestTests(unittest.TestCase):
                      "assets\\bad.png", "/tmp/art.png"):
             self.assert_rejected(lambda x, p=path: x["assets"].append(entry(p)))
 
+    def test_reject_noncanonical_and_windows_device_paths(self):
+        for path in ("original/./tile.png", "original//tile.png",
+                     "original/tile.png ", "CON.png", "assets/LPT1.png"):
+            self.assert_rejected(lambda x, p=path: x["assets"].append(entry(p)))
+
     def test_reject_duplicate_ids(self):
         self.assert_rejected(lambda x: x["assets"].extend([entry(), entry("original/other.png")]))
 
