@@ -1,0 +1,74 @@
+using UnityEditor;
+using UnityEngine;
+
+namespace Match3.VisualFactory.Editor
+{
+    public sealed class VufDashboardWindow : EditorWindow
+    {
+        private static readonly string[] Profiles = {
+            "Coral Rescue", "Garage Legends", "Dino Islands",
+            "The Fractured Realms", "Wonder Pop"
+        };
+        private static readonly string[] Modules = {
+            "VF-01  Style Bible & Visual Director",
+            "VF-02  Asset Catalog, Versioning & Receipts",
+            "VF-03  Provider-neutral AI / Manual Intake",
+            "VF-04  Image Processing & Atlases",
+            "VF-05  Character Animation",
+            "VF-06  VFX, Shader & Particles",
+            "VF-07  Interactive Screen / UI Composer",
+            "VF-08  Responsive Layout & Safe Areas",
+            "VF-09  Visual Quality & Performance QA",
+            "VF-10  Unity Integration / Export"
+        };
+        private static readonly string[] States = {
+            "DRAFT STYLE CONTRACTS", "OFFLINE PYTHON CATALOG", "MANUAL PNG INTAKE VIA CLI",
+            "PLANNED", "FRAME PREVIEW ONLY", "PLANNED",
+            "PLANNED", "SIMULATED DEVICE GUIDES", "STRUCTURAL CHECKS ONLY",
+            "LOCAL PACKAGE PREVIEW ONLY"
+        };
+        private int profile;
+        private Vector2 scroll;
+
+        [MenuItem("Tools/MATCH3/Visual Factory Dashboard")]
+        public static void Open()
+        {
+            var window = GetWindow<VufDashboardWindow>("Visual Factory");
+            window.minSize = new Vector2(550, 530);
+            window.Show();
+        }
+
+        private void OnGUI()
+        {
+            EditorGUILayout.Space(10);
+            EditorGUILayout.LabelField("MATCH3 VISUAL FACTORY", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(
+                "Five games. One shared toolchain. M00 foundation under construction. " +
+                "No approved artwork or production exports. Upstream integration is gated.",
+                MessageType.Info);
+            profile = EditorGUILayout.Popup("Selected game", profile, Profiles);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("Open Manual Sprite Preview", GUILayout.Height(34)))
+                    VufStudioWindow.Open();
+                GUI.enabled = false;
+                GUILayout.Button("Publish Pack (NOT IMPLEMENTED)", GUILayout.Height(34));
+                GUI.enabled = true;
+            }
+            GUILayout.Space(8);
+            EditorGUILayout.LabelField("VF MODULES | IMPLEMENTATION STATE", EditorStyles.boldLabel);
+            scroll = EditorGUILayout.BeginScrollView(scroll);
+            for (int i = 0; i < Modules.Length; ++i)
+            {
+                EditorGUILayout.BeginVertical("box");
+                EditorGUILayout.LabelField(Modules[i], EditorStyles.boldLabel);
+                EditorGUILayout.LabelField(States[i], EditorStyles.miniLabel);
+                EditorGUILayout.EndVertical();
+            }
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.HelpBox(
+                "Approval receipt strings are audit metadata, not proof of an owner sign-off. " +
+                "Game rules, saves and rewards remain owned by Engine/game repos.",
+                MessageType.Warning);
+        }
+    }
