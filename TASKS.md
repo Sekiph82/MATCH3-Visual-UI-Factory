@@ -1,20 +1,49 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF-M00 EARLY REPOSITORY BOOTSTRAP IN_PROGRESS / UPSTREAM INTEGRATION BLOCKED / NO INDEPENDENT PASS.
+**Status:** OWNER R04 PRODUCTION PLAN ADOPTED / VUF-M00 IMPLEMENTATION ACTIVE / VF-01 & VF-02 SOURCE BUILT / INDEPENDENT TEST + UNITY AUDIT STILL OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
 
 ## PROPOSED execution sequence and release boundaries
 
-**Owner's newer directive (2026-10-15):** Begin implementing the Visual & UI Factory directly with ChatGPT. This is a narrow, explicit **R03 early-bootstrap exception** to the old no-parallel-setup prohibition: stand-alone VUF source, local-free toolchain, manual preview, structural schemas, and isolated tests MAY proceed in this repository now. The Engine and Level Factory remain mandatory independently audited prerequisites for binding their final contracts, real gameplay integration, production export, full Studio acceptance and VUF v1 release. No VUF code/art may be copied into Engine; no LFX/game repo edits are authorized by this exception. Do not generate production asset packs, modify the owner's Windows checkout, perform cleanup or launch paid APIs before their own authorization and gates.
+**OWNER ADOPTED R04 (2026-10-15):** The full ten-module VF-01..VF-10 Visual/UI Factory plan is adopted, and ChatGPT is authorized to implement **stand-alone VUF repository source and isolated verification now**, beyond the earlier R03 setup-only exception. The final independently audited Engine and LFX release gates still block shared contract freeze, real Engine replay/level bindings, five-title integration, production asset package publishing and VUF-M11 release. Never write art or Factory behavior into the Engine, change LFX/game repos, claim creative approval or modify owner-local Windows files without an actual safe access/sync path. No paid image API, surprise subscription, destructive cleanup, or automatic commercial image rights assumption. **VF module progress is separate from VUF milestone audit status.**
 
 1. MATCH3_ENGINE: ENG-M00..ENG-M24 independent PASS/CLOSED. Engine defines five neutral GameProfiles, player-facing surface/state interfaces, immutable presentation events, responsive layout and stable asset keys. No finished branded game assets or Game-repo implementation are required for engine acceptance.
 2. Match3-Level-Factory: LFX-M00..LFX-M14 independent PASS/CLOSED. LFX-M08 preview uses original neutral placeholders and five mock themes until Visual Factory begins, and exports accepted sample level packs/fixtures.
 3. MATCH3-Visual-UI-Factory: VUF-M00..VUF-M11 independent acceptance for the reusable production pipeline, complete five-theme sample vertical slice, Unity runtime bindings, asset provenance, and deterministic export. **VUF v1 is a tested production tool, not a false claim that every future game's final art is approved.**
 4. Five branded game repositories, each G00..G12: all title-specific production assets are made through versioned VUF contracts and independently reviewed at G01; scenes/prefabs/animations are integrated at G02; game-specific device and owner visual acceptance stays at G09–G11. Subsequent VUF patches are individually versioned, backward-compatible, independently audited, and pinned by consuming game repos, never silent changes to a completed prior phase.
 
-**Dependency conflict requiring an explicit decision:** ENG-M09-014 currently requires owner approval of actual five-game visual masters and real iOS/Android signoffs before the Engine itself can close. This contradicts the existing Engine -> LFX -> VUF -> Games sequence. Do NOT silently weaken or self-approve the frozen R01 audit: issue explicit owner-approved ENG-M09-014 R02 scope/criteria preserving engine-owned neutral UI/device evidence now and deferring final branded master/device signoffs to each game's G01/G09/G11 plus ENG-M23/24 device gates. Until owner authorizes that versioned change, ENG-M09-014 stays blocked and the full sequential execution cannot progress.
+**Resolved contract-specific Engine dependency (R02):** ENG-M09-014 now records owner-authorized **PASS/CLOSED_R02** for symbolic five-profile x 17 surface x 8-state neutral contracts, without branded artwork. Evidence in Engine TASKS.md and independent audit https://docs.google.com/document/d/1rJKb3vfCXfyaokeT3E7cDs-roOGOfxk7S2hLraxDgn4/edit . This closes the old M09-014 circular design contradiction only. **The complete Engine ENG-M24 and Level Factory LFX-M14 final independent PASS gates are still open**, so real inter-repo integration and release must wait.
+
+## OWNER-ADOPTED TEN MODULES | VF-01..VF-10 vs. VUF milestones | R04
+
+Each VF number is a functional module. VUF numbers are milestone/independent audit gates; neither numbering system replaces the other. `docs/ARCHITECTURE.md` describes technical boundaries, not lifecycle status.
+
+| Functional module | System role / required acceptance | Primary VUF phases | Current verified scope |
+| --- | --- | --- | --- |
+| VF-01 Visual Director / Style Bible | Five distinctive style bibles, design tokens, silhouettes, original/language/age rules, owner sample review | M00/M02/M03/M09 | Draft five-profile JSON + structural validators source, NO creative approval |
+| VF-02 Asset Catalog / Versioning | Original/licensed source receipt, immutable content-addressed revision, explicit owner review and rollback | M00/M01/M04/M11 | SQLite candidate/approval and external blob catalog source; runtime tests NOT independently verified |
+| VF-03 Modular AI / Batch Intake | External manual import first, optional paid API adapters default OFF, measured cost and provenance, no overwrite | M04 | Offline VF-02 PNG intake path source only; provider/batch adapters NOT IMPLEMENTED |
+| VF-04 Image Processing | Non-destructive alpha/crop/segmentation/masking/resolutions/atlas, preserve original SHA | M05/M06 | NOT IMPLEMENTED |
+| VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Manual sheet frame preview in Unity C# source only; real Editor not yet verified |
+| VF-06 VFX Lab | Shader/particles/audio/haptic triggers/combo chaining, interruption/replay/reduced motion | M07/M09 | NOT IMPLEMENTED |
+| VF-07 UI Composer | Layered interactive button/prefab, 28 Coral experiences + reusable 5-theme screens, real state/locale binding | M03/M08/M10 | 28 Coral contract IDs only; actual screens NOT IMPLEMENTED |
+| VF-08 Responsive Preview | Safe areas, mobile ratios, tablet, touch accessibility and real-device evidence | M03/M08/M09 | Simulated Editor guide code only; no mobile device tests |
+| VF-09 Validation / Visual QA | Automated art/rights/render/perf + complete manual Sprite/VFX/UI Studio, separate owner/device PASS | M09/M10 | Offline schema/source tests authored; running evidence NOT YET VERIFIED |
+| VF-10 Unity Packaging / Release | Versioned UPM, SpriteAtlas, Animator, prefabs, Addressables optional, deterministic export/rollback | M08/M10/M11 | Local UPM package SOURCE and preview contract; no production export |
+
+**Visual Production Dashboard:** one game selector and ten module states now exists as a truthful Unity Editor UI source; later shows candidate production queue, outstanding review, approved/active pins, exports and QA receipts. Each unavailable button/tab must display unsupported reasons, not imply functionality.
+
+### Implementation sequence R04
+1. **A | independent foundation (ACTIVE):** VUF-M00 toolchain, VF-01 initial draft style bibles, VF-02 external asset catalog/immutable approval, VF-03 offline import, portable UPM source and automated negative controls. Compile/test/audit before claiming PASS.
+2. **B | independent creative tooling:** VF-04 non-destructive cleanup/alpha/atlas, VF-05 multi-format animation builder and VF-06 VFX templates with manual edit/playback and reduced-motion support; no game rules.
+3. **C | interactive screen composing:** VF-07 runtime-backed layered UI, 28 Coral experience templates and five theme skins; VF-08 phone/tablet responsive/safe-area and EN/TR pseudo-long strings.
+4. **D | comprehensive review:** VF-09 manual Visual QA Studio, animation/event/replay lab, deterministic diagnostics, asset licence/consistency/accessibility review, owner aesthetic approval separately from unit tests.
+5. **E | downstream-gated packaging:** only AFTER full Engine + LFX independent PASS, exact pinned replay/level consumptions, VF-10 final Unity adapters, texture performance budgets, five-profile playable visual slices and real iOS/Android smoke acceptance at VUF-M10/M11.
+6. **F | five branded game integration:** per-game G01 final character/screen approval and device QA; active VUF masters are immutable and require explicit reviewed supersession.
+
+**Source layout:** `factory/{visual_director,asset_catalog,asset_generator,image_processor,animation_builder,vfx_builder,ui_composer,responsive,validators,export_pipeline}`; `games/` holds only five draft profile configs, NOT five app repositories; `unity_package/{Runtime,Editor,Samples~}`; `schemas/`, `tests/`, and sole root lifecycle `TASKS.md`. Big PNG/PSD/animation assets are external versioned content-addressed blobs, never bulk GitHub data. Individual unsupported modules remain PLANNED until genuinely developed.
 
 ## System boundaries
 
@@ -67,6 +96,14 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## R04 source implementation progress | 2026-10-15 | NOT INDEPENDENTLY AUDITED
+
+**GitHub main source-only implemented/created:** `unity_package/package.json`, C# Editor Dashboard, migrated manual Sprite Preview, C# read-only preview contract, `Packages/manifest.json` local UPM reference; five draft style bibles `factory/visual_director/style_profiles.v1.json`; 28 experience IDs `schemas/coral-experiences.v1.json`; five thin game configs; VF-02 offline SQLite + external SHA-256 PNG store under `factory/asset_catalog/catalog.py`; original `Tools/validate_manifest.py`, new `factory/validators/validate_design.py`; source unit tests and workflow. Source audit evidence still required for completeness.
+
+**UNVERIFIED:** hosted Python test job conclusion, real Unity Editor compilation/PlayMode, local Windows folder synchronization, actual image/animation/VFX editor controls, complete PNG decoding, production licences, user art selection, five-title live bindings, actual device appearance, independent review. Existing M00 checkboxes stay **open**; no M00/M01 or VF module declared PASS. Do not claim asset generation or production-ready Studio based on dashboard labels.
+
+**Next priority:** inspect true GitHub Actions results and independently reproduce tests; harden legal/source, external store, package Editor import and Unity 6000.6.5f1 compilation; then complete M00 and advance isolated VF-04/VF-05 tasks without breaking upstream gates. Keep future builds source/test evidence in Drive only.
 
 ## 2026-10-15 | VUF-M00 early-bootstrap execution record (owner R03)
 
@@ -186,4 +223,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_M00_EARLY_BOOTSTRAP / NEXT: independently inspect structural tests and real Unity 6000.6.5f1 Editor opening before any milestone PASS. Upstream final Engine/LFX gates remain enforced for integrated phases. No physical device approval, finished graphics, paid API usage or audited v1 release is claimed.
+**CURRENT_OWNER:** CHATGPT_VUF_R04_IMPLEMENTATION_ACTIVE / NEXT: check actual Python CI run and Unity 6000.6.5f1 import, challenge independent tests, then continue VF-04/VF-05 in VUF until 10 modules are complete. Full Engine/LFX release gates remain enforced for integrated work. No physical device approval, paid provider use, approved art or independently audited v1 release is claimed.
