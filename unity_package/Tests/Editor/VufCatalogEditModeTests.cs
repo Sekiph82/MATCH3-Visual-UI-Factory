@@ -247,13 +247,6 @@ namespace Match3.VisualFactory.Tests
                 tween.Hide();
                 Assert.That(group.interactable, Is.False);
                 Assert.That(group.blocksRaycasts, Is.False);
-                tween.Show();
-                tween.Advance(tween.Duration / 2f);
-                tween.Hide();
-                tween.Advance(tween.Duration);
-                Assert.That(group.alpha, Is.EqualTo(0f).Within(0.0001f));
-                Assert.That(group.interactable, Is.False);
-                Assert.That(group.blocksRaycasts, Is.False);
                 tween.Advance(tween.Duration / 2f);
                 Assert.That(group.alpha, Is.InRange(0.01f, 0.99f));
                 tween.Show();
@@ -264,6 +257,14 @@ namespace Match3.VisualFactory.Tests
                 Assert.That(group.blocksRaycasts, Is.True);
                 tween.Hide();
                 tween.Advance(tween.Duration / 2f);
+                tween.Hide();
+                tween.Advance(tween.Duration);
+                Assert.That(group.alpha, Is.EqualTo(0f).Within(0.0001f));
+                Assert.That(group.interactable, Is.False);
+                Assert.That(group.blocksRaycasts, Is.False);
+                tween.Show();
+                tween.Advance(tween.Duration / 2f);
+                Assert.That(group.alpha, Is.InRange(0.01f, 0.99f));
                 tween.Hide();
                 tween.Advance(tween.Duration);
                 Assert.That(group.alpha, Is.EqualTo(0f).Within(0.0001f));
