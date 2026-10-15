@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+from contextlib import closing
 import json
 import sqlite3
 import struct
@@ -85,7 +86,7 @@ class AssetCatalogTests(unittest.TestCase):
         self.catalog.approve(v2["revision_id"], "owner-v2-explicit", v1["revision_id"])
         updated = self.catalog.preview_manifest("Coral_Rescue")
         self.assertEqual(updated["assets"][0]["sha256"], v2["sha256"])
-        with sqlite3.connect(self.catalog.db_path) as con:
+        with closing(sqlite3.connect(self.catalog.db_path)) as con, con:
             self.assertEqual(con.execute("SELECT COUNT(*) FROM approvals").fetchone()[0], 2)
         self.assertTrue(self.catalog._blob(v1["sha256"]).exists())
 
@@ -164,7 +165,7 @@ class AssetCatalogTests(unittest.TestCase):
     def test_rollback_to_previously_approved_revision(self):
         v1 = self.ingest()
         self.catalog.approve(v1["revision_id"], "owner-accept-v1")
-        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        v2 = self.ingest(b"\x19\x22\x33\xff")
         self.catalog.approve(v2["revision_id"], "owner-accept-v2", v1["revision_id"])
         restored = self.catalog.rollback(v1["revision_id"], v2["revision_id"], "owner-restore-v1")
         self.assertEqual(restored["active_revision_id"], v1["revision_id"])
@@ -179,7 +180,7 @@ class AssetCatalogTests(unittest.TestCase):
     def test_rollback_wrong_expected_active_fails_closed(self):
         v1 = self.ingest()
         self.catalog.approve(v1["revision_id"], "owner-accept-v1")
-        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        v2 = self.ingest(b"\x19\x22\x33\xff")
         self.catalog.approve(v2["revision_id"], "owner-accept-v2", v1["revision_id"])
         with self.assertRaises(CatalogError):
             self.catalog.rollback(v1["revision_id"], v1["revision_id"], "stale-receipt")
@@ -192,7 +193,7 @@ class AssetCatalogTests(unittest.TestCase):
     def test_rollback_unapproved_candidate_is_rejected(self):
         v1 = self.ingest()
         self.catalog.approve(v1["revision_id"], "owner-v1")
-        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        v2 = self.ingest(b"\x19\x22\x33\xff")
         with self.assertRaises(CatalogError):
             self.catalog.rollback(v2["revision_id"], v1["revision_id"], "owner-v2")
         self.assertEqual(self.catalog.verify()["active_assets"], 1)
@@ -209,7 +210,7 @@ class AssetCatalogTests(unittest.TestCase):
     def test_revision_and_approval_history_are_sqlite_append_only(self):
         revision = self.ingest()
         self.catalog.approve(revision["revision_id"], "owner-v1")
-        with sqlite3.connect(self.catalog.db_path) as con:
+        with closing(sqlite3.connect(self.catalog.db_path)) as con, con:
             with self.assertRaises(sqlite3.IntegrityError):
                 con.execute("UPDATE revisions SET rights='licensed' WHERE id=?",
                             (revision["revision_id"],))
@@ -221,10 +222,10 @@ class AssetCatalogTests(unittest.TestCase):
     def test_restoration_events_are_sqlite_append_only(self):
         v1 = self.ingest()
         self.catalog.approve(v1["revision_id"], "owner-v1")
-        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        v2 = self.ingest(b"\x19\x22\x33\xff")
         self.catalog.approve(v2["revision_id"], "owner-v2", v1["revision_id"])
         self.catalog.rollback(v1["revision_id"], v2["revision_id"], "owner-restore")
-        with sqlite3.connect(self.catalog.db_path) as con:
+        with closing(sqlite3.connect(self.catalog.db_path)) as con, con:
             with self.assertRaises(sqlite3.IntegrityError):
                 con.execute("DELETE FROM restorations")
             with self.assertRaises(sqlite3.IntegrityError):
@@ -233,7 +234,7 @@ class AssetCatalogTests(unittest.TestCase):
     def test_rollback_rejects_modified_target_bytes(self):
         v1 = self.ingest()
         self.catalog.approve(v1["revision_id"], "owner-v1")
-        v2 = self.ingest(b"\\x19\\x22\\x33\\xff")
+        v2 = self.ingest(b"\x19\x22\x33\xff")
         self.catalog.approve(v2["revision_id"], "owner-v2", v1["revision_id"])
         self.catalog._blob(v1["sha256"]).write_bytes(b"corrupt")
         with self.assertRaises(CatalogError):
@@ -260,7 +261,7 @@ class AssetCatalogTests(unittest.TestCase):
         self.assertEqual(coral["active_asset_count"], 0)
         self.assertEqual(coral["pending_preview"][0]["id"], v1["revision_id"])
         self.catalog.approve(v1["revision_id"], "human-reviewed")
-        v2 = self.ingest(b"\\x44\\x55\\x66\\xff")
+        v2 = self.ingest(b"\x44\x55\x66\xff")
         report = self.catalog.portfolio_report()
         coral = next(p for p in report["profiles"] if p["profile_id"] == "Coral_Rescue")
         self.assertEqual(coral["pending_review_count"], 1)

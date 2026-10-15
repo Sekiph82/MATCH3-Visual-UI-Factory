@@ -7,6 +7,7 @@ Structural receipts are NOT cryptographic evidence of actual owner approval.
 from __future__ import annotations
 
 import argparse
+from contextlib import closing
 import hashlib
 import json
 import os
@@ -122,7 +123,7 @@ class AssetCatalog:
         self.store.mkdir(parents=True, exist_ok=True)
         if self.store.is_symlink() or self.db_path.is_symlink():
             raise CatalogError("catalog root/database must not be symlink")
-        with sqlite3.connect(str(self.db_path)) as con:
+        with closing(sqlite3.connect(str(self.db_path))) as con:
             con.executescript(SCHEMA)
 
     def _blob(self, digest: str) -> Path:
@@ -168,7 +169,7 @@ class AssetCatalog:
             pass
         if dest.is_symlink() or hashlib.sha256(dest.read_bytes()).hexdigest() != digest:
             raise CatalogError("content-addressed blob mismatch; cannot overwrite")
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             con.execute("BEGIN IMMEDIATE")
             revision = con.execute(
                 "SELECT COALESCE(MAX(revision),0)+1 FROM revisions WHERE profile=? AND asset_key=?",
@@ -186,7 +187,7 @@ class AssetCatalog:
     def approve(self, revision_id: int, owner_receipt: str,
                 replaces_revision_id: int | None = None) -> dict:
         owner_receipt = required_text(owner_receipt, "owner approval receipt")
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             con.execute("BEGIN IMMEDIATE")
             revision = con.execute(
                 "SELECT * FROM revisions WHERE id=?", (revision_id,)).fetchone()
@@ -225,7 +226,7 @@ class AssetCatalog:
                 or target_revision_id <= 0 or expected_active_revision_id <= 0
                 or target_revision_id == expected_active_revision_id):
             raise CatalogError("rollback needs distinct positive target and expected-active IDs")
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             con.execute("BEGIN IMMEDIATE")
             target = con.execute(
                 """SELECT r.* FROM revisions r
@@ -266,7 +267,7 @@ class AssetCatalog:
     def history(self, profile: str, asset_key: str) -> dict:
         if profile not in PROFILES or not isinstance(asset_key, str) or not KEY_PATTERN.fullmatch(asset_key):
             raise CatalogError("unknown history key/profile")
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             revisions = con.execute(
                 """SELECT r.id, r.revision, r.sha256, r.created_utc,
                 CASE WHEN a.revision_id IS NULL THEN 0 ELSE 1 END AS approved
@@ -289,7 +290,7 @@ class AssetCatalog:
                 "restorations": [dict(row) for row in restores]}
 
     def verify(self) -> dict:
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             rows = con.execute("SELECT id,sha256 FROM revisions ORDER BY id").fetchall()
             active = con.execute(
                 """SELECT a.profile, a.asset_key, a.revision_id
@@ -325,7 +326,7 @@ class AssetCatalog:
         """Read-only production queue. Stored receipts are NOT identity verified."""
         checked = self.verify()
         profiles = []
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             for profile in sorted(PROFILES):
                 values = con.execute(
                     """SELECT COUNT(*) AS total,
@@ -368,7 +369,7 @@ class AssetCatalog:
         if profile not in PROFILES:
             raise CatalogError("unknown game profile")
         self.verify()
-        with self._connect() as con:
+        with closing(self._connect()) as con, con:
             rows = con.execute(
                 """SELECT r.* FROM revisions r JOIN active a ON a.revision_id=r.id
                 WHERE a.profile=? ORDER BY r.asset_key""", (profile,)).fetchall()
