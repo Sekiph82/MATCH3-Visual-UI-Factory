@@ -128,6 +128,9 @@ class AssetCatalog:
         if len(data) > MAX_FILE_BYTES:
             raise CatalogError("file exceeds 64 MiB intake limit")
         width, height = png_dimensions(data)
+        # No content-store writes before successful explicit catalog initialization.
+        if self.store.is_symlink() or self.db_path.is_symlink() or not self.db_path.is_file():
+            raise CatalogError("Catalog missing or unsafe: run 'init' before ingest")
         digest = hashlib.sha256(data).hexdigest()
         dest = self._blob(digest)
         dest.parent.mkdir(parents=True, exist_ok=True)
