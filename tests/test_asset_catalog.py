@@ -147,6 +147,20 @@ class AssetCatalogTests(unittest.TestCase):
             self.assertEqual(len(manifest["assets"]), 1)
             self.assertTrue(manifest["assets"][0]["asset_id"].startswith(profile + "."))
 
+    def test_invalid_idat_crc_fails_without_catalog_pollution(self):
+        broken = bytearray(sample_png())
+        broken[50] ^= 1
+        self.source.write_bytes(broken)
+        with self.assertRaises(CatalogError):
+            self.ingest()
+        self.assertEqual(self.catalog.verify()["verified_revisions"], 0)
+
+    def test_uninitialized_catalog_ingest_creates_no_blob(self):
+        fresh = AssetCatalog(Path(self.temp.name) / "new-uninitialized")
+        with self.assertRaises(CatalogError):
+            fresh.ingest(self.source, "Coral_Rescue", "tile.star", "original", "receipt")
+        self.assertFalse((fresh.store / "blobs").exists())
+
     def test_cli_initializes_and_verifies(self):
         with tempfile.TemporaryDirectory() as folder:
             store = Path(folder) / "new"
