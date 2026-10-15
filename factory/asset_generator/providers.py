@@ -6,14 +6,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Protocol
 import re
+import sys
 
-try:
-    from factory.asset_catalog.catalog import AssetCatalog, CatalogError, PROFILES
-except ImportError:
-    # Direct script/test path is intentionally supported for offline tools.
-    from catalog import AssetCatalog, CatalogError, PROFILES
+# Offline CLI works when invoked by path from any current working directory.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from factory.asset_catalog.catalog import (
+    AssetCatalog, CatalogError, PROFILES, MAX_FILE_BYTES, png_dimensions
+)
 
 
 @dataclass(frozen=True)
@@ -50,8 +50,12 @@ class ManualFileProvider:
     def import_png(self, request: VisualRequest, catalog: AssetCatalog, image: Path,
                    rights: str, source_receipt: str) -> dict:
         request.validate()
-        from factory.asset_catalog.catalog import png_dimensions
-        data = Path(image).read_bytes()
+        path = Path(image)
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_FILE_BYTES:
+            raise CatalogError("manual intake requires regular bounded PNG source")
+        data = path.read_bytes()
+        if len(data) > MAX_FILE_BYTES:
+            raise CatalogError("source exceeds bounded intake")
         width, height = png_dimensions(data)
         if (width, height) != (request.width, request.height):
             raise CatalogError("provided source dimensions differ from request")
