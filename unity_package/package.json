@@ -1,0 +1,18 @@
+{
+  "name": "com.match3.visual-factory",
+  "version": "0.1.0",
+  "displayName": "MATCH3 Visual and UI Factory",
+  "description": "Authoring-only visual asset contract and source preview for five independent Match3 themes.",
+  "unity": "6000.0",
+  "keywords": [
+    "match3",
+    "visual-factory",
+    "ui",
+    "editor",
+    "sprite"
+  ],
+  "author": {
+    "name": "MATCH3 GAMES"
+  },
+  "dependencies": {}
+}
