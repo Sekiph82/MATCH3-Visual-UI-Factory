@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "profile_id": "Coral_Rescue",
+  "theme_version": "0.1.0",
+  "engine_sha": "UNPINNED",
+  "level_factory_sha": "UNPINNED",
+  "stage": "TEST_ONLY",
+  "assets": []
+}
