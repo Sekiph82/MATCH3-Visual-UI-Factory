@@ -1,0 +1,29 @@
+name: VUF source and manifest checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manifest-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Manifest positive/negative tests
+        run: python -m unittest discover -s tests -v
+      - name: Synthetic TEST_ONLY sample
+        run: python Tools/validate_manifest.py Samples~/sample_manifest.json
+      - name: Assert Unity version and project structure
+        run: |
+          grep -F 'm_EditorVersion: 6000.6.5f1' ProjectSettings/ProjectVersion.txt
+          test -f Assets/Editor/VufStudioWindow.cs
+          python -m json.tool Packages/manifest.json > /dev/null
