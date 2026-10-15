@@ -226,6 +226,7 @@ namespace Match3.VisualFactory.Tests
                 tween.Show();
                 Assert.That(group.alpha, Is.EqualTo(1f));
                 Assert.That(group.interactable, Is.True);
+                Assert.That(group.blocksRaycasts, Is.True);
                 Assert.That(tween.IsAnimating, Is.False);
             }
             finally
@@ -244,6 +245,13 @@ namespace Match3.VisualFactory.Tests
                 var group = go.GetComponent<CanvasGroup>();
                 tween.SetReducedMotion(false);
                 tween.Hide();
+                Assert.That(group.interactable, Is.False);
+                Assert.That(group.blocksRaycasts, Is.False);
+                tween.Show();
+                tween.Advance(tween.Duration / 2f);
+                tween.Hide();
+                tween.Advance(tween.Duration);
+                Assert.That(group.alpha, Is.EqualTo(0f).Within(0.0001f));
                 Assert.That(group.interactable, Is.False);
                 Assert.That(group.blocksRaycasts, Is.False);
                 tween.Advance(tween.Duration / 2f);
@@ -315,34 +323,48 @@ namespace Match3.VisualFactory.Tests
         [Test]
         public void VfxCandidateBuilderCreatesConfiguredUnityParticleSystemInMemory()
         {
-            GameObject candidate = VufVfxLabWindow.BuildCandidateParticleSystem(
-                "MatchBurst", 42, .5f, 4.5f, .21f, new Color(1f, .73f, .35f, 1f));
-            try
+            string[] presets = {
+                "BubbleRise", "MatchBurst", "StarSparkle", "SoftDrift", "PortalPulse"
+            };
+            for (int i = 0; i < presets.Length; ++i)
             {
-                ParticleSystem system = candidate.GetComponent<ParticleSystem>();
-                Assert.That(system, Is.Not.Null);
-                Assert.That(candidate.GetComponent<ParticleSystemRenderer>(), Is.Not.Null);
-                ParticleSystem.MainModule main = system.main;
-                Assert.That(main.playOnAwake, Is.False);
-                Assert.That(main.loop, Is.False);
-                Assert.That(main.maxParticles, Is.EqualTo(160));
-                Assert.That(main.simulationSpace,
-                    Is.EqualTo(ParticleSystemSimulationSpace.Local));
-                Assert.That(main.startLifetime.constant, Is.EqualTo(.5f).Within(.0001f));
-                Assert.That(main.startSpeed.constant, Is.EqualTo(4.5f).Within(.0001f));
-                ParticleSystem.EmissionModule emission = system.emission;
-                Assert.That(emission.rateOverTime.constant, Is.EqualTo(0f));
-                var bursts = new ParticleSystem.Burst[1];
-                Assert.That(emission.GetBursts(bursts), Is.EqualTo(1));
-                Assert.That(bursts[0].count.constant, Is.EqualTo(42));
-                Assert.That(system.shape.enabled, Is.True);
-                Assert.That(system.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Cone));
-                Assert.That(system.shape.angle, Is.EqualTo(60f));
-                Assert.That(system.sizeOverLifetime.enabled, Is.True);
-            }
-            finally
-            {
-                UnityEngine.Object.DestroyImmediate(candidate);
+                int count = 20 + i;
+                float lifetime = .5f + i * .1f;
+                float speed = 1f + i;
+                GameObject candidate = VufVfxLabWindow.BuildCandidateParticleSystem(
+                    presets[i], count, lifetime, speed, .1f + i * .02f,
+                    new Color(.2f + i * .1f, .7f, .9f, 1f));
+                try
+                {
+                    ParticleSystem system = candidate.GetComponent<ParticleSystem>();
+                    Assert.That(system, Is.Not.Null);
+                    Assert.That(candidate.GetComponent<ParticleSystemRenderer>(), Is.Not.Null);
+                    ParticleSystem.MainModule main = system.main;
+                    Assert.That(main.playOnAwake, Is.False);
+                    Assert.That(main.loop, Is.False);
+                    Assert.That(main.maxParticles, Is.EqualTo(160));
+                    Assert.That(main.simulationSpace,
+                        Is.EqualTo(ParticleSystemSimulationSpace.Local));
+                    Assert.That(main.startLifetime.constant,
+                        Is.EqualTo(lifetime).Within(.0001f));
+                    Assert.That(main.startSpeed.constant, Is.EqualTo(speed).Within(.0001f));
+                    ParticleSystem.EmissionModule emission = system.emission;
+                    Assert.That(emission.rateOverTime.constant, Is.EqualTo(0f));
+                    var bursts = new ParticleSystem.Burst[1];
+                    Assert.That(emission.GetBursts(bursts), Is.EqualTo(1));
+                    Assert.That(bursts[0].count.constant, Is.EqualTo(count));
+                    Assert.That(system.shape.enabled, Is.True);
+                    Assert.That(system.shape.shapeType, Is.EqualTo(ParticleSystemShapeType.Cone));
+                    Assert.That(system.shape.angle,
+                        Is.EqualTo(presets[i] == "BubbleRise" ? 8f : 60f));
+                    Assert.That(system.shape.radius,
+                        Is.EqualTo(presets[i] == "SoftDrift" ? .45f : .12f));
+                    Assert.That(system.sizeOverLifetime.enabled, Is.True);
+                }
+                finally
+                {
+                    UnityEngine.Object.DestroyImmediate(candidate);
+                }
             }
         }
 
@@ -352,6 +374,11 @@ namespace Match3.VisualFactory.Tests
             Texture2D atlas = new Texture2D(16, 16, TextureFormat.RGBA32, false);
             try
             {
+                var pixels = new Color[16 * 16];
+                for (int i = 0; i < pixels.Length; ++i)
+                    pixels[i] = new Color((i % 16) / 15f, (i / 16) / 15f, .5f, 1f);
+                atlas.SetPixels(pixels);
+                atlas.Apply(false, false);
                 string valid = AtlasManifestJson("[8,8,4,4]", "[0.5,0.25,0.25,0.25]");
                 VufAtlasPreviewWindow.AtlasManifest document;
                 Rect[] rectangles = VufAtlasPreviewWindow.ValidateCandidateGeometry(
