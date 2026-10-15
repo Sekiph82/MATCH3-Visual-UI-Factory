@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R08 DIRECT DEVELOPMENT / VF-07 28 CORAL uGUI CANDIDATE SHELLS + FIVE THEME MIRRORS SOURCE / 117 UNIT METHODS DEFINED; R08 PYTHON + UNITY NOT YET VERIFIED; LATEST HOSTED VERIFIED R05 66/66.
+**Status:** VUF R09 SOURCE DEVELOPMENT / VF-02 HISTORY+ROLLBACK SOURCE / 125 PYTHON TEST METHODS DEFINED; LATEST VERIFIED HOSTED R05 66/66, CURRENT UNITY/PYTHON TESTS OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -98,6 +98,13 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 | 28 | Gameplay / Level HUD (required baseline) | Real interactive match board, progress and boosters | Engine deterministic rule events, Coral G02 |
 
 **Mandatory downstream mapping:** VUF-M01-002 maps each of these 28 experiences to the Engine's existing 17 typed `UiSurfaceKind` primitives, plus separate Coral page/overlay/mode IDs, action IDs and state applicability. Do NOT add 28 engine enum values or demand image pixels/creative master approval in Engine. The existing 5 x 17 x 8 matrix is a **symbolic interface coverage contract only**. VUF-M03 creates layered/reusable UI templates and VUF-M09 checks actual full/disabled/empty/loading/claimed/owned/offline/pending states when applicable. G01 signs off final original/licensed Coral art and G02/G09/G11 confirm functioning screens and on-device appearance. No dead buttons: disabled feature states must show an accessible reason.
+
+## 2026-10-15 | R09 SOURCE / VF-02 REVISION ROLLBACK | UNVERIFIED
+
+- Asset catalog now supports restoring an earlier approved revision with an explicitly provided expected active revision and an owner review receipt. Historic source blobs are retained and restoration activity is separately recorded.
+- SQLite schema adds append-only controls for historic revision, approval and restoration records. These safeguard history locally but do not provide authenticated ownership or prevent manipulation by database administrators.
+- An optional CLI history view and rollback command were added, with eight new unit-test methods. Current source defines 125 unit-test methods across ten files. This is not a passing test result. The last verified hosted run remains R05: 66 tests successful at 10a1b3bc09bef1238ced23fc54b9646e65369343.
+- GitHub Actions automatic triggers remain disabled. R08/R09 still require free local Python checks and real Unity Editor import, followed by independent review before any milestone PASS. Do not publish assets or change game repositories.
 
 ## 2026-10-15 | R08 DIRECT DEVELOPMENT / ALL 28 CORAL EXPERIENCE CANDIDATE SHELLS | UNITY NOT TESTED
 
@@ -286,4 +293,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R08_DIRECT_DEVELOPMENT / NEXT: free local source parity test and genuine Unity 6000.6.5f1 editor import of 28-Screen Shell Builder, correct UX or C# errors before announcing any PASS. Keep all 28 final art/completion and five-game integration gates OPEN. GH Actions manual-only; no Windows checkout touched, no owner/device acceptance.
+**CURRENT_OWNER:** CHATGPT_VUF_R09_SOURCE_DEVELOPMENT / NEXT: run free Python source checks at current commit and real Unity 6000.6.5f1 editor tests before closure. All art, device and downstream integration acceptance remains open; no GitHub Actions dispatch or local Windows changes.
