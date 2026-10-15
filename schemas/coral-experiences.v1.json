@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "status": "CONTRACT_DRAFT_NOT_IMPLEMENTED",
+  "profile_id": "Coral_Rescue",
+  "screens": [
+    {
+      "id": "COR-01",
+      "key": "world_map",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-02",
+      "key": "level_start",
+      "kind": "modal",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-03",
+      "key": "level_won",
+      "kind": "ceremony",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-04",
+      "key": "level_failed",
+      "kind": "modal",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-05",
+      "key": "reef_restoration",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-06",
+      "key": "marine_collection",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-07",
+      "key": "my_aquarium",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-08",
+      "key": "region_unlocked",
+      "kind": "ceremony",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-09",
+      "key": "daily_rewards",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-10",
+      "key": "tasks_missions",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-11",
+      "key": "shop",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-12",
+      "key": "treasure_rewards",
+      "kind": "ceremony",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-13",
+      "key": "events_hub",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "OFF_UNTIL_ENGINE_POLICY_CONFIRMED"
+    },
+    {
+      "id": "COR-14",
+      "key": "season_pass",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "OFF_UNTIL_ENGINE_POLICY_CONFIRMED"
+    },
+    {
+      "id": "COR-15",
+      "key": "endless_mode",
+      "kind": "mode",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-16",
+      "key": "time_attack",
+      "kind": "mode",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-17",
+      "key": "tournament",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "OFF_UNTIL_ENGINE_POLICY_CONFIRMED"
+    },
+    {
+      "id": "COR-18",
+      "key": "weekly_records",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-19",
+      "key": "friends",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "OFF_UNTIL_ENGINE_POLICY_CONFIRMED"
+    },
+    {
+      "id": "COR-20",
+      "key": "leaderboard",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "OFF_UNTIL_ENGINE_POLICY_CONFIRMED"
+    },
+    {
+      "id": "COR-21",
+      "key": "player_profile",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-22",
+      "key": "splash_loading",
+      "kind": "overlay",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-23",
+      "key": "tutorial",
+      "kind": "overlay",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-24",
+      "key": "pause_settings",
+      "kind": "modal",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-25",
+      "key": "out_of_lives",
+      "kind": "modal",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-26",
+      "key": "welcome_back",
+      "kind": "modal",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-27",
+      "key": "home",
+      "kind": "page",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    },
+    {
+      "id": "COR-28",
+      "key": "gameplay_hud",
+      "kind": "playable",
+      "runtime_ui_required": true,
+      "available_in_demo": false,
+      "feature_gate": "REQUIRES_ENGINE_OR_GAME_BINDING"
+    }
+  ]
+}
