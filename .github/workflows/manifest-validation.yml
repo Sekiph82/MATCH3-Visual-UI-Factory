@@ -20,6 +20,22 @@ jobs:
           python-version: '3.11'
       - name: Manifest positive/negative tests
         run: python -m unittest discover -s tests -v
+      - name: Verify five draft style profiles and 28 Coral experiences
+        run: python factory/validators/validate_design.py
+      - name: Assert portable package metadata and package locations
+        run: |
+          python -m json.tool unity_package/package.json > /dev/null
+          python -m json.tool unity_package/Runtime/Match3.VisualFactory.Runtime.asmdef > /dev/null
+          python -m json.tool unity_package/Editor/Match3.VisualFactory.Editor.asmdef > /dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("Packages/manifest.json").read_text())
+          assert data["dependencies"]["com.match3.visual-factory"] == "file:../unity_package"
+          assert Path("unity_package/Editor/VufStudioWindow.cs").is_file()
+          assert Path("unity_package/Editor/VufDashboardWindow.cs").is_file()
+          assert not Path("Assets/Editor/VufStudioWindow.cs").exists()
+          PY
       - name: Synthetic TEST_ONLY sample
         run: python Tools/validate_manifest.py Samples~/sample_manifest.json
       - name: Assert Unity version and project structure
