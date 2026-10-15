@@ -111,7 +111,7 @@ try {
         '-projectPath', ('"' + $project + '"'),
         '-runTests', '-testPlatform', 'EditMode',
         '-testResults', ('"' + $xmlPath + '"'),
-        '-logFile', ('"' + $logPath + '"'), '-quit'
+        '-logFile', ('"' + $logPath + '"')
     )
     $process = Start-Process -FilePath $UnityExe -ArgumentList $arguments -PassThru -Wait
     if ($process.ExitCode -ne 0) {
