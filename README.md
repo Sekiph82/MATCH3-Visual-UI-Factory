@@ -24,6 +24,21 @@ Before updating the existing folder, inspect uncommitted local changes and remot
 
 Unity may generate `Library/`, `Temp/` and package metadata on first opening; these are local caches and must not be committed. Unity visual QA/device tests remain outstanding.
 
+## One-command Windows preparation (optional, owner-controlled)
+
+From PowerShell **in the existing local checkout**, after reviewing local changes:
+
+```powershell
+.\scripts\prepare_visual_factory.ps1 -FetchAndFastForward -OpenUnity
+```
+
+The script verifies the exact remote, `main`, clean local status, repository
+version, and only permits **fast-forward** Git synchronization. It never
+uses hard reset, force push, deletes, worktrees or duplicate clones. If local
+changes or divergence are found, it stops without overwriting anything. The
+actual local run and Unity import still require on-machine execution and
+are NOT claimed completed by this cloud implementation.
+
 ## Offline asset catalog, no paid APIs
 
 Choose a separate, owner-controlled **store outside the repository**; the catalog explicitly rejects blob storage inside the tracked GitHub source tree.
