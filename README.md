@@ -17,7 +17,8 @@ Games: `Coral_Rescue`, `Garage_Legends`, `Dino_Islands`, `The_Fractured_Realms`,
 - **VF-07 draft interactive composer:** real Unity uGUI layered Canvas/Images/Text/disabled Buttons for seven base screen archetypes; no Game/Engine action bindings yet.
 - **VF-08 runtime safe-area component** for RectTransforms; real device evidence still required.
 - **VF-09 manual prefab QA Inspector:** browse candidate uGUI/ParticleSystem components, suspect unbound active buttons, safe area, missing renderer materials and image/clip import metadata. Real visuals, user experience and performance acceptance are still human/device-gated.
-- **VF-04 full PNG pixel decoder, alpha crop, 1×/2×/3× source transform** and candidate provenance receipt (external output only).
+- **VF-04 offline PNG processor**: 1×/2×/3× trim/scaling, alpha keep/remove mask, and deterministic multi-sprite PNG atlas with exact sprite/UV ledger. All output is candidate-only, outside Git. Unity `Tools > MATCH3 > Sprite Atlas Inspector` provides read-only geometric preview, not production art acceptance.
+- **VF-09 independent pixel verifier** checks original SHA provenance, sprite rects, UV layout, atlas pixel-by-pixel parity and original/mask alpha composition, without writing any image data.
 
 ## Open in Unity Hub (existing folder, do not create duplicate checkout)
 
