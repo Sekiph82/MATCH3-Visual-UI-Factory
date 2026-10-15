@@ -1,0 +1,14 @@
+{
+  "name": "Match3.VisualFactory.Runtime",
+  "rootNamespace": "Match3.VisualFactory",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
