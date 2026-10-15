@@ -158,16 +158,17 @@ def trim_rgba(width: int, height: int, rgba: bytes,
               padding: int = 0, alpha_cutoff: int = 0) -> tuple[int, int, bytes, dict]:
     if not 0 <= padding <= 64 or not 0 <= alpha_cutoff <= 254:
         raise ImageError("invalid padding or alpha cutoff")
-    visible = [
-        (x, y)
-        for y in range(height)
-        for x in range(width)
-        if rgba[(y * width + x) * 4 + 3] > alpha_cutoff
-    ]
-    if not visible:
+    # Constant auxiliary memory, including a large 4096x4096 texture.
+    min_x, min_y, max_x, max_y = width, height, -1, -1
+    for y in range(height):
+        for x in range(width):
+            if rgba[(y * width + x) * 4 + 3] > alpha_cutoff:
+                min_x = min(min_x, x)
+                min_y = min(min_y, y)
+                max_x = max(max_x, x)
+                max_y = max(max_y, y)
+    if max_x < 0:
         raise ImageError("entire image is transparent at selected alpha cutoff")
-    min_x, min_y = min(x for x, _ in visible), min(y for _, y in visible)
-    max_x, max_y = max(x for x, _ in visible), max(y for _, y in visible)
     new_w, new_h = max_x - min_x + 1 + 2 * padding, max_y - min_y + 1 + 2 * padding
     if new_w > MAX_DIMENSION or new_h > MAX_DIMENSION or new_w * new_h > MAX_OUTPUT_PIXELS:
         raise ImageError("padded sprite is too large")
