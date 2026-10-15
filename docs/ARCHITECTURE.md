@@ -27,6 +27,22 @@ Five independent branded Match3 titles share Visual Director, Asset Catalog, AI 
 5. **Phase E / gated integration:** after independently audited full Engine and LFX milestones, VF-10 exactly pinned manifests, Unity prefab/atlas/Animator/Addressables adapters and five playable visual slices; owner and device tests and independent audit before VUF-M11 release.
 6. **Phase F / five game projects:** versioned assets are consumed downstream without mutating ENGINE source, rules or earned rewards.
 
+## Complete output coverage
+
+| Production family | Principal modules | Versioned outputs and acceptance |
+| --- | --- | --- |
+| UI Screens | VF-07, VF-08 | Home/Gameplay/Map/Shop/Event/Collection/Settings and conditional overlays, stateful Unity interactive assemblies |
+| UI Components | VF-07, VF-09 | buttons, cards, progress, counters, modals and real runtime localization/action bindings |
+| Game Tiles | VF-04, VF-05, VF-09 | six silhouette-distinct base pieces, specials, boosters, obstacles with required damage and VFX keys |
+| Characters | VF-01, VF-04, VF-05 | original-reference locked creatures/mascots, poses, expressions and non-destructive rig/frame masters |
+| Environments | VF-01, VF-04, VF-06 | layered worlds, backgrounds, depth, parallax and custom decorations |
+| Animations | VF-05, VF-09 | idle/move/win/lose/collect/transitions, sprite/skeletal/3D where appropriate and reduced-motion fallbacks |
+| VFX | VF-06, VF-09 | matching/booster/chained effects, particle, shaders, sound/haptic cues and budget checks |
+| Rewards | VF-05, VF-06, VF-07 | chests, currency/claimed/owned states and grant-receipt-driven ceremonies only, never fake grants |
+| Marketing Assets | VF-04, VF-10 | app icon, splash and store listing screenshots as separately reviewed exports with platform-specific dimensions and rights receipts |
+
+All nine output families follow **request -> candidate -> validation -> owner approval -> immutable versioned export -> Unity/game import -> real QA**. Marketing assets and app icons are not flattened interactive runtime UI; they are distinct presentation deliverables and receive their own QA/rights receipts.
+
 ## Version and source policy
 `CANDIDATE` images never silently supersede an `APPROVED` revision. All approved blobs are immutable and separately stored in an owner-selected, external content-addressed folder. A new revision is approved by a distinct owner decision explicitly specifying the expected previous active revision. Catalog receipt strings are record fields, NOT a cryptographic or identity-based signature; final approval still requires direct owner review. Failing provenance, missing art, signature mismatch, unavailable age policy and broken dependency contracts fail closed. No automated provider may charge by default or store tokens in GitHub.
 
