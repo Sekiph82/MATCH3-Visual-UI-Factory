@@ -19,3 +19,16 @@ UserSettings/
 secrets/
 generated/
 candidate_art/
+
+# Python and external candidate/catalog outputs
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-shm
+*.sqlite3-wal
+candidates/
+asset_store/
+blobs/
+Assets/VufCandidates/
