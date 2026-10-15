@@ -37,6 +37,7 @@ def validate_structure() -> dict:
         "Editor/VufVfxLabWindow.cs",
         "Editor/VufUiComposerWindow.cs",
         "Editor/VufQaStudioWindow.cs",
+        "Editor/VufAtlasPreviewWindow.cs",
         "Runtime/VufSafeAreaFitter.cs",
     ]
     guids = []
