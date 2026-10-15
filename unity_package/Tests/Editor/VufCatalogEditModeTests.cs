@@ -197,6 +197,96 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void ResponsiveGeometryAuditsAllSyntheticDevicePresets()
+        {
+            var screens = VufScreenCatalog.LoadScreens();
+            var style = VufScreenCatalog.LoadStyle("Coral_Rescue");
+            foreach (var device in VufResponsiveGeometry.Presets)
+            {
+                foreach (var screen in screens)
+                {
+                    GameObject root = VufScreenShellBuilderWindow.BuildCandidateHierarchy(
+                        screen, style, true);
+                    try
+                    {
+                        var report = VufResponsiveGeometry.Analyze(root, device);
+                        Assert.That(report.CandidateOnly, Is.True);
+                        Assert.That(report.ButtonCount, Is.EqualTo(1));
+                        Assert.That(report.Nodes.Count, Is.GreaterThan(10));
+                        Assert.That(report.Device.Name, Is.EqualTo(device.Name));
+                        var safe = report.Nodes.Find(node => node.IsSafeArea);
+                        Assert.That(safe, Is.Not.Null);
+                        Assert.That(safe.Bounds, Is.EqualTo(device.SafeRect));
+                        Assert.That(report.Warnings.Exists(
+                            warning => warning.StartsWith("SAFE-AREA:")), Is.False,
+                            screen.id + " on " + device.Name);
+                    }
+                    finally
+                    {
+                        UnityEngine.Object.DestroyImmediate(root);
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void ResponsiveGeometryDetectsTooSmallUnboundButton()
+        {
+            var root = new GameObject("TEST_ONLY_SMALL_BUTTON", typeof(RectTransform));
+            var child = new GameObject("Unbound", typeof(RectTransform),
+                typeof(Image), typeof(Button));
+            try
+            {
+                child.transform.SetParent(root.transform, false);
+                var rect = child.GetComponent<RectTransform>();
+                rect.anchorMin = new Vector2(.5f, .5f);
+                rect.anchorMax = new Vector2(.501f, .501f);
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+                var report = VufResponsiveGeometry.Analyze(
+                    root, VufResponsiveGeometry.Presets[0]);
+                Assert.That(report.CandidateOnly, Is.False);
+                Assert.That(report.ButtonCount, Is.EqualTo(1));
+                Assert.That(report.Warnings.Exists(
+                    warning => warning.StartsWith("TOUCH-TARGET:")), Is.True);
+                Assert.That(report.Warnings.Exists(
+                    warning => warning.StartsWith("UNBOUND-ACTION:")), Is.True);
+                Assert.That(report.Warnings.Exists(
+                    warning => warning.StartsWith("BLOCKED:")), Is.True);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void ResponsiveGeometryKeepsFiveDistinctProfilesCandidateOnly()
+        {
+            var screens = VufScreenCatalog.LoadScreens();
+            foreach (string profileId in Profiles)
+            {
+                var style = VufScreenCatalog.LoadStyle(profileId);
+                GameObject root = VufScreenShellBuilderWindow.BuildCandidateHierarchy(
+                    screens[26], style, false);
+                try
+                {
+                    var report = VufResponsiveGeometry.Analyze(root,
+                        VufResponsiveGeometry.Presets[3]);
+                    Assert.That(report.CandidateOnly, Is.True);
+                    Assert.That(root.GetComponent<VufCandidateScreenMarker>().ProfileId,
+                        Is.EqualTo(profileId));
+                    Assert.That(report.Warnings.Exists(
+                        warning => warning.StartsWith("BLOCKED:")), Is.False);
+                }
+                finally
+                {
+                    UnityEngine.Object.DestroyImmediate(root);
+                }
+            }
+        }
+
+        [Test]
         public void SpriteLoopFrameSequenceHasNoDuplicateEdges()
         {
             CollectionAssert.AreEqual(

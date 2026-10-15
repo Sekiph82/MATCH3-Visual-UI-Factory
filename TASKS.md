@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R14 SOURCE DEVELOPMENT / VF-03 OFFLINE BATCH SOURCE (19 NEW UNVERIFIED TESTS). LAST REAL LOCAL C004 SHA a4493cd8: PYTHON 125 PASS + 7 WINDOWS SKIP; UNITY EDITMODE 13/13 PASS. GUI/DEVICE/ART ACCEPTANCE OPEN.
+**Status:** VUF R15 SOURCE DEVELOPMENT / VF-08 FIVE SYNTHETIC RESPONSIVE WIREFRAME PRESETS + VF-03 BATCH; R14/R15 NEW TESTS NOT EXECUTED. LAST REAL LOCAL C004 a4493cd8: PYTHON 125 PASS + 7 WINDOWS SKIP, UNITY 13/13 PASS.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -40,6 +40,13 @@
 **Reported real Windows local tests:** Python 3.12.10 **132 executed, 125 PASS, 7 OS symlink SKIP, 0 FAIL/ERROR**; five VFX presets and structure/manifest validators PASS. Unity 6000.6.5f1 real EditMode **13 PASS, 0 FAIL/SKIP/INCONCLUSIVE**; 140 in-memory Coral ID × theme constructions, ParticleSystem presets, Atlas geometry, sprite animation, production queue and tween checks. C004 tracked 24 previously generated project settings/metas/package lock files individually, documented by matching SHA and no deletion. This does not prove GUI visual quality.
 **Remaining open:** Native Unity GUI windows, rendered candidate assets, responsive real phone/tablet behavior, physical device tests, complete premium artwork and owner legal/visual acceptance NOT RUN. This is not independent VUF milestone closure.
 
+## VUF-R15 | VF-08 STATIC RESPONSIVE WIREFRAME AUTHORING | CURRENT UNITY TESTS OPEN
+
+**New Unity Editor source:** `unity_package/Editor/VufResponsiveGeometry.cs` models anchored RectTransform child positions inside synthetic screen presets and the estimated SafeAreaFitter inset. `VufResponsivePreviewWindow.cs` draws a read-only overlay of actual candidate prefab text/button rectangles; highlights candidate-only marker, policy-off screens, potential safe-area escape and too-small tap targets. Five synthetic phone/tablet/landscape presets are included. Dashboard links to this tool. All new scripts include stable .meta GUIDs and package structure source guard updates.
+**New tests authored:** three NUnit EditMode tests (existing C004 13 plus these three => **16 defined, NOT 16 verified**) cover 28 Coral layouts × five simulated devices (140 cases), a tiny unsafe unbound Button and five draft title Home variants. No OS screenshot, actual Unity UI render, real mobile safe-area, dynamic text layout or owner visual approval is implied.
+**Cumulative source test definitions:** R14 added 19 Python methods beyond the old 132; **151 Python test methods defined**, and R15 extends Unity methods to **16**. They require actual local tests at the new exact HEAD. Last verified Codex C004 evidence remains Python 125 PASS + 7 OS SKIP, real Unity 13/13 PASS at SHA `a4493cd8`, before R14/R15.
+**NEXT:** safely fast-forward owner checkout to R15 HEAD and run free Python source suite and Unity 6000.6.5f1 EditMode source tests. Any new failures must be fixed and rerun at final SHA. Keep CI workflow manual-only and continue other VF-08 localization/render QA after this test gate.
+
 ## VUF-R14 | VF-03 OFFLINE BATCH CANDIDATE INTAKE SOURCE DEVELOPMENT | LOCAL TEST GATE OPEN
 
 - `factory/asset_generator/offline_batch.py`: offline source-root constrained, link/junction/traversal rejecting manifest of 1..64 original/licensed PNGs, full CRC/dimension checks, per-item pinned SHA256, 64MiB aggregate memory ceiling, five-profile asset-key isolation and deterministic stale-baseline dry-run `plan_sha256`.
@@ -71,7 +78,7 @@ Each VF number is a functional module. VUF numbers are milestone/independent aud
 | VF-05 Animation Builder | UI tween, sprite/skeletal/3D clip methods, scrubbing/sprite sheet, frame/pivot/state/reduced motion | M07 | Sprite .anim builder, manual frame scrub/ping-pong/reduced motion Editor SOURCE; Unity compile, full skeleton/3D/tween workflows open |
 | VF-06 VFX Lab | Shader/particles/audio/haptic triggers/combo chaining, interruption/replay/reduced motion | M07/M09 | Five candidate ParticleSystem preset prefab builder + 2D sketch SOURCE; shaders/audio/haptic GPU/replay/device QA open |
 | VF-07 UI Composer | Layered interactive button/prefab, 28 Coral experiences + reusable 5-theme screens, real state/locale binding | M03/M08/M10 | Seven standard uGUI archetypes + new data-driven 28 exact-ID Coral candidate prefab SHELLS SOURCE, five draft palettes and immutable candidate metadata; real gameplay actions, polished 28 visual designs, localization and device tests OPEN |
-| VF-08 Responsive Preview | Safe areas, mobile ratios, tablet, touch accessibility and real-device evidence | M03/M08/M09 | Runtime Screen.safeArea fitter SOURCE plus simulated Editor device guides; physical phone/tablet tests open |
+| VF-08 Responsive Preview | Safe areas, mobile ratios, tablet, touch accessibility and real-device evidence | M03/M08/M09 | Runtime SafeAreaFitter + NEW five-device synthetic RectTransform layout wireframe/read-only Editor audit with heuristic tap targets SOURCE; no actual Unity GUI/render/physical device/locale layout PASS |
 | VF-09 Validation / Visual QA | Automated art/rights/render/perf + complete manual Sprite/VFX/UI Studio, separate owner/device PASS | M09/M10 | Independent atlas/mask original-to-output SHA/pixel verifier, manual prefab/atlas inspection SOURCE; newest tests/Unity/device performance unverified |
 | VF-10 Unity Packaging / Release | Versioned UPM, SpriteAtlas, Animator, prefabs, Addressables optional, deterministic export/rollback | M08/M10/M11 | Local UPM package SOURCE and preview contract; no production export |
 
@@ -361,4 +368,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT_VUF_R14_OFFLINE_BATCH_SOURCE / NEXT: free local Windows Python run at R14 exact SHA to validate newly added 19 batch tests plus unchanged Unity 13 EditMode, then VF-03 scope expansion. No GitHub Actions, paid API, changes to owner local files or approval/release claims.
+**CURRENT_OWNER:** CHATGPT_VUF_R15_SOURCE / NEXT: Codex local Python+Unity full regression on exact R15 SHA (R14 19 offline batch tests + R15 3 Unity layout tests); continue VF-08 locale, animation and accessible UI source only after observed issues fixed. No Actions, paid APIs, local-machine cleanup or false milestone acceptance.
