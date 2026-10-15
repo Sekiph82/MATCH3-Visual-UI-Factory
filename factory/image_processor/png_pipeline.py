@@ -85,6 +85,10 @@ def decode_png(data: bytes) -> tuple[int, int, bytes]:
                 raise ImageError("compressed PNG exceeds limit")
             compressed.extend(payload)
             has_idat = True
+        elif name == b"tRNS":
+            # RGB colorkey transparency must not silently become opaque on decode.
+            # Indexed/palette images already fail closed at IHDR.
+            raise ImageError("PNG tRNS transparency not supported; convert to RGBA first")
         elif name == b"IEND":
             if size or not has_idat or has_iend or index != len(data):
                 raise ImageError("invalid PNG end")
