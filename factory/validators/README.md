@@ -64,3 +64,18 @@ and validates ordered provenance receipts, but **does not** re-open original
 layers or establish real licensing rights. A success is
 `VERIFIED_CANDIDATE_ONLY`, never owner visual approval.
 Nine new Python test definitions await R26 exact-SHA execution.
+
+## R30 | Independent five-game concept bundle verification
+
+`python -B factory/validators/verify_generated_kits.py showcase --candidate "D:\\VUF_CANDIDATES\\concept_001"`
+
+Reads all 15 **actual** PNG files and validates recorded SHA-256,
+PNG CRC, fully opaque pixels, identical intended screen dimensions and
+exact (five theme × three page) order. Rejects forged approvals, device
+verification, enabled live UI, wrong source hash format and tampered
+screen PNGs. It only confirms byte integrity of a candidate bundle:
+`VERIFIED_CANDIDATE_ONLY`, never production art rights, premium UI,
+Unity textured render or owner acceptance.
+
+`tests/test_concept_bundle_verifier.py` adds 7 Python test definitions.
+No local R30 Windows run is claimed yet.

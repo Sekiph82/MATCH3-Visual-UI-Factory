@@ -103,3 +103,32 @@ engine, language QA, fallback-string generator or Unity text clipping test.
 `tests/test_locale_audit.py` adds 18 offline Python cases; three separate
 Unity EditMode tests cover the read-only coverage viewer and forged
 approval/feature gates. They are SOURCE-DEFINED, NOT YET RUN at R19 SHA.
+
+## R28 | Five-game noninteractive mobile concept PNG showcase
+
+`python -B factory/ui_composer/concept_showcase.py --scale 1 --seed 0`
+
+Generates **15 actual RGBA concept PNGs in memory**: each of five
+distinct Style Bible draft palettes/mathematical motif languages gets
+`home`, `gameplay` and `world_map` conceptual screens at 360×640.
+Use `--scale 2` for 720×1280. To intentionally save, provide a NEW
+external folder using `--output-dir "D:\\VUF_CANDIDATES\\concept_001"`.
+A default call never writes files. Only new external folder writes are
+allowed; no overwrites or original PNG edits.
+
+Images combine six real mathematically rasterized and SHA-pinned tile
+silhouettes, separate theme motifs (coral bubbles, metal rivets,
+prehistoric foliage, magical circles, toy confetti), simulated scene
+tiles/level nodes, and visual-only placeholder bars. Nothing is interactive,
+licensed original game art, live score, a functioning button, WCAG-certified
+text or a completed premium UI. The generator NEVER flattens or replaces
+actual Unity interactive UI; it makes separate named concept previews
+to visually evaluate composition and direction.
+
+Files: `preview_<Profile>_<page>.png` (15) and
+`showcase_manifest.json` with exact profile and page order,
+360×640 or 720×1280 dimensions, PNG/source/style/tiles SHA-256 receipts
+and explicit `VISUAL_CONCEPT_NOT_INTERACTIVE` flags.
+
+`tests/test_concept_showcase.py` has 10 authored Python source tests.
+Their actual execution on Windows is still OPEN at R28 code SHA.

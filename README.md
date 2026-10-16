@@ -177,3 +177,22 @@ the six mathematically generated R25 shape sprites. It checks per-cell
 atlas bounds, theme profile and strictly non-approved manifest fields.
 It is not an art quality grader or real iOS/Android output; the complete
 R21–R27 source batch awaits one genuine local Unity/Python regression.
+
+### R28–R30 | Fifteen five-game portrait UI concept images
+
+A new offline VF-07 concept generator makes **15 actual separate PNG
+screen concepts**, one Home, Gameplay and World Map for each of the
+five distinct game themes, at 360×640 or 720×1280 with deterministic
+Style Bible colors, six existing mathematical silhouettes and different
+per-theme motif geometry. These are flattened *noninteractive visual
+references only*, **not** app screen implementations or accepted art.
+An opt-in external write-once folder stores them and a SHA-pinned
+`showcase_manifest.json`.
+
+In Unity Editor, **Tools > MATCH3 > Five-Game Concept Showcase**
+offers a read-only gallery by theme or by common screen across themes,
+after manually importing COPIES to an Assets subfolder. Python's
+independent `verify_generated_kits.py showcase` validates actual
+15-PNG byte receipts and order first; the Editor viewer checks
+manifest schema, geometry and unapproved stage, not texture SHA bytes.
+New test definitions written for later bulk test checkpoint only.

@@ -218,14 +218,73 @@ def verify_scene(directory: Path) -> dict:
             "rights_verified": False, "visual_approved": False}
 
 
+
+def verify_showcase(directory: Path) -> dict:
+    """Verify all fifteen actual five-game concept PNGs, never approve them."""
+    folder = _bundle(directory)
+    manifest = _manifest(folder, "showcase_manifest.json")
+    profiles = ("Coral_Rescue", "Garage_Legends", "Dino_Islands",
+                "The_Fractured_Realms", "Wonder_Pop")
+    pages = ("home", "gameplay", "world_map")
+    dims = manifest.get("dimensions")
+    if (manifest.get("stage") != "CANDIDATE_NOT_OWNER_APPROVED" or
+            manifest.get("generator") != "VF07_FIVE_GAME_CONCEPT_SCREENS_V01" or
+            manifest.get("file_count") != 15 or
+            manifest.get("profile_ids") != list(profiles) or
+            manifest.get("screen_keys") != list(pages) or
+            dims not in ([360, 640], [720, 1280]) or
+            manifest.get("interactive_ui_enabled") is not False or
+            manifest.get("owner_visual_approval") is not False or
+            manifest.get("asset_rights_verified") is not False or
+            manifest.get("real_device_verified") is not False or
+            manifest.get("original_art") != "MATHEMATICAL_CONCEPT_ONLY"):
+        raise BundleError("showcase is not a strictly unapproved five-game concept")
+    rows = manifest.get("screens")
+    if not isinstance(rows, list) or len(rows) != 15:
+        raise BundleError("expected exactly fifteen concept screens")
+    scale = dims[0] // 360
+    seen = set()
+    for idx, row in enumerate(rows):
+        profile, page = profiles[idx // 3], pages[idx % 3]
+        name = "preview_" + profile + "_" + page + ".png"
+        if (not isinstance(row, dict) or row.get("profile_id") != profile or
+                row.get("screen_key") != page or row.get("file") != name or
+                row.get("dimensions") != dims or
+                row.get("screen_state") != "VISUAL_CONCEPT_NOT_INTERACTIVE" or
+                row.get("interactive") is not False or
+                type(row.get("render_scale")) is not int or
+                row["render_scale"] != scale or
+                type(row.get("seed")) is not int or
+                not 0 <= row["seed"] <= 9999 or name in seen):
+            raise BundleError("concept screenshot identity/safety contract mismatch")
+        seen.add(name)
+        for field in ("style_source_sha256", "tile_kit_atlas_sha256"):
+            value = row.get(field)
+            if not isinstance(value, str) or SHA.fullmatch(value) is None:
+                raise BundleError("concept source SHA receipt format invalid")
+        raw = _read(folder, name, 12 * 1024 * 1024)
+        _sha(raw, row.get("png_sha256"))
+        w, h, rgba = decode_png(raw)
+        if [w, h] != dims or any(alpha != 255 for alpha in rgba[3::4]):
+            raise BundleError("concept PNG dimensions or opacity wrong")
+    return {
+        "stage": "VERIFIED_CANDIDATE_ONLY", "kind": "showcase",
+        "screen_count": len(seen), "profile_count": len(profiles),
+        "original_rights_verified": False,
+        "interactive_ui_enabled": False,
+        "real_device_verified": False,
+        "visual_approved": False
+    }
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("kind", choices=("fx", "tiles", "scene"))
+    parser.add_argument("kind", choices=("fx", "tiles", "scene", "showcase"))
     parser.add_argument("--candidate", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         fn = {"fx": verify_fx, "tiles": verify_tiles,
-              "scene": verify_scene}[args.kind]
+              "scene": verify_scene, "showcase": verify_showcase}[args.kind]
         print(json.dumps(fn(args.candidate), indent=2, sort_keys=True))
         return 0
     except (BundleError, ImageError, OSError, UnicodeError, ValueError) as exc:

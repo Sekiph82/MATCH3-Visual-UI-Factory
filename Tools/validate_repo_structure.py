@@ -41,6 +41,8 @@ def validate_structure() -> dict:
         "Editor/VufFxClipExporterWindow.cs",
         "Editor/VufTileKitInspectorWindow.cs",
         "Tests/Editor/VufTileKitInspectorEditModeTests.cs",
+        "Editor/VufConceptShowcaseWindow.cs",
+        "Tests/Editor/VufConceptShowcaseEditModeTests.cs",
         "Tests/Editor/VufFxClipExporterEditModeTests.cs",
         "Tests/Editor/VufFxSheetEditModeTests.cs",
         "Editor/VufUiComposerWindow.cs",

@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R21–R27 FEATURE BATCH: REAL SOURCE-BASED RGBA SCENES, PROCEDURAL FX PNG, ALL FIVE GAME TILE ART PROTOTYPES, TRUE UNITY .anim FX EXPORT, BUNDLE SHA CHECKS, READ-ONLY UNITY TILE INSPECTOR. CURRENT BATCH NOT YET LOCALLY TESTED. LAST REAL R20-C008 at aa4900aa: PYTHON 189 PASS + 7 WINDOWS SKIP, UNITY 32/32 PASS. GUI/PHONE/OWNER-ART OPEN.
+**Status:** VUF R21–R30 CONSOLIDATED VISUAL AUTHORING SOURCE: REAL PNG SCENES, FIVE THEME TILE PROTOTYPES, PROCEDURAL FX, TRUE FX .anim, PLUS 15 PORTRAIT CONCEPT SCREENS + UNITY GALLERY + EXTERNAL BUNDLE BYTE VERIFIER. LATEST ACTUAL TEST: R20-C008 aa4900aa: PYTHON 189 PASS / 7 WINDOWS SYMLINK SKIP, UNITY 32/32 PASS. R21–R30 NOT YET EXECUTED ON OWNER WINDOWS. PREMIUM ART/REAL GUI/PHONE OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -57,6 +57,16 @@
 
 **Owner-provided actual local outcome:** SHA `aa4900aadec8debfe902ab860c6900eaea229e07` synchronized on local `main`, `origin/main` and GitHub `main` at the end of C008, zero ahead/behind; GitHub independently confirmed this previous remote source. Python 3.12.10 **196 discovered, 189 PASS, 7 OS symlink SKIP, 0 error/fail**; Unity 6000.6.5f1 **32/32 EditMode PASS**, no compiler diagnostic `CS####`. Two test-only commits corrected R18 expected authored Text field count. Structural, TEST_ONLY manifest, VFX five presets checks passed. Report and SHA256SUMS are in owner Windows `C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R20-C008-20261016\\`; raw log bytes not independently read here.
 **Not accepted:** GUI rendered appearance, mobile devices, actual translation quality, original artwork rights, animated VFX shaders/performance and dependent Engine/LFX production gates NOT RUN / OPEN. No paid GitHub Actions, deletion or other repo work was reported.
+
+## VUF-R28–R30 | FIVE GAME 15-SCREEN CONCEPT GENERATION + REVIEW | SOURCE / BATCH TEST OPEN
+
+**R28 original noninteractive portrait concepts:** `factory/ui_composer/concept_showcase.py` renders real decoded PNG RGBA visual-only concepts for all five draft game profiles, with three page types (Home, Gameplay, World Map), per-theme geometric motifs, six unique mathematical tile silhouettes and buttons represented solely as flat noninteractive placeholder bars. Supports 360×640 or 720×1280 PNG output, seeded determinism, pinned Style Bible/tile kit/image digests, 15 image filenames and manifest. Default no-write, optional NEW outside-Git output folder only; no original/licensed art edits, no actual uGUI production screens or gameplay actions. Ten new Python regression methods authored.
+
+**R29 Unity five-game visual concept gallery:** `unity_package/Editor/VufConceptShowcaseWindow.cs` offers explicit imported-Assets-folder + JSON TextAsset read-only view, profile dropdown and comparative 5-game/page previews of actual candidate PNG texture bytes. Rejects false owner rights/approval/device/UI flags, broken 15-screen order, wrong dimensions and malformed SHA receipt strings. Does NOT recalculate Texture2D image SHA; actual iOS/Android, Unity GUI look and owner aesthetics remain OPEN. Four new Unity EditMode NUnit definitions and stable .meta GUIDs, Dashboard link and package guard.
+
+**R30 integrity verifier:** `verify_generated_kits.py showcase` independently reopens and SHA-validates all 15 candidate PNGs with CRC and dimensions, verifies unapproved five-game/three-page order and rejects forged shipping, copyright or mobile PASS fields. Seven new Python test definitions authored in `tests/test_concept_bundle_verifier.py`. Output remains `VERIFIED_CANDIDATE_ONLY`.
+
+**All R21–R30 authored source definitions since actual C008:** 60 new Python methods and 14 new Unity methods; projected cumulative **256 Python / 46 Unity EditMode** tests defined, **NOT run** at new source SHA. C008 prior real evidence remains 196 Python (189 PASS, 7 Windows symlink SKIP), Unity 32/32 PASS at SHA `aa4900aa`. Continue development in consolidated batches, ONE eventual cost-free owner-local Codex validation only when release-critical functions require it. Do not claim GUI/mobile/real asset/owner art or Engine/LFX production PASS.
 
 ## VUF-R27 | UNITY FIVE-GAME TILE KIT PREVIEW | SOURCE / TEST OPEN
 
@@ -446,4 +456,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT R21–R27 CONSOLIDATED VISUAL AUTHORING SOURCE. NEXT: source QA on the integrated batch, followed by ONE local Windows/Unity Codex validation only at full batch milestone. No GitHub Actions, paid API, local cleanup, unrelated repo edits or owner rights/device/GUI approval claims.
+**CURRENT_OWNER:** CHATGPT R21–R30 DIRECT SOURCE AUTHORING. Batch still untested on owner machine; continue meaningful asset workflows before scheduling a SINGLE no-cost local Python/Unity test gate. Do not trigger Github Actions/paid AI, delete local files/caches, write unrelated repos or claim GUI/physical-device/owner-rights PASS.
