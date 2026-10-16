@@ -27,7 +27,7 @@ namespace Match3.VisualFactory.Tests
         {
             // Match the Python exporter: an absent optional palette_review key,
             // rather than JsonUtility.ToJson's empty object for a null class field.
-            const string exportedReport = "{\"schema_version\":1," +
+            string exportedReport = "{\"schema_version\":1," +
                 "\"stage\":\"REVIEW_REQUIRED_NOT_OWNER_APPROVED\"," +
                 "\"generator\":\"VF09_PIXEL_HEALTH_V01\",\"file_count\":1," +
                 "\"total_source_bytes\":120,\"warning_count\":1," +
