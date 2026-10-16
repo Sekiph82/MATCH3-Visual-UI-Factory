@@ -78,6 +78,8 @@ namespace Match3.VisualFactory.Editor
             }
             if (GUILayout.Button("Procedural FX Sheet Player", GUILayout.Height(30)))
                 VufFxSheetPreviewWindow.Open();
+            if (GUILayout.Button("Procedural FX to .anim Exporter", GUILayout.Height(30)))
+                VufFxClipExporterWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Atlas Inspector", GUILayout.Height(32)))

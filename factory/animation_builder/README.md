@@ -56,3 +56,22 @@ Unity Sprite sub-assets and creating an editable .anim remains an explicit
 manual Editor step, not a background modification of owner TextureImporters.
 Three new Unity EditMode test methods are authored but have NOT been
 executed by Unity 6000.6.5f1 at R23 SHA. The UI itself needs GUI inspection.
+
+## R24 | Procedural FX -> actual Unity SpriteRenderer AnimationClip
+
+`Tools > MATCH3 > Procedural FX Clip Exporter` offers the missing bridge
+from real R22 `fx_sheet.png` to a **genuine user-created .anim**:
+import a COPY of the candidate sheet in Unity using Sprite (Multiple),
+manually slice its square frames in Sprite Editor, and select the manifest
+and matching reduced-motion still. The tool compares all original manifest
+top-left atlas rectangles against the imported Sprite.rect bottom-left
+coordinate system, preserves deterministic exact frame order, requires
+a separate still, rejects missing/packed/ambiguous or edited frame crops,
+and passes verified Sprite objects into `VufSpriteClipBuilderWindow
+.BuildCandidateClip` for a true `SpriteRenderer.m_Sprite` reference curve.
+
+It NEVER changes TextureImporter configuration, auto-slices sprites or
+overwrites an existing .anim. You manually select a NEW asset path.
+No Gameplay event, reward, owner art approval, source ownership or real
+mobile accessibility claim is implied. Four new Unity EditMode NUnit
+methods are authored but not yet run at current R24 SHA.

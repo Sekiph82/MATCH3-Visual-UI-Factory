@@ -49,3 +49,18 @@ iOS/Android device QA, and Engine/LFX integration in OPEN state.
 An external copied JSON report does not prove artwork ownership or that
 any person accepted an asset. Full dependency, legal and device evidence
 must be documented and reviewed independently.
+
+## R26 | Read-only independent generated bundle verification
+
+Use `python -B factory/validators/verify_generated_kits.py fx --candidate "D:\\VUF_CANDIDATES\\bubble_fx_001"`
+or `tiles` or `scene` for the corresponding candidate bundle.
+
+Checks actual stored PNG CRC, SHA-256 and dimensions. For FX, checks
+every frame rectangle and raw RGBA digest, including the separately
+hashed static reduced-motion fallback. For tile kits, compares all six
+PNG sprites to actual atlas regions and tests distinct alpha outlines.
+For layered scenes, verifies the scene image against its recorded digest
+and validates ordered provenance receipts, but **does not** re-open original
+layers or establish real licensing rights. A success is
+`VERIFIED_CANDIDATE_ONLY`, never owner visual approval.
+Nine new Python test definitions await R26 exact-SHA execution.

@@ -160,3 +160,13 @@ scrub those imported frames. All are deliberately candidate-only and
 never enable gameplay, rewards, auto-approval, paid AI providers or
 production game exports. New Python and Unity tests have been authored;
 only the earlier R20-C008 tests were executed locally so far.
+
+### R24–R26 | Five-game source-prototype tile assets + Unity FX animation clip
+R24 adds manual **true SpriteRenderer `.anim`** export from correctly
+imported candidate FX sheet sub-sprites, with explicit reduced-motion
+still and strict manifest geometry verification. R25 produces six
+differently shaped, anti-aliased mathematical tile PNG prototypes and
+a 3x2 atlas for all five draft palettes. R26 independently checks real
+candidate FX/tile/scene output PNG hashes, frame and atlas pixel geometry.
+They are not high-end final artwork, approved device/GUI output or
+shipping gameplay. Local exact-SHA new tests remain OPEN.
