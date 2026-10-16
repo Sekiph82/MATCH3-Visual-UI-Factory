@@ -223,3 +223,15 @@ Home, Gameplay and World Map images** into a labeled 5×3 comparison PNG.
 The generator validates all 15 original PNG byte receipts before displaying
 them, preserves source files, and optionally saves only to a **new external
 PNG**. Owner review is still required for actual art and real mobile UI.
+
+### R35–R36 | Genuine editable 5-theme uGUI compositions
+The candidate stage author now creates individual Unity UI elements
+for separate **Home, Gameplay (6×7 static board), and World Map**
+composition patterns instead of relying on flat noninteractive concept
+PNGs alone. Five original mathematical motif grammars (bubbles, rivets,
+foliage, portals, confetti) are separate editable non-clickable uGUI
+objects. These additions do not supply actual game logic, rewards,
+production owner art, right-to-use evidence or finished responsive
+iOS/Android user interfaces. The last real test remains C009 at the
+previous pre-R35 exact source SHA; new Editor code awaits one later
+bulk local test.

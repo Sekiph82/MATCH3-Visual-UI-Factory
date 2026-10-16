@@ -296,6 +296,12 @@ namespace Match3.VisualFactory.Editor
                     raw.color = new Color(1, 1, 1, .60f);
                     raw.raycastTarget = false;
                 }
+                // Actual editable three-layout component kit, not a single
+                // flattened concept screenshot. No gameplay or active input.
+                // Distinct noninteractive geometric art languages per game,
+                // authored as independently editable uGUI decoration.
+                VufThemeMotifDecor.Apply(safe, style);
+                VufPageComposition.Compose(safe, style, selected.screen_key);
                 RectTransform header = Node(safe, "EditableTitleBanner",
                     new Vector2(.04f, .88f), new Vector2(.96f, .955f));
                 var band = header.gameObject.AddComponent<Image>();

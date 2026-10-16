@@ -184,3 +184,46 @@ and game repositories are never modified.
 It is still a static reference sheet, not high-end art or a finished
 responsive interactive UI, authentic licensing or physical device QA.
 Five Python tests are authored for future bundled local execution.
+
+## R35 | Editable page-specific uGUI composition
+
+The existing `Tools > MATCH3 > Editable Concept UI Stage Builder`
+now goes beyond a flattened source screenshot: after checking the imported
+reference SHA and five-game Style Bible, it creates separate, editable
+uGUI authoring objects for **three different screen page layouts**.
+
+- Home: distinct hero artwork placeholder, editable mission panel with
+  static progress bar, four collectible placeholders.
+- Gameplay: 6-column × 7-row **STATIC board preview**, separate
+  score/objective/moves Text components and three booster placeholders.
+- World Map: seven manually editable level map markers linked by six
+  decorative path segments and a map footer.
+
+All of these are **purely visual candidates**. The test board contains
+neither matches nor input; level markers have no navigation, rewards or
+save-data callbacks; text/graphics are editable. The original design
+reference is a separate optional `RawImage`, not a clickable flattened
+background. Nothing here is a production-quality artwork or a real game
+HUD. Disabled primary game action and existing policy gates remain.
+
+`unity_package/Editor/VufPageComposition.cs` is the shared in-memory
+composition helper; four Unity EditMode test methods and Python source
+guards are authored. Real Editor compilation and UI visual acceptance
+for R35 are still NOT RUN.
+
+## R36 | Five original mathematical uGUI motif grammars
+
+The same stage builder now layers profile-specific **editable,
+noninteractive** geometric decoration *under* its page components:
+Coral bubbles, Garage rivet plates, Dino foliage stems, Fractured Realms
+portal diamonds, and Wonder Pop confetti. These are intentionally
+different shapes rather than mere palette swaps. All Images have
+`raycastTarget=false`. They are draft shapes, **not owner-provided art**,
+real physics, sprites, skeletal animation or shaded effects.
+
+The authoring-only source is
+`unity_package/Editor/VufThemeMotifDecor.cs`. Four Unity EditMode
+tests cover five distinct motif sets, input safety and duplicate
+composition rejection. `tests/test_editable_composition_contracts.py`
+adds three Python source checks for R35/R36. All R35/R36 tests are
+authored but NOT run on owner-local Windows/Unity.
