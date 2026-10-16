@@ -25,7 +25,19 @@ namespace Match3.VisualFactory.Tests
         [Test]
         public void ReadOnlyPixelReportParses()
         {
-            var parsed = VufSpriteQaReportWindow.ParseReport(JsonUtility.ToJson(Synthetic()));
+            // Match the Python exporter: an absent optional palette_review key,
+            // rather than JsonUtility.ToJson's empty object for a null class field.
+            const string exportedReport = "{\"schema_version\":1," +
+                "\"stage\":\"REVIEW_REQUIRED_NOT_OWNER_APPROVED\"," +
+                "\"generator\":\"VF09_PIXEL_HEALTH_V01\",\"file_count\":1," +
+                "\"total_source_bytes\":120,\"warning_count\":1," +
+                "\"source_rights_verified\":false,\"sprites\":[{" +
+                "\"filename\":\"test.png\",\"source_sha256_recorded\":\"" +
+                new string('a', 64) + "\",\"dimensions\":[2,2]," +
+                "\"visible_bbox_top_left\":[0,0,2,2]," +
+                "\"alpha_coverage_basis_points\":5000,\"visible_pixels\":2," +
+                "\"warnings\":[\"CANVAS_BOUNDARY_TOUCH\"]}]}";
+            var parsed = VufSpriteQaReportWindow.ParseReport(exportedReport);
             Assert.That(parsed.file_count, Is.EqualTo(1));
             Assert.That(parsed.source_rights_verified, Is.False);
         }
