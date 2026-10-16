@@ -46,6 +46,13 @@
 **Tested and published final SHA:** `05566214e6bae0561885f46655f0caf9492c344f`. Python 3.12.10 **170 total, 163 PASS, 7 Windows symlink SKIP, 0 fail/error**; Unity 6000.6.5f1 EditMode **18/18 PASS**, no reported compiler CS errors or warnings. C006 fixed candidate sprite bbox test expectation and hardened Unity pixel-health report against malformed alpha/bbox/contrast metrics and forged rights/approval status; optional palette exporter shape covered. Five VFX presets, design contracts, TEST_ONLY manifest and 33 GUIDs checked. This applies ONLY to SHA 05566214 and is not R17 evidence.
 **Remaining gates:** real native Unity GUI, rendered typography/materials, physical devices, legal source-rights and creative/owner approval NOT RUN; no independent production milestone PASS. No GitHub Actions or paid CI.
 
+## VUF-R20-C008 | ONE CONSOLIDATED R18–R20 LOCAL PYTHON + UNITY TEST | ASSIGNED / NOT RUN
+
+**Codex prompt:** https://docs.google.com/document/d/1PPyjVUyhvp7aHG9mVwaO9AC5Z7Uo1evFyP82mrqSZ1o/edit
+**Product scope:** Three significant source additions grouped into ONE test task, not per-feature CI: R18 Unity typography/contrast lab, R19 offline English/Turkish draft coverage + Unity read-only report, R20 cross-module evidence board. Published code SHA `d2b3109ce57d68bd5e1bd72f3397d0b5d8320d87`. Code-defined expectations ~196 Python tests and 32 Unity EditMode tests; actual results are pending Codex owner-local runs at exact final SHA.
+**Safety:** Existing Windows repo safe fast-forward only, no GitHub Actions/manual dispatch, billed runners, paid APIs, file/cache/Temp/Library deletion, forced Git history, other repositories, artwork auto-approval or false GUI/phone PASS. Codex may make minimal VUF-only observed fixes and must rerun both full suites on final tested commit. ChatGPT alone edits TASKS.md milestone status after evidence review.
+**Next development:** Resume larger VF-04/05/06 asset production workflows independently of routine per-small-change test handoffs. Real premium art, physical device, actual Unity GUI, original rights, owner aesthetic review and Engine ENG-M24 / LFX-M14 integration remain OPEN.
+
 ## VUF-R20 | FIVE-GATE REVIEW EVIDENCE BOARD | SOURCE / COMBINED TEST GATE OPEN
 
 **New tool:** `VufReadinessBoardWindow.cs` adds read-only Factory Dashboard access to optional original/unapproved candidate, VF-09 pixel QA report and VF-07 locale coverage report. It validates input formats through existing typed parsers and audits five synthetic viewport geometry/font/contrast cases. Produces counts/warnings and permanently **OPEN** human source-art rights, owner visual quality, actual Unity GUI, physical iPhone/Android, and independent Engine/LFX integration gates. Never writes, signs off or ships anything.
