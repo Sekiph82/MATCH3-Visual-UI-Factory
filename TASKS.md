@@ -1,5 +1,10 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
+
+## OWNER RULE | PRE-CODE DONOR-FIRST GATE | 2026-10-16
+**Owner requirement for EVERY future VUF code task:** Read this existing root `TASKS.md` task, then inspect existing working VUF modules and the actual files of previously discussed pinned GitHub donors BEFORE writing new code. Prefer direct legally permitted source adoption with minimal namespace/Unity 6.6/asset-schema changes and baseline+integration tests over rewriting equivalent functionality. The existing `docs/VUF_DONOR_SOURCE_LEDGER.md` is source provenance evidence, NOT another task tracker. Reuse already adopted BSD-3-Clause Unity-UI-Extensions `NonDrawingGraphic` and other now-adopted inspected UGUI effects plus VUF's existing `VufUiTween` before adding redundant UI/animation libraries. UltraGem and Unity Game Simulation level-edit code belong to LFX, LibraStack match logic to Engine; CC BY-NC-ND Rimaethon/unlicensed assets or code are not import candidates under current rights. For EACH coding step, record exact donor repo/commit/file/blob SHA, licence and dependency review, selected functions, `DIRECT_REUSE`/`MINIMAL_ADAPTER`/`INTERNAL_REUSE`/`REJECTED_REASON`, necessary changes, actual test status and original notices in the existing Drive workflow. Update this same `TASKS.md` after real source changes/audits; no task ID/milestone count edits, no false PASS for unrun Unity, device, visuals or licensing, no GitHub Actions/paid CI or destructive cleanup. This is a **process-only instruction**, not an import or task closure.
+
+
 **Status:** R21–R34 OWNER-LOCAL C009 PASSED AT 6c70a6a0 (280 PYTHON, 273 PASS / 7 WINDOWS SKIP; 50/50 UNITY EDITMODE). NEW R35–R40 DIRECT SOURCE: EDITABLE HOME/BOARD/WORLD, FIVE MOTIFS, BSD3 NONDRAWING/GRADIENT/FLIPPABLE DONORS + EXISTING UI TWEEN REUSE. NEW SOURCE NOT YET LOCAL PYTHON/UNITY VERIFIED. GUI/DEVICE/ART/ENGINE/LFX OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
