@@ -1,0 +1,34 @@
+# VUF R37-R38 | Verified Donor Source and Reuse Ledger (not a task tracker)
+
+Date: 2026-10-16. This document is an audited software source/provenance register for Visual & UI Factory. The *only lifecycle/task tracker remains root TASKS.md*.
+
+## Adopted exact upstream code donor | BSD-3-Clause
+
+Repository: https://github.com/Unity-UI-Extensions/com.unity.uiextensions
+Pinned upstream release commit: d47f838ba918bbb9b26f242bd944940a711f525f
+Exact upstream file: Runtime/Scripts/Utilities/NonDrawingGraphic.cs
+Git blob SHA (upstream): abd42d8920aedfc7c4f887a0c6ea02496a57849c
+Verified license: https://github.com/Unity-UI-Extensions/com.unity.uiextensions/blob/release/LICENSE.md
+Local license copy: third_party/UnityUIExtensions/LICENSE.md (BSD-3-Clause including copyright, disclaimer and mandatory redistribution notices).
+
+Source was copied from that actual GitHub blob, with only a namespace isolation change to Match3.VisualFactory.Editor.ThirdParty and explicit using UnityEngine/UnityEngine.UI for that isolation. Original individual author credit is preserved in the source. File: unity_package/Editor/ThirdParty/NonDrawingGraphic.cs. This component is battle-tested upstream as a non-drawing Graphic that still participates in uGUI raycast hit tests. It is used as the final fully transparent input shield over editable candidate prefabs. Original source code is not written from scratch. The namespace isolation prevents accidental type collision with a future installation of the full UI Extensions package. No package installation, network download at runtime, paid provider or Unity package dependency required.
+
+## Reused existing in-repo code: no new dependency
+
+VufUiTween from unity_package/Runtime/VufUiTween.cs already implements deterministic CanvasGroup alpha transitions and reduced-motion snapping. R38 VufCandidateMotionKit simply attaches the existing component to a draft Home hero, Gameplay HUD or World Map canvas. It does not rewrite interpolation, introduce DOTween or animate actual gameplay. Reduced motion is ON by default. Factory candidate primary Buttons remain explicitly disabled; the R37 input shield stays on top.
+
+## Other previously discussed external donors: examined, not indiscriminately copied
+
+- DhafinFawwaz/Unity-AnimationUI: https://github.com/DhafinFawwaz/Unity-AnimationUI (MIT). Supports Inspector animation sequences and editor preview; its AnimationUI.cs alone is around 80kB and depends on TMPro/extra sequence infrastructure, with input/scene/audio side effects. No direct import into authoring-only package; current existing VufUiTween reuse is leaner and avoids a second engine.
+- Unity-UI-Extensions/com.unity.uiextensions (BSD-3-Clause): many mature Unity 6 uGUI controls. UILineRenderer needs its custom control mesh/primitive dependencies and has not been imported; Gradient.cs includes assumptions about nonzero geometry and has not been imported. Full package may be evaluated separately rather than manually reimplementing controls.
+- LibraStack/Match3-SDK: https://github.com/LibraStack/Match3-SDK (MIT). Core swap/match/fill belongs to separate MATCH3 Engine, not Visual Factory. Do not add a competing match engine here.
+- JohannesBuchner/ultragem: https://github.com/JohannesBuchner/ultragem (Simplified BSD-derived code; underlying Al Sweigart credit). Bot/auto-level/difficulty logic belongs to separate Match3 Level Factory, not UI Factory.
+- Unity-Technologies/Game-Simulation-Match-3-Sample: https://github.com/Unity-Technologies/Game-Simulation-Match-3-Sample (Unity Companion License). Editor/LevelSO/bot examples belong to Level Factory evaluation; Unity license conditions and old service package matter. No automatic cloud Game Simulation or source copied into UI Factory.
+- AlperenGarip/Match3: https://github.com/AlperenGarip/Match3 (MIT as previously documented for level-builder pieces), Level Factory rather than UI Factory.
+- Rimaethon/Gem-Match3: https://github.com/Rimaethon/Gem-Match3 (CC BY-NC-ND 4.0). Do NOT copy derivative game/UI code for our potentially monetized games; reference architecture only.
+- User-approved Godot effect plugins GameFeelFlow and Saltmire Spark do not run in Unity. No copied incompatible Godot plugin source.
+- Source art, sprites, textures, fonts and demo scene assets are NOT licensed automatically by the source code license. No third-party visuals/assets have been imported.
+
+## Standing donor-first rule for subsequent VUF work
+
+Before implementing a substantial new visual feature, first inspect the existing VUF implementation and relevant external maintained Unity 6/uGUI or Python tooling. Prefer verified compatible existing methods. If externally vendoring actual source, pin repository, exact upstream commit/path/blob hash, retain required copyright and license notices, isolate types, add stable Unity .meta GUIDs, constrain permissions, and author local source/real Unity tests. If upstream code has incompatible dependencies, licensing uncertainty, hidden paid APIs or gameplay side effects, record rejection instead of importing or claiming prior testing. Keep owner originals and approved assets untouched, no paid/hosted CI, no automatic gameplay binding or owner PASS.

@@ -227,3 +227,27 @@ tests cover five distinct motif sets, input safety and duplicate
 composition rejection. `tests/test_editable_composition_contracts.py`
 adds three Python source checks for R35/R36. All R35/R36 tests are
 authored but NOT run on owner-local Windows/Unity.
+
+## R37 | License-compliant tested upstream uGUI primitive, not rewritten
+
+A COPY of Unity UI Extensions `NonDrawingGraphic` is vendored under
+`unity_package/Editor/ThirdParty/` from an exact upstream BSD-3-Clause
+Git blob. Namespace is isolated; original contributor credits are
+retained. Full BSD-3-Clause license is included at
+`third_party/UnityUIExtensions/LICENSE.md`.
+The component is placed last in all new editable concept stages as an
+invisible raycast-only shield for candidate-only UI. This blocks input
+without covering the draft visuals or activating any Button.
+**No network install or second UI package dependency.**
+
+## R38 | Reuse existing reduced-motion tween, do not rebuild it
+
+`VufCandidateMotionKit` attaches the already existing/tested runtime
+`VufUiTween` to one editable major panel per page, with a CanvasGroup
+and reduced motion enabled by default. It adds NO new tween easing
+algorithm. All candidate primary actions stay unbound and disabled.
+
+Before production export, the stage still needs real Unity rendered
+GUI/art owner inspection and device accessibility review. The new
+C# R37–R38 NUnit and Python source tests have been written but are
+NOT RUN yet on the owner-local Windows checkout.

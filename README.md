@@ -235,3 +235,25 @@ production owner art, right-to-use evidence or finished responsive
 iOS/Android user interfaces. The last real test remains C009 at the
 previous pre-R35 exact source SHA; new Editor code awaits one later
 bulk local test.
+
+### R37–R38 | Actual licensed donor code and reuse-first UI motion
+R37 **directly vendors** the proven Unity UI Extensions `NonDrawingGraphic.cs`
+(BSD-3-Clause, pinned upstream source commit/blob and full required license
+in `third_party/UnityUIExtensions/LICENSE.md`) with only a namespace
+isolation and explicit Unity imports. Candidate uGUI stages now have
+an invisible final raycast shield: original source art is untouched and
+all scene/game callbacks remain disabled. This is a real code donor,
+not a rewrite or a claim that the whole UIExtensions package is installed.
+
+R38 **reuses** existing `VufUiTween`, not a second custom easing engine.
+The Home hero, Gameplay HUD and World Map panel receive the existing
+CanvasGroup motion component, with reduced-motion ON by default and
+initial CanvasGroup input disabled. The per-screen animation setup is
+editable in Unity Inspector; it is not actual release animation polish
+or finished mobile interaction.
+
+The donor comparison, source hashes, license and rejected dependent
+libraries are in `docs/VUF_DONOR_SOURCE_LEDGER.md`. New NUnit/Python tests
+are authored, but these R37–R38 source additions are NOT yet certified
+by local Unity 6000.6.5f1. Last real bulk C009 certification applied only
+to R21–R34 source commit `6c70a6a0`.

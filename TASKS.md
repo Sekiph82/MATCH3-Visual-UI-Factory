@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R21–R34 LOCAL SOURCE GATE C009 COMPLETE AT 6c70a6a0 (PYTHON 280 TOTAL / 273 PASS / 7 WINDOWS SYMLINK SKIP, UNITY EDITMODE 50/50 PASS); LIVE GUI/ORIGINAL ART/DEVICE/ENGINE+LFX ACCEPTANCE OPEN. NEW R35–R36 EDITABLE UGUI PAGE COMPOSITION AND FIVE GAME MOTIF SOURCE WRITTEN BUT NOT YET TESTED.
+**Status:** R21–R34 OWNER-LOCAL C009 PASSED AT 6c70a6a0 (280 PYTHON: 273 PASS/7 SYMLINK SKIP; 50/50 UNITY EDITMODE). R35–R38 NEW SOURCE AUTHORING ONLY: EDITABLE HOME/BOARD/WORLD STAGES, 5 THEME MOTIFS, DIRECT BSD3 LICENSED UGUI DONOR AND EXISTING TWEEN REUSE. NOT YET TESTED AT NEW HEAD. ART/GUI/DEVICE/ENGINE/LFX GATES OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -69,6 +69,16 @@
 **Last completed actual tests still on old C008 source SHA** `aa4900aadec8debfe902ab860c6900eaea229e07`: Python 196 discovered, 189 PASS + 7 Windows symlink SKIP; actual Unity 6000.6.5f1 EditMode 32/32 PASS. Do not transfer those results to current source.
 **Codex assignment:** Safe fast-forward existing Visual Factory Windows checkout, full Python 3.12.10 and Unity 6000.6.5f1 import/compile/NUnit at exact full source SHA, verify R21–R34 features including .anim writer, R32 editable uGUI, 15 portrait concept sprites, original-source compositor, no overwrite, source hashes and approval boundaries. Fix only real scoped Visual Factory faults, rerun ENTIRE Python + Unity suites AFTER final fix commit, push ordinary safe fast-forward only if appropriate; one evidence report.
 **Absolute restrictions:** No GitHub Actions/manual dispatch or paid services, no deleting caches/Temp/Library, no forced Git, no clone/worktree, no changes to other projects, owner originals or licensed artworks; TASKS.md milestones remain ChatGPT-only. Unity GUI, GPU/performance, real phone/tablet, translation, art rights, owner aesthetic, ENG/LFX release and true premium production art remain OPEN regardless of headless PASS.
+
+## VUF-R37–R38 | REAL OPEN-SOURCE DONOR INTEGRATION AND ZERO-REDUNDANCY TWEEN REUSE | SOURCE / TEST OPEN
+
+**Donor-first source audit:** `docs/VUF_DONOR_SOURCE_LEDGER.md` now includes exact inspected external donor repositories, licence decisions and R37 vendored original source commit/blob SHA. User's previously discussed ultragem / Unity Game Simulation / Gem-Match3 / Match3-SDK code belongs in Engine/Level Factory or has noncommercial/other license terms; none is indiscriminately copied into Visual Factory. MIT `Unity-AnimationUI` reviewed, but its ~80kB animation class + TMPro/custom sequence dependencies are redundant for the small authoring motion requirement; reuse existing VUF runtime tween instead. Keep root TASKS.md as sole lifecycle tracker.
+
+**R37 actual vendored code:** BSD-3-Clause `Unity-UI-Extensions/com.unity.uiextensions` original `Runtime/Scripts/Utilities/NonDrawingGraphic.cs`, upstream commit `d47f838ba918bbb9b26f242bd944940a711f525f`, exact Git blob `abd42d8920aedfc7c4f887a0c6ea02496a57849c`. Local isolated namespace file at `unity_package/Editor/ThirdParty/NonDrawingGraphic.cs`, contributor credits unchanged, full mandatory BSD3 licence at `third_party/UnityUIExtensions/LICENSE.md`. Added last-child transparent raycast shield to R32 editable candidate prefab. No game callback, no custom reimplementation, no package install. Two new Unity NUnit source methods.
+
+**R38 internal reuse:** `VufCandidateMotionKit` ATTACHES the already-existing `VufUiTween` + CanvasGroup to Home hero, Gameplay HUD or World Map canvas, with reduced motion default enabled and initial input disabled. No new custom easing engine, no DOTween dependency or game action. Three new Unity NUnit source methods. Five Python source contracts validate license, exact source/adaptation, shield and existing tween reuse. New Unity .meta GUIDs and structural guards included.
+
+**CURRENT SOURCE NOT TESTED:** R35–R38 authored **8+5 = 13 new Unity EditMode tests and 3+5 = 8 Python tests** since C009. Expected 58+5=63 Unity and 283+5=288 Python test *definitions* (not actual executions). C009 test PASS applies ONLY to prior `6c70a6a0`; full R35–R38 source still requires one later owner-local Windows/Unity bulk gate before game integration. Real Unity GUI, GPU, physical iOS/Android, owner art and rights, original translation and ENG/LFX release remain OPEN.
 
 ## VUF-R35–R36 | EDITABLE PAGE COMPOSITION + DISTINCT FIVE-GAME UGUI DECOR | SOURCE / BULK TEST OPEN
 
@@ -496,4 +506,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT VUF R35–R36 SOURCE AUTHORING AFTER OWNER-LOCAL R34-C009 PASS. Continue substantial UI authoring batches, with one later owner-local Python+real Unity regression on exact final SHA. Live GUI/device/rights/owner creative and ENG/LFX integration gates remain OPEN.
+**CURRENT_OWNER:** CHATGPT DIRECT R35–R38 SOURCE DEVELOPMENT; donor-first validated code adoption now enforced with source ledger and BSD3 notices. A single later cost-free Codex Python + actual Unity batch run required before consumer game integration. No GitHub Actions, paid APIs, existing cache deletion or cross-repo edits.

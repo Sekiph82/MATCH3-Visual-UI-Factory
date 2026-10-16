@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Match3.VisualFactory.Editor.ThirdParty;
 
 namespace Match3.VisualFactory.Editor
 {
@@ -302,6 +303,9 @@ namespace Match3.VisualFactory.Editor
                 // authored as independently editable uGUI decoration.
                 VufThemeMotifDecor.Apply(safe, style);
                 VufPageComposition.Compose(safe, style, selected.screen_key);
+                // Reuse existing VufUiTween instead of vendoring another
+                // heavy animation engine or inventing easing curves.
+                VufCandidateMotionKit.Attach(safe, selected.screen_key);
                 RectTransform header = Node(safe, "EditableTitleBanner",
                     new Vector2(.04f, .88f), new Vector2(.96f, .955f));
                 var band = header.gameObject.AddComponent<Image>();
@@ -326,6 +330,14 @@ namespace Match3.VisualFactory.Editor
                 Label(safe, "OwnerReviewWarning",
                     "CONCEPT IMAGE ONLY / ORIGINAL ART AND DEVICE QA OPEN",
                     new Vector2(.04f, .81f), new Vector2(.96f, .875f), 15, ink);
+                // Reuse battle-tested BSD-3-Clause Unity UI Extensions
+                // NonDrawingGraphic, not another custom draw/raycast handler.
+                // A final transparent, raycast-only pane blocks candidate
+                // touches without modifying real disabled Button state.
+                RectTransform blocker = Node(safe, "AUTHORING_ONLY_InputShield",
+                    Vector2.zero, Vector2.one);
+                NonDrawingGraphic shield = blocker.gameObject.AddComponent<NonDrawingGraphic>();
+                shield.raycastTarget = true;
                 return root;
             }
             catch
