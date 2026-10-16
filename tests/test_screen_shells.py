@@ -76,7 +76,7 @@ class CoralScreenShellContracts(unittest.TestCase):
         package = json.loads((ROOT / "Packages/manifest.json").read_text())
         self.assertEqual(package["testables"], ["com.match3.visual-factory"])
         test_source = (ROOT / "unity_package/Tests/Editor/VufCatalogEditModeTests.cs").read_text()
-        self.assertEqual(test_source.count("[Test]"), 13)
+        self.assertEqual(test_source.count("[Test]"), 16)
         asm = json.loads((ROOT / "unity_package/Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef").read_text())
         self.assertEqual(asm["name"], "Match3.VisualFactory.Editor.Tests")
         self.assertEqual(asm["defineConstraints"], ["UNITY_INCLUDE_TESTS"])
