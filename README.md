@@ -149,3 +149,14 @@ real original art rights, owner aesthetics, live Unity GUI, real physical
 devices, and independent Engine/Level Factory integration. The board has
 no approval/packaging/export/save ability. Three new Editor-only NUnit
 tests plus three Python source guards are authored but not yet executed.
+
+### R21–R23 | Actual image/VFX candidate production
+The offline **RGBA layered scene compositor** in VF-04 now builds an actual
+new `scene.png` from ordered, SHA-pinned original PNG layers. VF-06's
+**procedural FX sheet generator** creates real 2D animated candidate PNGs
+for five mathematics-based effect families and independent static
+reduced-motion PNGs. VF-05 adds a **read-only Unity FX Sheet Player** to
+scrub those imported frames. All are deliberately candidate-only and
+never enable gameplay, rewards, auto-approval, paid AI providers or
+production game exports. New Python and Unity tests have been authored;
+only the earlier R20-C008 tests were executed locally so far.

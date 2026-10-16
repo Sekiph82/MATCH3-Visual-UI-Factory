@@ -77,3 +77,26 @@ No producer/editor/verifier has permission to modify approved masters,
 license receipts, MATCH3_ENGINE, Level Factory, or five consumer game repos.
 Real Unity Edit/PlayMode, profiler, visual quality, original/licensed asset
 provenance and physical-device tests remain separate mandatory gates.
+
+## R21 | Original-layer RGBA scene compositor (VF-04)
+
+`python -B factory/image_processor/layer_compositor.py --manifest "D:\\ORIGINAL_ART\\reef_layers.json" --source-root "D:\\ORIGINAL_ART" --output-dir "D:\\VUF_CANDIDATES\\reef_scene_001"`
+
+New `layer_compositor.py` builds a **real RGBA scene PNG** from 1..16
+explicitly ordered source layers with exact SHA-256 pins. Pixel origins are
+**top-left**; coordinates can be negative for intentional clipping. RGB
+background or fully transparent canvas, integer opacity 0..255, and bounded
+straight-alpha blending are supported. The external input JSON must have:
+`schema_version=1`, `stage=CANDIDATE_NOT_OWNER_APPROVED`, a five-game
+`profile_id`, canvas `width`, `height`, `background` (e.g. `"#062E43"`
+or `null`), and `layers`. Example layer:
+`{"id":"reef.front","file":"reef/front.png","sha256":"<64 lowercase hex>","x":0,"y":-20,"opacity":255}`.
+`--output-dir` omitted produces only a JSON receipt on stdout with no
+disk output. Explicit output makes a NEW never-overwritten candidate folder
+containing `scene.png` and `scene_receipt.json`. Existing originals and
+approved art are never edited; no source rights are inferred. Max canvas
+2048 x 2048 (4.19M px), total input 64MiB, 16 layers. This is an RGBA
+compositor, not a layered PSD painter, parallax rig or visually approved scene.
+
+`tests/test_layer_compositor.py` adds 12 regression methods; R21 output
+must be tested at its eventual exact final SHA before claiming PASS.

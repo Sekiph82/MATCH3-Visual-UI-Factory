@@ -39,3 +39,20 @@ EditMode suite to eight tests. The actual Unity Editor PlayMode visual result
 is still unverified. This is not a generalized skeletal-rig, 3D animation,
 Animator state graph or timeline authoring feature. No callbacks touch
 Engine board state, purchases or rewards.
+
+## R23 | Unity procedural FX sprite-sheet player
+
+`Tools > MATCH3 > Procedural FX Sheet Player` reads imported COPIES of
+`fx_sheet.png`, `reduced_motion.png`, `fx_manifest.json` and provides a
+frame-by-frame static/scrub/loop preview. Its manifest parser confirms
+candidate status, the five allowed effect families, exact frame atlas
+geometry and the mandatory static reduced-motion alternative. It refuses
+approved/rights-forged/game-event states, malformed frame rects and bad
+hash-format receipts. It does **not** independently recompute PNG hashes.
+
+This is a separate simple read-only preview from the existing
+`Sprite Animation Builder`. Importing/slicing the sheet into genuine
+Unity Sprite sub-assets and creating an editable .anim remains an explicit
+manual Editor step, not a background modification of owner TextureImporters.
+Three new Unity EditMode test methods are authored but have NOT been
+executed by Unity 6000.6.5f1 at R23 SHA. The UI itself needs GUI inspection.

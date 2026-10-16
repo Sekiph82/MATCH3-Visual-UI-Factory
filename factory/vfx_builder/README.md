@@ -17,3 +17,25 @@ performance instrumentation and chain combos remain NOT IMPLEMENTED.
 All effects must be presentation-only. No score, life, reward, purchase,
 savegame or Match3 board actions are in this package. A local original or
 owner-reviewed shader/material is necessary for production export.
+
+## R22 | Deterministic procedural VFX sprite-sheet production
+
+`python -B factory/vfx_builder/procedural_fx_sheet.py --preset BubbleRise --frames 12 --frame-side 64 --columns 4 --output-dir "D:\\VUF_CANDIDATES\\bubble_fx_001"`
+
+Unlike the prior 2D *sketch*, this actually generates an original **RGBA
+animated PNG sprite sheet** plus a **separate static reduced-motion PNG**.
+Five mathematical AUTHORING_ONLY effect families use existing preset policy:
+`BubbleRise`, `MatchBurst`, `StarSparkle`, `SoftDrift`,
+`PortalPulse`. Other parameters are `--fps`, bounded integer `--seed`,
+and optional RGB `--color #64E5FF`. Defaults to read-only in-memory
+preview receipt if no `--output-dir` is supplied. Explicit output creates
+a brand-new candidate folder containing `fx_sheet.png`,
+`reduced_motion.png` and `fx_manifest.json`. The manifest includes exact
+frame rectangles, per-frame raw RGBA SHA-256, sheet/still SHA-256 and preset
+source SHA-256. It never grants actual copyright/owner approval or game
+state and never consumes provider/API keys. Bounds: 2..32 frames, frame
+side 16..128, fps 1..60, max 2.1M atlas pixels.
+
+`tests/test_procedural_fx_sheet.py` adds 12 unverified source tests. The
+output is **functional concept art**, not final premium artwork, particle
+shader/material VFX, mobile GPU-certified effects or owner-approved art.
