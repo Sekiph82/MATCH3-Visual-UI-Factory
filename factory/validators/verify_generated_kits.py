@@ -177,7 +177,7 @@ def verify_tiles(directory: Path) -> dict:
         source = _read(folder, filename, 8 * 1024 * 1024)
         _sha(source, item.get("file_sha256"))
         tw, th, rgba = decode_png(source)
-        if (tw, th) != (side, side) or
+        if ((tw, th) != (side, side) or
                 rgba != _region(pixels, w, expected)):
             raise BundleError("tile pixels differ from atlas rect")
         _sha(rgba, item.get("rgba_sha256"))

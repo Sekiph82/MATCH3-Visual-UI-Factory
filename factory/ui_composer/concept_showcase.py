@@ -314,7 +314,7 @@ def write_showcase(directory: Path, manifest: dict, images: dict[str, bytes]) ->
         if hashlib.sha256(images[name]).hexdigest() != row["png_sha256"]:
             raise ShowcaseError("candidate image SHA receipt changed")
     path = Path(directory)
-    if path.exists() or path.is_symlink() or
+    if (path.exists() or path.is_symlink() or
             not path.parent.is_dir() or
             any(_linked(x) for x in (path.parent, *path.parent.parents)) or
             path.parent.resolve(strict=True).is_relative_to(ROOT)):
