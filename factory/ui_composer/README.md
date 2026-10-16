@@ -132,3 +132,33 @@ and explicit `VISUAL_CONCEPT_NOT_INTERACTIVE` flags.
 
 `tests/test_concept_showcase.py` has 10 authored Python source tests.
 Their actual execution on Windows is still OPEN at R28 code SHA.
+
+## R32 | Editable concept reference stage builder for five games
+
+After R28 creates the 15 concept PNG reference images and R30 verifies
+the external original candidate folder, import COPIES of the PNGs and
+`showcase_manifest.json` under an Assets subfolder. Open Unity Editor
+`Tools > MATCH3 > Editable Concept UI Stage Builder` or the Factory
+Dashboard. Pick one of five profiles and Home / Gameplay / World Map.
+The window checks actual imported PNG SHA256 against the source manifest
+receipt, rejects linked/outside-Assets originals, and constructs a **NEW**
+Unity `.prefab` containing real, independently editable uGUI elements:
+
+- `Canvas`, `CanvasScaler` and `VufSafeAreaFitter`.
+- Theme-draft `BackgroundColor`, editable `Text` heading/banner,
+  separate `Button` with `interactable=false`, no game callbacks.
+- Optional `RawImage` showing the reference PNG under those real uGUI
+  elements; `raycastTarget=false`, replace/remove before final artwork.
+- Explicit `CANDIDATE_NOT_APPROVED` / `REQUIRES_ENGINE_OR_GAME_BINDING`
+  marker, owner/rights/device QA not completed, NO production publishing.
+
+Only user-selected brand-new `.prefab` paths are written, never replaced.
+The reference image alone is NOT accepted artwork or an interactive UI.
+This is a manual creation tool, not automatic 15-prefab bulk publishing.
+Its C# SHA check certifies image/receipt *consistency*, not the ownership
+or human legitimacy of the manifest.
+
+Four new Unity EditMode tests cover 5x3 in-memory stages, disabled actions,
+misaligned profiles/PNG dimensions, no-reference stage, and forged
+approval. Three Python structural guards are also authored. They await
+the next consolidated local Windows/Unity test, not per-feature Codex.

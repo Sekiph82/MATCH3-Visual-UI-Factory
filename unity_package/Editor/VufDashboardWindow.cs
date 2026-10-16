@@ -84,6 +84,8 @@ namespace Match3.VisualFactory.Editor
                 VufTileKitInspectorWindow.Open();
             if (GUILayout.Button("Five-Game Concept Showcase (15 PNGs)", GUILayout.Height(30)))
                 VufConceptShowcaseWindow.Open();
+            if (GUILayout.Button("Editable Concept UI Stage Builder", GUILayout.Height(30)))
+                VufConceptStageBuilderWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Atlas Inspector", GUILayout.Height(32)))

@@ -277,15 +277,59 @@ def verify_showcase(directory: Path) -> dict:
     }
 
 
+
+def verify_scene_sources(directory: Path, original_manifest: Path,
+                         original_root: Path) -> dict:
+    """Re-render from intact original source layers, not copyright proof.
+
+    Requires explicit, separately supplied original manifest and source root.
+    A source hash can match without granting commercial usage rights.
+    """
+    previous = verify_scene(directory)
+    folder = _bundle(directory)
+    stored = _manifest(folder, "scene_receipt.json")
+    from factory.image_processor.layer_compositor import (
+        CompositorError, render_candidate
+    )
+    try:
+        expected_receipt, expected_png = render_candidate(
+            Path(original_manifest), Path(original_root))
+    except (CompositorError, OSError, ImageError, ValueError) as exc:
+        raise BundleError("scene originals cannot be verified: " + str(exc)) from exc
+    if (expected_receipt["original_manifest_sha256"] !=
+            stored.get("original_manifest_sha256") or
+            expected_receipt["image_sha256"] != stored.get("image_sha256") or
+            expected_receipt["source_bytes"] != stored.get("source_bytes") or
+            expected_receipt["layers"] != stored.get("layers") or
+            expected_receipt["profile_id"] != stored.get("profile_id") or
+            expected_png != _read(folder, "scene.png", 64 * 1024 * 1024)):
+        raise BundleError("recomposited original source bytes differ from candidate")
+    previous["original_source_bytes_reverified"] = True
+    previous["original_layers_reverified"] = len(expected_receipt["layers"])
+    previous["rights_verified"] = False
+    previous["visual_approved"] = False
+    return previous
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("kind", choices=("fx", "tiles", "scene", "showcase"))
     parser.add_argument("--candidate", type=Path, required=True)
+    parser.add_argument("--original-manifest", type=Path)
+    parser.add_argument("--original-root", type=Path)
     args = parser.parse_args(argv)
     try:
+        original_inputs = (args.original_manifest is not None,
+                           args.original_root is not None)
+        if any(original_inputs) and (
+                args.kind != "scene" or not all(original_inputs)):
+            raise BundleError("originals audit requires scene plus BOTH source paths")
         fn = {"fx": verify_fx, "tiles": verify_tiles,
               "scene": verify_scene, "showcase": verify_showcase}[args.kind]
-        print(json.dumps(fn(args.candidate), indent=2, sort_keys=True))
+        receipt = (verify_scene_sources(args.candidate,
+                   args.original_manifest, args.original_root)
+                   if all(original_inputs) else fn(args.candidate))
+        print(json.dumps(receipt, indent=2, sort_keys=True))
         return 0
     except (BundleError, ImageError, OSError, UnicodeError, ValueError) as exc:
         print("VUF_BUNDLE_REJECTED: " + str(exc), file=sys.stderr)

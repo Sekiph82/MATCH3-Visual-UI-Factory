@@ -204,3 +204,15 @@ fully transparent pixels. All original alpha and nontransparent RGBA
 bytes are unchanged. Output is strictly opt-in to a **new** external
 file, preserving original owner/source PNGs. This is a code-level
 anti-fringe candidate step, not actual shader/mobile visual QA.
+
+### R32–R33 | Editable Unity UI reference and scene-original byte provenance
+The new **Editable Concept UI Stage Builder** upgrades a noninteractive
+concept PNG into an optional visual reference under a separate, genuine
+uGUI `Canvas`, real editable Text, disabled unbound Button and SafeArea.
+It validates source candidate status and actual imported PNG SHA256,
+then writes only a NEW owner-selected candidate prefab. It does NOT
+turn a flattened picture into clickable game UI or sign off visual rights.
+R33 can additionally re-render the original SHA-pinned scene layers and
+compare every output PNG byte with the saved candidate, making explicit
+the difference between receipt-only QA and rechecked originals.
+No game Engine integration, mobile GUI or creative acceptance is implied.

@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R21–R31 CONSOLIDATED VISUAL AUTHORING SOURCE: PNG LAYERED SCENES, 5-GAME TILE KITS, PROCEDURAL VFX, .anim EXPORT, 15 PORTRAIT CONCEPT PNGS, INDEPENDENT SHA VERIFIER AND TRANSPARENT RGB HALO PREVENTION. LAST REAL TEST R20-C008 aa4900aa: PYTHON 189 PASS + 7 WINDOWS SKIP, UNITY 32/32 PASS. R21–R31 NOT YET LOCALLY TESTED. GUI/OWNER ART/PHONES OPEN.
+**Status:** VUF R21–R33 CONSOLIDATED VISUAL AUTHORING SOURCE: PNG SCENES/TILES/FX, 15 PORTRAIT CONCEPTS, EDITABLE UNITY UGUI REFERENCE STAGES, AND OPTIONAL ORIGINAL-SOURCE SCENE RECOMPOSITION. LAST REAL R20-C008 aa4900aa PYTHON 189 PASS + 7 WINDOWS SYMLINK SKIP, UNITY 32/32 PASS. R21–R33 NEW SOURCE NOT YET OWNER-LOCAL TESTED. GUI/RIGHTS/PHYSICAL DEVICES OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -57,6 +57,14 @@
 
 **Owner-provided actual local outcome:** SHA `aa4900aadec8debfe902ab860c6900eaea229e07` synchronized on local `main`, `origin/main` and GitHub `main` at the end of C008, zero ahead/behind; GitHub independently confirmed this previous remote source. Python 3.12.10 **196 discovered, 189 PASS, 7 OS symlink SKIP, 0 error/fail**; Unity 6000.6.5f1 **32/32 EditMode PASS**, no compiler diagnostic `CS####`. Two test-only commits corrected R18 expected authored Text field count. Structural, TEST_ONLY manifest, VFX five presets checks passed. Report and SHA256SUMS are in owner Windows `C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R20-C008-20261016\\`; raw log bytes not independently read here.
 **Not accepted:** GUI rendered appearance, mobile devices, actual translation quality, original artwork rights, animated VFX shaders/performance and dependent Engine/LFX production gates NOT RUN / OPEN. No paid GitHub Actions, deletion or other repo work was reported.
+
+## VUF-R32–R33 | EDITABLE FIVE-GAME UI STAGING + SOURCE-ORIGINAL PIXEL VERIFICATION | SOURCE / BATCH GATE OPEN
+
+**R32 VF-07 Unity editable stage production:** `unity_package/Editor/VufConceptStageBuilderWindow.cs` converts a selected R28 visual-reference PNG and already-validated 15-screen JSON manifest to a new Unity `Canvas` prefab with actual editable `Text` heading, policy warning, safe-area component, unbound `Button` and optional non-raycast `RawImage` concept reference. Supports five profiles x Home/Gameplay/World Map. Uses exact typed manifest/parser, existing draft Style Bible, actual imported raw PNG SHA256 recomputation (with asset path/link guard), candidate marker and explicit no-overwrite new prefab. **Not** flattened-clickable UI, gameplay Engine binding, licensed artwork, finished premium UI, authentic language or phone QA. Four new Unity EditMode NUnit definitions plus three Python structure guard definitions authored.
+
+**R33 VF-09 source-comparison QA:** `factory/validators/verify_generated_kits.py scene --original-manifest <external> --original-root <external>` supports explicit optional verification of ORIGINAL source PNG bytes and composition on top of stored candidate PNG hash checks. Rerenders with original R21 compositor, validates all source SHA pins, order, positions, generated scene hash and exact file bytes, and sets `original_source_bytes_reverified=true` only when source matches. Still does not establish human art rights or owner acceptance. Five new Python test definitions authored.
+
+**Cumulative new source definitions after previously tested C008 `aa4900aa`:** R21–R33 approx **79 Python methods and 18 Unity EditMode methods**, yielding ~**275 Python / 50 Unity** authored cases. **These counts are source definitions, NOT actual PASS.** Continue with coherent development batches; no immediate Codex job needed merely for source iteration. A single full owner-local Python 3.12.10 + genuine Unity 6000.6.5f1 EditMode verification remains REQUIRED before declaring R21–R33 good for owner GUI/device review, game import or release. Avoid hosted Actions, paid APIs, local cache/Temp deletion, other repos and false owner/sign-off.
 
 ## VUF-R31 | TRANSPARENT RGB EXTRUSION TO MITIGATE SPRITE SAMPLING HALOS | SOURCE / BATCH TEST OPEN
 
@@ -462,4 +470,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT R21–R31 SOURCE DEVELOPMENT, CONTINUE MEANINGFUL AUTHORING CODE IN COHERENT BATCHES. OWNER SAYS NO IMMEDIATE CODEX TEST REQUIRED; ONE LATER LOCAL PYTHON/UNITY GATE BEFORE ENGINE IMPORT, LIVE UI, GPU/DEVICE OR PRODUCTION. NO paid Actions, user file/cache cleanup or cross-repo writes.
+**CURRENT_OWNER:** CHATGPT R21–R33 CONSOLIDATED DIRECT SOURCE AUTHORING. Codex bulk regression NOT YET ASSIGNED; continue remaining coherent work without per-minor-feature handoffs. MUST run one local Python+Unity final SHA suite before GUI/game integration, without GitHub Actions, paid CI, disk cleanup, cross-repo writes or creative/rights PASS claims.

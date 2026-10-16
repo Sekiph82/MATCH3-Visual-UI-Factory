@@ -79,3 +79,29 @@ Unity textured render or owner acceptance.
 
 `tests/test_concept_bundle_verifier.py` adds 7 Python test definitions.
 No local R30 Windows run is claimed yet.
+
+## R33 | Optional scene original-source recomposition audit
+
+The existing `verify_generated_kits.py scene` mode only verifies
+the stored candidate PNG and source SHA receipt metadata. To confirm
+that ALL original external PNG layers still exist, match their SHA pins,
+and re-render **the exact same candidate PNG bytes**, supply BOTH
+source arguments:
+
+`python -B factory/validators/verify_generated_kits.py scene --candidate "D:\\VUF_CANDIDATES\\reef_scene_001" --original-manifest "D:\\ORIGINAL_ART\\reef_layers.json" --original-root "D:\\ORIGINAL_ART"`
+
+This calls the existing bounded, non-destructive R21 layer compositor,
+compares every layer receipt and the actual recomposited PNG byte stream
+with the saved candidate, and sets
+`original_source_bytes_reverified=true` on success. An altered original,
+modified layer order/coordinates or forged candidate will be refused.
+The source manifest is required and must be external to the Git repo.
+Without BOTH flags, no source-original audit is claimed; default receipt
+verification remains available and still honestly reports false.
+
+This is stronger data integrity verification, **NOT licensing or actual
+original-art rights certification**. Source bytes being unchanged does
+not prove that they were created or licensed by the owner. No images
+or original files are written or modified during this optional audit.
+Five new Python test definitions in
+`tests/test_scene_source_recomposition.py` await batch verification.
