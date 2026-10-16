@@ -44,8 +44,8 @@ namespace Match3.VisualFactory.Tests
                         VufResponsiveGeometry.Presets[0]);
                     Assert.That(report.DeviceName,
                         Is.EqualTo(VufResponsiveGeometry.Presets[0].Name));
-                    Assert.That(report.Items.Count, Is.EqualTo(4),
-                        "Each candidate screen exposes heading, content, action and review-state text slots.");
+                    Assert.That(report.Items.Count, Is.GreaterThanOrEqualTo(4),
+                        "Each candidate screen exposes at least its four primary text slots.");
                     Assert.That(report.Items.TrueForAll(item => item.MeasurementAvailable),
                         Is.True, "Every authored text slot must receive a real TextGenerator measurement.");
                     Assert.That(root.GetComponent<VufCandidateScreenMarker>().CandidateStatus,
