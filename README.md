@@ -124,3 +124,16 @@ contrast risks without modifying a prefab. Missing font/background is
 reported as unknown. This is **not** a rendered UI/device or language
 acceptance test. Five new NUnit methods and three Python source guards
 are written but have not run at R18 exact code SHA.
+
+
+### R19 | External English/Turkish draft localization audit
+`factory/ui_composer/locale_audit.py` reads a human-supplied offline,
+external JSON draft for **all 28 canonical Coral screen heading keys**.
+It validates current screen IDs and policy gates, UTF-8 source integrity,
+invisible/bidirectional control characters, EN/TR brace-placeholder
+parity, duplicate JSON keys, missing copy, excessive length, and tracks
+coverage without importing any game-ready translations.
+New `Tools > MATCH3 > Localization Coverage Studio` is a **read-only**
+Unity report viewer. No translation is approved, no runtime UI or game
+state is changed, no cloud translation/payment is invoked. R19 source,
+new Python/Unity tests need a later batched local regression.

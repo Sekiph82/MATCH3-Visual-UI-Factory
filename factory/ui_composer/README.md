@@ -59,3 +59,47 @@ It allows manually saving only **new** named candidate prefabs (no overwrite).
 unchanged policy gates and five-profile palette preservation. These tests
 and two source checks have not been run at R17 exact SHA. No source art,
 copyright acceptance or real device UI is involved.
+
+
+## R19 | Real draft heading intake coverage, without automatic translation
+
+A reviewed source package is **not** generated automatically. Provide an
+EXTERNAL UTF-8 JSON draft using the following small example:
+
+```json
+{
+  "schema_version": 1,
+  "stage": "LOCALIZATION_DRAFT_NOT_APPROVED",
+  "profile_id": "Coral_Rescue",
+  "locales": {
+    "en": {"home": "Home", "gameplay_hud": "Gameplay"},
+    "tr": {"home": "Ana Sayfa", "gameplay_hud": "Oyun Ekranı"}
+  }
+}
+```
+
+Run the **read-only** coverage and placeholder checker:
+
+```powershell
+python -B factory/ui_composer/locale_audit.py --draft "D:\\VUF_LOCALIZATION\\coral-draft.json"
+```
+
+Optional `--output-file "D:\\VUF_LOCALIZATION\\coverage-report-001.json"`
+writes a new (never overwritten) external JSON QA report. Import a COPY
+as TextAsset for `Tools > MATCH3 > Localization Coverage Studio`, which
+displays missing headings, long-label risks and coverage but cannot push
+translations into scenes or auto-enable policy-restricted pages.
+
+The input must contain exactly the 28 stable Coral contract keys when
+complete, but **incomplete drafts are deliberately accepted and reported
+as incomplete**, not as a finished localization. `en` and `tr` draft
+maps accept only known keys and nonempty Unicode values of <=240 characters.
+Invisible/bidi control characters, duplicated JSON keys and broken or
+mismatched `{named_placeholder}` tokens are rejected. Entry paths must
+be outside Git; reports are never allowed to replace an existing file.
+This is not a certified Turkish translation or right-to-left locale
+engine, language QA, fallback-string generator or Unity text clipping test.
+
+`tests/test_locale_audit.py` adds 18 offline Python cases; three separate
+Unity EditMode tests cover the read-only coverage viewer and forged
+approval/feature gates. They are SOURCE-DEFINED, NOT YET RUN at R19 SHA.

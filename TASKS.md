@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R18 SOURCE DEVELOPMENT / VF-08 FONT-METRICS AND CONTRAST LAB. R17 C007 REAL LOCAL: 172 PYTHON DISCOVERED, 165 PASS / 7 WINDOWS SYMLINK SKIP; UNITY 21/21 PASS AT f6984497. R18 NEW TESTS NOT RUN; GUI/DEVICE/ART OPEN.
+**Status:** VUF R19 FEATURE BATCH SOURCE / VF-08 TYPOGRAPHY+CONTRAST AND VF-07 EN/TR DRAFT COVERAGE; R18/R19 CODE STILL NEEDS LATER COMBINED LOCAL TEST. VERIFIED BASELINE R17 C007: PYTHON 165 PASS + 7 WINDOWS SKIP; UNITY 21/21 PASS AT f6984497. GUI/DEVICE/ART OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -45,6 +45,14 @@
 **Full Codex evidence:** https://docs.google.com/document/d/1OkmMx9cn_ik0z7b4LdZlM9PKQrqjFFZVh8DzqrtQ1hg/edit
 **Tested and published final SHA:** `05566214e6bae0561885f46655f0caf9492c344f`. Python 3.12.10 **170 total, 163 PASS, 7 Windows symlink SKIP, 0 fail/error**; Unity 6000.6.5f1 EditMode **18/18 PASS**, no reported compiler CS errors or warnings. C006 fixed candidate sprite bbox test expectation and hardened Unity pixel-health report against malformed alpha/bbox/contrast metrics and forged rights/approval status; optional palette exporter shape covered. Five VFX presets, design contracts, TEST_ONLY manifest and 33 GUIDs checked. This applies ONLY to SHA 05566214 and is not R17 evidence.
 **Remaining gates:** real native Unity GUI, rendered typography/materials, physical devices, legal source-rights and creative/owner approval NOT RUN; no independent production milestone PASS. No GitHub Actions or paid CI.
+
+## VUF-R19 | OFFLINE DRAFT EN/TR COVERAGE AND UNITY READ-ONLY REVIEW | SOURCE / BATCH TEST OPEN
+
+`factory/ui_composer/locale_audit.py` inspects owner-supplied external EN/TR draft heading JSON for exactly 28 canonical Coral screen keys, validates schema/stage, UTF-8, hidden/BiDi controls, duplicate JSON keys, matching named placeholders, short/long copy length heuristics and feature-policy-off metadata. Incomplete translations generate coverage/missing/long-copy warnings rather than false complete status; no translations generated, sent to any provider, approved or applied to runtime UI. Records SHA-256 of canonical contract and external source. Writes only optional new non-overwritten JSON outside Git.
+
+`unity_package/Editor/VufLocaleCoverageWindow.cs` is a read-only Unity TextAsset report viewer; validates two locale coverage maps, 28 stable canonical keys, five OFF-policy screens, draft stage and no enabled game bindings. Three Unity EditMode methods and 18 Python unit methods authored, with stable Editor .meta files, dashboard entry and source structure guard. **R18 + R19 combined source definitions:** 193 Python methods, 29 Unity EditMode methods. Neither new R18 nor R19 source has been executed by owner-local Unity yet. Old R17 evidence at SHA `f6984497` was Python 172 discovered/165 PASS/7 OS SKIP and real Unity 21/21 PASS.
+
+**Execution policy:** Continue coding the next related Visual Factory component before ONE combined Codex batch regression, not a new test prompt for every small change. No GitHub Actions, paid CI, local deletes/cache clearing, cross-repo modifications, original-art rights or owner visual acceptance claims. ENG-M24/LFX-M14 upstream production bindings still blocked.
 
 ## VUF-R18 | TYPOGRAPHY & CONTRAST LAB | SOURCE IMPLEMENTED, LOCAL UNITY TEST OPEN
 
@@ -397,4 +405,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT VUF R18+ FEATURE-BATCH CODING; AFTER COMBINED DEVELOPMENT REQUEST ONE LOCAL CODEX PYTHON + UNITY FULL CHECK, NOT ONE CHECK PER SMALL CHANGE. Keep GUI, owner art, legal rights, production release and Engine/LFX integration OPEN.
+**CURRENT_OWNER:** CHATGPT R18-R19 SOURCE FEATURE BATCH; DO NOT SCHEDULE CODEX AFTER EVERY CHANGE. After consolidated scope, request one exact-SHA Python and Unity EditMode regression. Real GUI, iOS/Android, original art/rights, owner aesthetic approval and Engine/LFX release remain OPEN.
