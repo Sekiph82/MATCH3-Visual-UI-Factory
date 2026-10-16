@@ -53,6 +53,7 @@ def validate_structure() -> dict:
         "Tests.meta", "Tests/Editor.meta",
         "Tests/Editor/Match3.VisualFactory.Editor.Tests.asmdef",
         "Tests/Editor/VufCatalogEditModeTests.cs",
+        "Tests/Editor/VufSpriteQaEditModeTests.cs",
         "Runtime/VufSafeAreaFitter.cs",
         "Runtime/VufUiTween.cs",
         "Editor/VufUiTweenInspector.cs",

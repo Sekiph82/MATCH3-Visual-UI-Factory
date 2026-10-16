@@ -27,3 +27,7 @@ copyright/licensing checks, real iOS/Android performance and independent audit.
 Automated or structural verification is NOT creative owner approval. The
 post-R07 Python suite has not been run by GitHub Actions, which remains manual
 dispatch only to prevent unexpected per-commit runner costs.
+
+## R16 static sprite health QA
+
+Use `python -B factory/validators/visual_qa.py --source <PNG> --profile Coral_Rescue`. Advisory metrics: alpha coverage, visible bounds, colored transparency, matte-fringe hints and draft palette contrast. Optional `--output-file` writes a NEW external JSON report. The read-only Unity `Sprite Pixel Health QA` Editor panel inspects a JSON TextAsset copy. This never approves art or tests real device rendering. The 19 new Python cases require local execution at the R16 SHA.
