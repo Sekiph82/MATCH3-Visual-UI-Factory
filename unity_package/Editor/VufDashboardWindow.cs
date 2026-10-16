@@ -49,6 +49,8 @@ namespace Match3.VisualFactory.Editor
             profile = EditorGUILayout.Popup("Selected game", profile, Profiles);
             if (GUILayout.Button("Five-Game Production Queue (read-only)", GUILayout.Height(32)))
                 VufProductionQueueWindow.Open();
+            if (GUILayout.Button("Offline Sprite Pixel QA Report (read-only)", GUILayout.Height(30)))
+                VufSpriteQaReportWindow.Open();
             if (GUILayout.Button("Device & Safe-Area Layout Wireframe", GUILayout.Height(30)))
                 VufResponsivePreviewWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
