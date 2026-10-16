@@ -9,7 +9,7 @@ class DonorRadialLayoutContracts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.donor = (
-            ROOT / "unity_package/Editor/ThirdParty/RadialLayout.cs"
+            ROOT / "unity_package/Runtime/ThirdParty/RadialLayout.cs"
         ).read_text(encoding="utf-8")
         cls.layout = (
             ROOT / "unity_package/Editor/VufPageComposition.cs"

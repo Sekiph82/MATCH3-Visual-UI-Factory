@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 class DonorFlowContracts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.donor=(ROOT/"unity_package/Editor/ThirdParty/FlowLayoutGroup.cs").read_text()
+        cls.donor=(ROOT/"unity_package/Runtime/ThirdParty/FlowLayoutGroup.cs").read_text()
         cls.page=(ROOT/"unity_package/Editor/VufPageComposition.cs").read_text()
         cls.ledger=(ROOT/"docs/VUF_DONOR_SOURCE_LEDGER.md").read_text()
         cls.nunit=(ROOT/"unity_package/Tests/Editor/VufDonorFlowLayoutEditModeTests.cs").read_text()
@@ -32,7 +32,7 @@ class DonorFlowContracts(unittest.TestCase):
         self.assertIn("SetLayoutInputForAxis(offset, -1, offset, -1, axis)", self.donor)
 
     def test_stable_meta_and_genuine_nunit_definitions(self):
-        self.assertTrue((ROOT/"unity_package/Editor/ThirdParty/FlowLayoutGroup.cs.meta").exists())
+        self.assertTrue((ROOT/"unity_package/Runtime/ThirdParty/FlowLayoutGroup.cs.meta").exists())
         self.assertTrue((ROOT/"unity_package/Tests/Editor/VufDonorFlowLayoutEditModeTests.cs.meta").exists())
         self.assertEqual(self.nunit.count("[Test]"),2)
         self.assertIn("ActualDonorReflowsOnNarrowAndWideAuthoringPanels",self.nunit)

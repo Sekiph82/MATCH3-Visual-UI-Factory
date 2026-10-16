@@ -231,7 +231,7 @@ authored but NOT run on owner-local Windows/Unity.
 ## R37 | License-compliant tested upstream uGUI primitive, not rewritten
 
 A COPY of Unity UI Extensions `NonDrawingGraphic` is vendored under
-`unity_package/Editor/ThirdParty/` from an exact upstream BSD-3-Clause
+`unity_package/Runtime/ThirdParty/` from an exact upstream BSD-3-Clause
 Git blob. Namespace is isolated; original contributor credits are
 retained. Full BSD-3-Clause license is included at
 `third_party/UnityUIExtensions/LICENSE.md`.
@@ -257,14 +257,16 @@ NOT RUN yet on the owner-local Windows checkout.
 Mature `Unity UI Extensions` **BSD-3-Clause** implementations
 `Gradient.cs` (upstream Breyer credit) and `UIFlippable.cs`
 (upstream ChoMPHi credit) are copied from pinned Git blobs into
-`unity_package/Editor/ThirdParty/`, with isolated namespaces and
+`unity_package/Runtime/ThirdParty/`, with isolated namespaces and
 attribution. Gradient fixes only the upstream min/max-bounds/zero-height
 corner cases in Unity quad geometry. Gradient mesh effects are attached
 to Home hero, Home mission, Gameplay HUD and World Map placeholder
 panels. UIFlippable is used to mirror selected Dino Islands leaf
 geometry instead of writing another mesh transformation.
 
-These are editor-only candidate effects, not real art/rights/device
+These candidate effects are compiled in the package Runtime assembly so
+Unity can attach and serialize them on candidate objects, but the authoring
+code applies them only to editor previews. They are not real art/rights/device
 approval and not actual game input. Four Unity mesh/source contract
 tests and five Python source checks are authored; local Unity execution
 is still pending for this new batch. The heavy `UILineRenderer` donor

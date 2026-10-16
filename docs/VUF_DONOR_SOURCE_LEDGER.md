@@ -11,7 +11,7 @@ Git blob SHA (upstream): abd42d8920aedfc7c4f887a0c6ea02496a57849c
 Verified license: https://github.com/Unity-UI-Extensions/com.unity.uiextensions/blob/release/LICENSE.md
 Local license copy: third_party/UnityUIExtensions/LICENSE.md (BSD-3-Clause including copyright, disclaimer and mandatory redistribution notices).
 
-Source was copied from that actual GitHub blob, with only a namespace isolation change to Match3.VisualFactory.Editor.ThirdParty and explicit using UnityEngine/UnityEngine.UI for that isolation. Original individual author credit is preserved in the source. File: unity_package/Editor/ThirdParty/NonDrawingGraphic.cs. This component is battle-tested upstream as a non-drawing Graphic that still participates in uGUI raycast hit tests. It is used as the final fully transparent input shield over editable candidate prefabs. Original source code is not written from scratch. The namespace isolation prevents accidental type collision with a future installation of the full UI Extensions package. No package installation, network download at runtime, paid provider or Unity package dependency required.
+Source was copied from that actual GitHub blob, with only a namespace isolation change to Match3.VisualFactory.Editor.ThirdParty and explicit using UnityEngine/UnityEngine.UI for that isolation. Original individual author credit is preserved in the source. File: unity_package/Runtime/ThirdParty/NonDrawingGraphic.cs. This component is battle-tested upstream as a non-drawing Graphic that still participates in uGUI raycast hit tests. It is used as the final fully transparent input shield over editable candidate prefabs. Original source code is not written from scratch. The namespace isolation prevents accidental type collision with a future installation of the full UI Extensions package. No package installation, network download at runtime, paid provider or Unity package dependency required.
 
 ## Reused existing in-repo code: no new dependency
 
@@ -37,7 +37,7 @@ Before implementing a substantial new visual feature, first inspect the existing
 Before designing the next UI effects, checked these exact external Github donors:
 - Unity UI Extensions `Runtime/Scripts/Effects/Gradient.cs`, upstream commit `d47f838ba918bbb9b26f242bd944940a711f525f`, exact Git blob `d3387fd4c917196209079970e436cf0f8ffaddfc`, original Breyer credit.
 - Unity UI Extensions `Runtime/Scripts/Effects/UIFlippable.cs`, exact Git blob `d06dbb032940ec8938b3841351f3ff7b7190dac1`, original ChoMPHi credit.
-Both are BSD-3-Clause under the already vendored `third_party/UnityUIExtensions/LICENSE.md`, and source credits are retained. Actual original source copied to `unity_package/Editor/ThirdParty/Gradient.cs` and `UIFlippable.cs`; namespace adapted to `Match3.VisualFactory.Editor.ThirdParty` and explicit Unity imports added. Gradient has TWO bounded defect protections: initialize its Graphic lazily and compute real vertex-list min/max instead of unsafe first/last (including zero-height guard) for Unity closed quads. No new gradients/flip vertex algorithms or heavy dependency rewritten.
+Both are BSD-3-Clause under the already vendored `third_party/UnityUIExtensions/LICENSE.md`, and source credits are retained. Actual original source copied to `unity_package/Runtime/ThirdParty/Gradient.cs` and `UIFlippable.cs`; namespace adapted to `Match3.VisualFactory.Editor.ThirdParty` and explicit Unity imports added. Gradient has TWO bounded defect protections: initialize its Graphic lazily and compute real vertex-list min/max instead of unsafe first/last (including zero-height guard) for Unity closed quads. No new gradients/flip vertex algorithms or heavy dependency rewritten.
 
 R39 uses the donor `Gradient` as a `BaseMeshEffect` on the existing editable Home hero/mission, Gameplay HUD and WorldMap canvas. R40 uses actual donor `UIFlippable` horizontally on alternating Dino leaf graphics, allowing authored mirrored leaf sprites without custom UV/mesh rewrite. Four new real Unity NUnit tests (mesh vertex colors, collapsed zero-height safe return, actual flip positions, integrated five-theme UI) and five Python contract/source tests are written, not yet run. No Unity AssetDatabase importer mutation, gameplay binding, shader/device validation or production artwork acceptance. Existing R35–R38 tests also remain unverified.
 
@@ -51,7 +51,7 @@ original Git blob `a949d0c23d27124c3347405972cca7bb7a7a3489`.
 Retains original credits to Simie, Martin Sharkbomb, Vicente Russo and
 Ramon Molossi, plus upstream `third_party/UnityUIExtensions/LICENSE.md`
 BSD-3-Clause terms. The real upstream `LayoutGroup` source was copied to
-`unity_package/Editor/ThirdParty/FlowLayoutGroup.cs`, changing ONLY its
+`unity_package/Runtime/ThirdParty/FlowLayoutGroup.cs`, changing ONLY its
 namespace to isolated `Match3.VisualFactory.Editor.ThirdParty` and
 adding explicit UnityEngine/UnityEngine.UI imports. It has no other
 package dependencies and does not create gameplay events.
@@ -84,7 +84,7 @@ PRE-CODE DONOR CHECK: inspected actual GitHub upstream source
 Original contributor Danny Goodayle and the embedded 2015 MIT
 copyright/permission/disclaimer are retained, along with BSD-3-Clause
 package notices already in `unity_package/NOTICE-UnityUIExtensions.md`.
-Source copied directly as `unity_package/Editor/ThirdParty/RadialLayout.cs`.
+Source copied directly as `unity_package/Runtime/ThirdParty/RadialLayout.cs`.
 MINIMAL_ADAPTER: added namespace isolation and explicit Unity using
 directives; added ONE guard for zero active visible children when
 `OnlyLayoutVisible` is true, preventing divide by zero.
@@ -101,3 +101,18 @@ rotation after angle edit) and three Python donor/provenance contracts
 are AUTHORED, NOT owner-local tested.
 Donor disposition: DIRECT_REUSE + MINIMAL_ADAPTER (one null-visible guard);
 license MIT embedded + BSD3 package notice, no package install or service.
+
+## C010 Unity 6.6 runtime-component import correction
+
+The first real Unity 6000.6.5f1 run found that scripts under an `Editor/`
+directory cannot be attached with `GameObject.AddComponent`, even while the
+Editor is constructing candidate UI. The five direct donor sources were
+moved unchanged (retaining their original code and stable `.meta` GUIDs) to
+`unity_package/Runtime/ThirdParty/`, which compiles them into the package's
+runtime assembly so Unity can serialize and attach them to candidate objects.
+The authoring code remains editor-only; this does not bind gameplay. The
+Unity 6 `SetLayoutInputForAxis` API adds a `totalMax` parameter, so the three
+FlowLayoutGroup calls now explicitly preserve the upstream min/preferred/
+flexible semantics. Gradient enum references are fully qualified to avoid
+the collision with `UnityEngine.GradientMode`. Full Python and Unity results
+for this correction are recorded in the C010 evidence report.

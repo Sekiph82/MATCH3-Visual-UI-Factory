@@ -13,7 +13,7 @@ class DonorFirstVisualContracts(unittest.TestCase):
     def setUpClass(cls):
         def read(path):
             return (ROOT / path).read_text(encoding="utf-8")
-        cls.donor = read("unity_package/Editor/ThirdParty/NonDrawingGraphic.cs")
+        cls.donor = read("unity_package/Runtime/ThirdParty/NonDrawingGraphic.cs")
         cls.license = read("third_party/UnityUIExtensions/LICENSE.md")
         cls.stage = read("unity_package/Editor/VufConceptStageBuilderWindow.cs")
         cls.motion = read("unity_package/Editor/VufCandidateMotionKit.cs")
@@ -49,7 +49,7 @@ class DonorFirstVisualContracts(unittest.TestCase):
 
     def test_license_meta_and_actual_nunit_test_sources_are_present(self):
         paths = [
-            "unity_package/Editor/ThirdParty/NonDrawingGraphic.cs.meta",
+            "unity_package/Runtime/ThirdParty/NonDrawingGraphic.cs.meta",
             "unity_package/Editor/VufCandidateMotionKit.cs.meta",
             "unity_package/Tests/Editor/VufOpenSourceDonorEditModeTests.cs.meta",
             "unity_package/Tests/Editor/VufCandidateMotionReuseEditModeTests.cs.meta"

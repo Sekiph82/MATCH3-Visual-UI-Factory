@@ -12,8 +12,8 @@ class DonorMeshEffectsContracts(unittest.TestCase):
     def setUpClass(cls):
         def read(path):
             return (ROOT/path).read_text(encoding="utf-8")
-        cls.gradient=read("unity_package/Editor/ThirdParty/Gradient.cs")
-        cls.flip=read("unity_package/Editor/ThirdParty/UIFlippable.cs")
+        cls.gradient=read("unity_package/Runtime/ThirdParty/Gradient.cs")
+        cls.flip=read("unity_package/Runtime/ThirdParty/UIFlippable.cs")
         cls.page=read("unity_package/Editor/VufPageComposition.cs")
         cls.motif=read("unity_package/Editor/VufThemeMotifDecor.cs")
         cls.nunit=read("unity_package/Tests/Editor/VufDonorMeshEffectsEditModeTests.cs")
@@ -55,8 +55,8 @@ class DonorMeshEffectsContracts(unittest.TestCase):
         self.assertIn("UpstreamGradientCanShadeARealUiImage",self.nunit)
         self.assertIn("CopiedFlippableMirrorsActualUiVertices",self.nunit)
         for path in (
-            "unity_package/Editor/ThirdParty/Gradient.cs.meta",
-            "unity_package/Editor/ThirdParty/UIFlippable.cs.meta",
+            "unity_package/Runtime/ThirdParty/Gradient.cs.meta",
+            "unity_package/Runtime/ThirdParty/UIFlippable.cs.meta",
             "unity_package/Tests/Editor/VufDonorMeshEffectsEditModeTests.cs.meta"
         ):
             self.assertTrue((ROOT/path).is_file(),path)
