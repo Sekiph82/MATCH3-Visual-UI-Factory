@@ -3,6 +3,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Match3.VisualFactory.Editor.ThirdParty;
 
 namespace Match3.VisualFactory.Editor
 {
@@ -31,6 +32,21 @@ namespace Match3.VisualFactory.Editor
             Image image = rect.gameObject.AddComponent<Image>();
             image.color = color;
             image.raycastTarget = false;
+            // Reuse BSD-3-Clause upstream Gradient.cs for selected
+            // large authoring panels, not a new proprietary mesh shader.
+            if (name == "HOME_HeroArtworkPlaceholder" ||
+                name == "HOME_DailyMissionCard" ||
+                name == "GAMEPLAY_ReadOnlyHUD" ||
+                name == "WORLD_EditableMapCanvas")
+            {
+                var gradient = rect.gameObject.AddComponent<
+                    Match3.VisualFactory.Editor.ThirdParty.Gradient>();
+                gradient.GradientMode = GradientMode.Global;
+                gradient.GradientDir = GradientDir.Vertical;
+                gradient.OverwriteAllColor = true;
+                gradient.Vertex1 = Color.white;
+                gradient.Vertex2 = new Color(.58f, .68f, .86f, 1f);
+            }
             return rect;
         }
 

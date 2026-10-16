@@ -251,3 +251,22 @@ Before production export, the stage still needs real Unity rendered
 GUI/art owner inspection and device accessibility review. The new
 C# R37–R38 NUnit and Python source tests have been written but are
 NOT RUN yet on the owner-local Windows checkout.
+
+## R39–R40 | Real open-source Gradient + UIFlippable integration
+
+Mature `Unity UI Extensions` **BSD-3-Clause** implementations
+`Gradient.cs` (upstream Breyer credit) and `UIFlippable.cs`
+(upstream ChoMPHi credit) are copied from pinned Git blobs into
+`unity_package/Editor/ThirdParty/`, with isolated namespaces and
+attribution. Gradient fixes only the upstream min/max-bounds/zero-height
+corner cases in Unity quad geometry. Gradient mesh effects are attached
+to Home hero, Home mission, Gameplay HUD and World Map placeholder
+panels. UIFlippable is used to mirror selected Dino Islands leaf
+geometry instead of writing another mesh transformation.
+
+These are editor-only candidate effects, not real art/rights/device
+approval and not actual game input. Four Unity mesh/source contract
+tests and five Python source checks are authored; local Unity execution
+is still pending for this new batch. The heavy `UILineRenderer` donor
+was inspected and intentionally not imported due transitive primitive,
+Bezier and cable dependencies.

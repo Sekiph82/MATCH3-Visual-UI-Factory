@@ -257,3 +257,13 @@ libraries are in `docs/VUF_DONOR_SOURCE_LEDGER.md`. New NUnit/Python tests
 are authored, but these R37–R38 source additions are NOT yet certified
 by local Unity 6000.6.5f1. Last real bulk C009 certification applied only
 to R21–R34 source commit `6c70a6a0`.
+
+### R39–R40 | Copied two more mature uGUI mesh effects
+Direct BSD-3-Clause source integrations from Unity UI Extensions:
+`Gradient.cs` to shade selected editable large candidate panels and
+`UIFlippable.cs` to mirror Dino leaf motif art. The exact source commit,
+blob hashes, original author credits, and local namespace/safety diffs
+are recorded in `docs/VUF_DONOR_SOURCE_LEDGER.md`; upstream BSD3 license
+is included in the repository. This is actual reused upstream code,
+not newly invented color/UV mesh logic. Python and Unity tests were
+authored but have not yet executed at the new source SHA.

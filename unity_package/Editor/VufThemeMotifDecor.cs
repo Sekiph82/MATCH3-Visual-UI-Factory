@@ -4,6 +4,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Match3.VisualFactory.Editor.ThirdParty;
 
 namespace Match3.VisualFactory.Editor
 {
@@ -84,10 +85,16 @@ namespace Match3.VisualFactory.Editor
                     new Vector2(x, y), new Vector2(8, 47),
                     Transparent(accent, .28f),
                     i % 2 == 0 ? -25 : 25);
-                Shape(frond, "DINO_LeafLeft", new Vector2(.12f, .72f),
+                RectTransform leafLeft = Shape(frond, "DINO_LeafLeft",
+                    new Vector2(.12f, .72f),
                     new Vector2(22, 12), Transparent(accent, .5f), -40);
-                Shape(frond, "DINO_LeafRight", new Vector2(.88f, .48f),
+                RectTransform leafRight = Shape(frond, "DINO_LeafRight",
+                    new Vector2(.88f, .48f),
                     new Vector2(25, 11), Transparent(accent, .5f), 35);
+                // Reuse original upstream UIFlippable mesh effect, no custom
+                // UV/vertex mirroring code in Visual Factory.
+                var mirror = leafRight.gameObject.AddComponent<UIFlippable>();
+                mirror.horizontal = true;
             }
         }
 
