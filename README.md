@@ -276,3 +276,7 @@ a wrapping flow layout, allowing responsive candidate authoring at
 different screen widths. Repo attribution/license/provenance is in
 `docs/VUF_DONOR_SOURCE_LEDGER.md`; local Unity Editor and phone layout
 tests have not yet run for R41.
+
+**Third-party redistribution:** Standalone Unity package recipients must
+retain `unity_package/NOTICE-UnityUIExtensions.md`, the verbatim
+BSD-3-Clause copyright, conditions and disclaimer for copied components.

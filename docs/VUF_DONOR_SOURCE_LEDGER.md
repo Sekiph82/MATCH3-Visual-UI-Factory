@@ -63,3 +63,13 @@ parent RectTransform narrows. This is a true uGUI LayoutGroup, not an
 image mockup. Two Unity NUnit and three Python source tests authored, NOT
 run locally on current new SHA. Must confirm actual rendered responsive
 geometry in real Unity GUI before owner/phone PASS.
+
+## R41 release-packaging license hardening
+
+The exact upstream BSD-3-Clause text is also duplicated verbatim to
+`unity_package/NOTICE-UnityUIExtensions.md`, including its copyright,
+disclaimer and redistribution conditions, so an extracted standalone
+`unity_package` copy retains the required terms. Root-side authoritative
+copy is `third_party/UnityUIExtensions/LICENSE.md`. A stable .meta GUID
+for the notice is committed. Neither notice implies a warranty or
+license to original third-party sprites, textures, fonts or demo art.

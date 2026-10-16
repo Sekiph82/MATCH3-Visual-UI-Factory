@@ -77,6 +77,8 @@
 
 ## VUF-R41 | FOURTH BSD3 DIRECT DONOR, DYNAMIC HOME COLLECTION FLOW LAYOUT | SOURCE / TEST OPEN
 
+**Licensing hardening:** Standalone `unity_package/NOTICE-UnityUIExtensions.md` is an exact text copy of BSD3 vendor license with stable Unity meta, so redistributed Unity package subsets retain original copyright/conditions/disclaimer; source-only donor smoke test now checks actual license phrase. All owner rights, real Unity compilation and phone visual gates remain OPEN.
+
 **Donor before code:** Inspected `Unity-UI-Extensions/com.unity.uiextensions` `FlowLayoutGroup.cs` (BSD-3-Clause), pinned `release` commit `d47f838ba918bbb9b26f242bd944940a711f525f`, exact blob `a949d0c23d27124c3347405972cca7bb7a7a3489`, original credits Simie et al. Copied the original wrapping `LayoutGroup` implementation to `unity_package/Editor/ThirdParty/FlowLayoutGroup.cs` with ONLY namespace isolation plus explicit UnityEngine/UI imports. Full BSD3 terms already included. `VufPageComposition.Home` uses it for four separately editable collection `LayoutElement` cards, enabling responsive wrapping at different screen widths without our own wrap algorithm. Two real Unity NUnit tests and three Python provenance/source checks authored, but local Unity 6000.6.5f1 has NOT compiled/tested these yet. R35–R41 new features remain distinct from C009 verified old SHA. Real GUI/phones/rights/owner art remain OPEN; one later combined no-cost Codex gate before game integration.
 
 ## VUF-R39–R40 | SECOND AND THIRD ACTUAL UPSTREAM BSD3 DONOR COMPONENTS | SOURCE / TEST OPEN

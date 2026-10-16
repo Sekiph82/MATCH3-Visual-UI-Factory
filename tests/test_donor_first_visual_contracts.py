@@ -26,7 +26,7 @@ class DonorFirstVisualContracts(unittest.TestCase):
         self.assertIn("class NonDrawingGraphic : MaskableGraphic", self.donor)
         self.assertIn("vh.Clear();", self.donor)
         self.assertIn("BSD-3-Clause", self.license)
-        self.assertIn("Redistributions in source", self.license)
+        self.assertIn("Redistribution and use in source", self.license)
         self.assertIn("Unity-UI-Extensions/com.unity.uiextensions", self.ledger)
         self.assertIn("abd42d8920aedfc7c4f887a0c6ea02496a57849c", self.ledger)
 
