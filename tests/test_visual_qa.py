@@ -35,7 +35,8 @@ class VisualQaTests(unittest.TestCase):
 
     def test_bbox_and_alpha_coverage_are_exact(self):
         metrics = sprite_metrics(2, 2, self.rgba)
-        self.assertEqual(metrics["visible_bbox_top_left"], [0, 0, 2, 2])
+        # Alpha-zero colored pixels are reported separately, not as visible bounds.
+        self.assertEqual(metrics["visible_bbox_top_left"], [1, 0, 1, 2])
         self.assertEqual(metrics["visible_pixels"], 2)
         self.assertEqual(metrics["alpha_coverage_basis_points"], 5000)
         self.assertEqual(metrics["transparent_colored_pixels"], 1)

@@ -171,12 +171,20 @@ namespace Match3.VisualFactory.Editor
                 result.sprites == null || result.sprites.Length < 1 ||
                 result.sprites.Length > 32 ||
                 result.file_count != result.sprites.Length ||
-                result.total_source_bytes < 1 || result.warning_count < 0)
+                result.total_source_bytes < 1 || result.total_source_bytes > 64 * 1024 * 1024 ||
+                result.warning_count < 0)
                 throw new ArgumentException("invalid report contract or false approval");
             int warnings = 0;
             var names = new HashSet<string>(StringComparer.Ordinal);
+            var allowedWarnings = new HashSet<string>(StringComparer.Ordinal) {
+                "EMPTY_ALPHA", "CANVAS_BOUNDARY_TOUCH", "SPARSE_VISIBLE_CANVAS",
+                "LARGE_TEXTURE_HEURISTIC", "POSSIBLE_BLACK_MATTE_FRINGE"
+            };
             foreach (SpriteFinding item in result.sprites)
             {
+                long pixels = item == null || item.dimensions == null ||
+                    item.dimensions.Length != 2 ? 0L :
+                    (long)item.dimensions[0] * item.dimensions[1];
                 if (item == null || String.IsNullOrEmpty(item.filename) ||
                     item.filename.Contains("/") || item.filename.Contains("\\") ||
                     !item.filename.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
@@ -187,8 +195,20 @@ namespace Match3.VisualFactory.Editor
                     item.dimensions[0] < 1 || item.dimensions[1] < 1 ||
                     item.warnings == null || item.alpha_coverage_basis_points < 0 ||
                     item.alpha_coverage_basis_points > 10000 ||
-                    item.visible_pixels < 0 ||
-                    (long)item.visible_pixels > (long)item.dimensions[0] * item.dimensions[1])
+                    item.visible_pixels < 0 || item.visible_pixels > pixels ||
+                    item.alpha_coverage_basis_points !=
+                        (int)((long)item.visible_pixels * 10000 / pixels) ||
+                    item.partial_alpha_visible_pixels < 0 ||
+                    item.partial_alpha_visible_pixels > item.visible_pixels ||
+                    item.edge_visible_pixels < 0 ||
+                    item.edge_visible_pixels > item.visible_pixels ||
+                    item.transparent_colored_pixels < 0 ||
+                    item.transparent_colored_pixels > pixels - item.visible_pixels ||
+                    item.transparent_black_adjacent_visible < 0 ||
+                    item.transparent_black_adjacent_visible > pixels - item.visible_pixels ||
+                    item.distinct_visible_rgb_capped < 0 ||
+                    item.distinct_visible_rgb_capped > Math.Min(257, item.visible_pixels) ||
+                    (item.visible_pixels == 0) != (item.visible_bbox_top_left == null))
                     throw new ArgumentException("invalid per-sprite pixel metrics");
                 foreach (char c in item.source_sha256_recorded)
                     if (!(c >= '0' && c <= '9') && !(c >= 'a' && c <= 'f'))
@@ -197,24 +217,48 @@ namespace Match3.VisualFactory.Editor
                 {
                     int[] b = item.visible_bbox_top_left;
                     if (b.Length != 4 || b[0] < 0 || b[1] < 0 || b[2] < 1 ||
-                        b[3] < 1 || b[0] + b[2] > item.dimensions[0] ||
-                        b[1] + b[3] > item.dimensions[1])
+                        b[3] < 1 || (long)b[0] + b[2] > item.dimensions[0] ||
+                        (long)b[1] + b[3] > item.dimensions[1])
                         throw new ArgumentException("invalid sprite bounding box");
                 }
-                warnings += item.warnings.Length;
+                foreach (string warning in item.warnings)
+                {
+                    if (!allowedWarnings.Contains(warning))
+                        throw new ArgumentException("unknown sprite warning");
+                    warnings++;
+                }
             }
             if (result.palette_review != null)
             {
-                if (result.palette_review.stage != "DRAFT_NOT_OWNER_APPROVED" ||
+                var allowedProfiles = new HashSet<string>(StringComparer.Ordinal) {
+                    "Coral_Rescue", "Garage_Legends", "Dino_Islands",
+                    "The_Fractured_Realms", "Wonder_Pop"
+                };
+                if (!allowedProfiles.Contains(result.palette_review.profile_id) ||
+                    result.palette_review.stage != "DRAFT_NOT_OWNER_APPROVED" ||
                     result.palette_review.contrast_checks == null ||
                     result.palette_review.contrast_checks.Length != 3)
                     throw new ArgumentException("unexpected palette profile contract");
+                var expectedMinimums = new Dictionary<string, float>(StringComparer.Ordinal) {
+                    {"text_on_surface", 4.5f}, {"cta_label_on_cta", 4.5f},
+                    {"accent_on_background", 3f}
+                };
+                var seenPairs = new HashSet<string>(StringComparer.Ordinal);
                 foreach (ContrastFinding contrast in result.palette_review.contrast_checks)
                 {
                     if (contrast == null || String.IsNullOrEmpty(contrast.pair) ||
+                        !expectedMinimums.ContainsKey(contrast.pair) ||
+                        !seenPairs.Add(contrast.pair) ||
+                        Single.IsNaN(contrast.ratio) || Single.IsInfinity(contrast.ratio) ||
+                        Single.IsNaN(contrast.advisory_minimum) ||
+                        Single.IsInfinity(contrast.advisory_minimum) ||
                         contrast.ratio < 1f || contrast.ratio > 21.001f ||
-                        contrast.advisory_minimum <= 0f)
+                        Math.Abs(contrast.advisory_minimum - expectedMinimums[contrast.pair]) > .0001f)
                         throw new ArgumentException("invalid palette diagnostic");
+                    float tolerance = .00051f; // Python exporter rounds ratios to 3 decimals.
+                    if ((!contrast.review && contrast.ratio + tolerance < contrast.advisory_minimum) ||
+                        (contrast.review && contrast.ratio - tolerance >= contrast.advisory_minimum))
+                        throw new ArgumentException("palette review flag contradicts contrast ratio");
                     warnings += contrast.review ? 1 : 0;
                 }
             }
