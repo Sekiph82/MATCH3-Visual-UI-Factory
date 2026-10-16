@@ -162,3 +162,25 @@ Four new Unity EditMode tests cover 5x3 in-memory stages, disabled actions,
 misaligned profiles/PNG dimensions, no-reference stage, and forged
 approval. Three Python structural guards are also authored. They await
 the next consolidated local Windows/Unity test, not per-feature Codex.
+
+## R34 | One-image five-game comparison sheet (no Unity required)
+
+After saving the R28 15-PNG concept bundle and validating actual bytes
+with `verify_generated_kits.py showcase`, generate one bounded composite
+**contact sheet PNG** for rapid owner art-direction comparisons:
+
+`python -B factory/ui_composer/contact_sheet.py --candidate "D:\\VUF_CANDIDATES\\concept_001" --output-file "D:\\VUF_REVIEWS\\five-game-review-001.png"`
+
+Five game columns x Home/Gameplay/World Map rows each show their exact
+individual original mathematical concept thumbnails. Tiny fixed 5x7
+ASCII labels identify the theme and page. Output includes cell positions,
+individually rechecked source SHA256 receipts, contact-sheet SHA256 and
+explicit `CANDIDATE_NOT_OWNER_APPROVED` / noninteractive status. Without
+`--output-file`, only computed JSON manifest prints to stdout, with no
+disk writes. The output path must be a NEW PNG outside Git, never overwriting
+an existing file. Actual concept images, original art, Unity metadata
+and game repositories are never modified.
+
+It is still a static reference sheet, not high-end art or a finished
+responsive interactive UI, authentic licensing or physical device QA.
+Five Python tests are authored for future bundled local execution.

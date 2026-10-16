@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R21–R33 CONSOLIDATED VISUAL AUTHORING SOURCE: PNG SCENES/TILES/FX, 15 PORTRAIT CONCEPTS, EDITABLE UNITY UGUI REFERENCE STAGES, AND OPTIONAL ORIGINAL-SOURCE SCENE RECOMPOSITION. LAST REAL R20-C008 aa4900aa PYTHON 189 PASS + 7 WINDOWS SYMLINK SKIP, UNITY 32/32 PASS. R21–R33 NEW SOURCE NOT YET OWNER-LOCAL TESTED. GUI/RIGHTS/PHYSICAL DEVICES OPEN.
+**Status:** VUF R21–R34 BATCH SOURCE: REAL PNG SCENES, FX SHEETS, FIVE-GAME TILE PROTOTYPES, FIFTEEN MOBILE CONCEPTS, EDITABLE UGUI STAGES, SOURCE ORIGINAL VERIFICATION AND 5×3 CONTACT SHEET. LAST REAL R20-C008 aa4900aa: PYTHON 189 PASS + 7 WINDOWS SKIP, UNITY 32/32 PASS. R21–R34 NEW CODE UNTESTED ON OWNER UNITY/WINDOWS. OWNER RIGHTS/GUI/DEVICES OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -57,6 +57,12 @@
 
 **Owner-provided actual local outcome:** SHA `aa4900aadec8debfe902ab860c6900eaea229e07` synchronized on local `main`, `origin/main` and GitHub `main` at the end of C008, zero ahead/behind; GitHub independently confirmed this previous remote source. Python 3.12.10 **196 discovered, 189 PASS, 7 OS symlink SKIP, 0 error/fail**; Unity 6000.6.5f1 **32/32 EditMode PASS**, no compiler diagnostic `CS####`. Two test-only commits corrected R18 expected authored Text field count. Structural, TEST_ONLY manifest, VFX five presets checks passed. Report and SHA256SUMS are in owner Windows `C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R20-C008-20261016\\`; raw log bytes not independently read here.
 **Not accepted:** GUI rendered appearance, mobile devices, actual translation quality, original artwork rights, animated VFX shaders/performance and dependent Engine/LFX production gates NOT RUN / OPEN. No paid GitHub Actions, deletion or other repo work was reported.
+
+## VUF-R34 | FIVE GAME 15-SCREEN CONTACT SHEET GENERATOR | SOURCE / BULK TEST OPEN
+
+**New owner review surface:** `factory/ui_composer/contact_sheet.py` reuses the independent `verify_generated_kits.py showcase` 15-image byte/CRC guard before composing a separate 5-column × 3-row PNG contact sheet with tiny original bitmap labels. It records ordered page/theme SHA256/crop receipts and a sheet SHA256. Default no-output receipt, optional explicit never-overwritten new external PNG file. Five new Python source test definitions in `tests/test_concept_contact_sheet.py`. This does not edit original art, import into games, authenticate licensing, or approve owner aesthetics.
+
+**Combined authoring definition estimate since R20-C008:** 84 additional Python methods + 18 Unity EditMode definitions, total **280 Python and 50 Unity** source-defined methods. **NOT tested at R34 source SHA**. C008 original 196 Python total (189 PASS, seven OS symlink skips) and 32 Unity PASS only apply to `aa4900aa`. Owner specifically prefers continued coherent coding and a single eventual Codex regression rather than a test handoff for every small feature. No new Codex task necessary now; GUI/device/rights acceptance strictly remains OPEN.
 
 ## VUF-R32–R33 | EDITABLE FIVE-GAME UI STAGING + SOURCE-ORIGINAL PIXEL VERIFICATION | SOURCE / BATCH GATE OPEN
 
@@ -470,4 +476,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT R21–R33 CONSOLIDATED DIRECT SOURCE AUTHORING. Codex bulk regression NOT YET ASSIGNED; continue remaining coherent work without per-minor-feature handoffs. MUST run one local Python+Unity final SHA suite before GUI/game integration, without GitHub Actions, paid CI, disk cleanup, cross-repo writes or creative/rights PASS claims.
+**CURRENT_OWNER:** CHATGPT VUF R21–R34 SOURCE DEVELOPMENT. No immediate Codex dispatch requested, continue meaningful coding; one later owner-local Python+real Unity 6000.6.5f1 bulk test remains essential before actual product integration. No GitHub Actions, paid API, file/cache cleanup, original asset overwrite or other project modifications.

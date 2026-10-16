@@ -216,3 +216,10 @@ R33 can additionally re-render the original SHA-pinned scene layers and
 compare every output PNG byte with the saved candidate, making explicit
 the difference between receipt-only QA and rechecked originals.
 No game Engine integration, mobile GUI or creative acceptance is implied.
+
+### R34 | One-file five-game concept comparison preview
+An offline Python-generated contact sheet composites all **15 prototype
+Home, Gameplay and World Map images** into a labeled 5×3 comparison PNG.
+The generator validates all 15 original PNG byte receipts before displaying
+them, preserves source files, and optionally saves only to a **new external
+PNG**. Owner review is still required for actual art and real mobile UI.
