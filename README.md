@@ -267,3 +267,12 @@ are recorded in `docs/VUF_DONOR_SOURCE_LEDGER.md`; upstream BSD3 license
 is included in the repository. This is actual reused upstream code,
 not newly invented color/UV mesh logic. Python and Unity tests were
 authored but have not yet executed at the new source SHA.
+
+### R41 | Donor-first dynamic flow layout for Collection previews
+Copied the **actual** BSD-3-Clause Unity UI Extensions `FlowLayoutGroup`
+source from a pinned blob instead of inventing our own wrapping algorithm.
+The editable Home collection cards now have real LayoutElement sizing and
+a wrapping flow layout, allowing responsive candidate authoring at
+different screen widths. Repo attribution/license/provenance is in
+`docs/VUF_DONOR_SOURCE_LEDGER.md`; local Unity Editor and phone layout
+tests have not yet run for R41.

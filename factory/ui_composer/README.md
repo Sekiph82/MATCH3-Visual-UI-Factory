@@ -270,3 +270,14 @@ tests and five Python source checks are authored; local Unity execution
 is still pending for this new batch. The heavy `UILineRenderer` donor
 was inspected and intentionally not imported due transitive primitive,
 Bezier and cable dependencies.
+
+## R41 | Imported ready-made responsive FlowLayoutGroup
+
+`HOME_CollectionSlots` now uses the genuine upstream
+`Unity UI Extensions/FlowLayoutGroup` (BSD-3-Clause) in the editable
+candidate prefab. Four separately editable collection placeholders
+have real `LayoutElement` preferred widths/heights and dynamic wrap
+spacing. The upstream source was copied, not rewritten, with only
+namespace/import changes. Real layout depends on parent geometry and
+must be inspected in actual Unity at portrait/tablet sizes.
+R41 Unity and Python source test definitions are written, not yet run.

@@ -87,12 +87,24 @@ namespace Match3.VisualFactory.Editor
                 new Vector2(.08f, .20f), new Vector2(.46f, .33f), accent);
             RectTransform collection = Panel(parent, "HOME_CollectionSlots",
                 new Vector2(.095f, .205f), new Vector2(.905f, .32f), surface);
+            // Reuse actual Simie/Martin Sharkbomb/Vicente Russo BSD3 flow
+            // LayoutGroup implementation instead of another wrap algorithm.
+            var flow = collection.gameObject.AddComponent<FlowLayoutGroup>();
+            flow.padding = new RectOffset(12, 12, 7, 7);
+            flow.SpacingX = 9f;
+            flow.SpacingY = 5f;
+            flow.ChildForceExpandWidth = false;
+            flow.ChildForceExpandHeight = false;
             for (int i = 0; i < 4; i++)
             {
                 float left = .04f + i * .24f;
-                Panel(collection, "HOME_CollectiblePlaceholder_" + (i + 1).ToString("D2"),
+                RectTransform tile = Panel(collection,
+                    "HOME_CollectiblePlaceholder_" + (i + 1).ToString("D2"),
                     new Vector2(left, .14f), new Vector2(left + .19f, .87f),
                     Color.Lerp(surface, accent, (i % 3 + 1) * .17f));
+                var element = tile.gameObject.AddComponent<LayoutElement>();
+                element.preferredWidth = 104f;
+                element.preferredHeight = 68f;
             }
         }
 

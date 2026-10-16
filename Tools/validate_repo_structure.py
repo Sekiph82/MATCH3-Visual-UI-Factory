@@ -48,6 +48,8 @@ def validate_structure() -> dict:
         "Editor/VufThemeMotifDecor.cs",
         "Editor/ThirdParty/NonDrawingGraphic.cs",
         "Editor/ThirdParty/Gradient.cs",
+        "Editor/ThirdParty/FlowLayoutGroup.cs",
+        "Tests/Editor/VufDonorFlowLayoutEditModeTests.cs",
         "Editor/ThirdParty/UIFlippable.cs",
         "Tests/Editor/VufDonorMeshEffectsEditModeTests.cs",
         "Editor/VufCandidateMotionKit.cs",

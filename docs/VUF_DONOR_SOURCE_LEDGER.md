@@ -42,3 +42,24 @@ Both are BSD-3-Clause under the already vendored `third_party/UnityUIExtensions/
 R39 uses the donor `Gradient` as a `BaseMeshEffect` on the existing editable Home hero/mission, Gameplay HUD and WorldMap canvas. R40 uses actual donor `UIFlippable` horizontally on alternating Dino leaf graphics, allowing authored mirrored leaf sprites without custom UV/mesh rewrite. Four new real Unity NUnit tests (mesh vertex colors, collapsed zero-height safe return, actual flip positions, integrated five-theme UI) and five Python contract/source tests are written, not yet run. No Unity AssetDatabase importer mutation, gameplay binding, shader/device validation or production artwork acceptance. Existing R35–R38 tests also remain unverified.
 
 Rejected upstream `UILineRenderer.cs` for current small world-map use because its dependencies on `UIPrimitiveBase`, `BezierPath`, `CableCurve` and nontrivial mesh stack exceed simple editor line placeholders; do not copy until mature world-map curve editing needs the complete vetted dependency slice. Existing simplified R35 lines remain independent.
+
+## R41 | Fourth real BSD3 donor: responsive wrap layout
+
+Inspected **Unity UI Extensions** `Runtime/Scripts/Layout/FlowLayoutGroup.cs`,
+pinned release commit `d47f838ba918bbb9b26f242bd944940a711f525f`,
+original Git blob `a949d0c23d27124c3347405972cca7bb7a7a3489`.
+Retains original credits to Simie, Martin Sharkbomb, Vicente Russo and
+Ramon Molossi, plus upstream `third_party/UnityUIExtensions/LICENSE.md`
+BSD-3-Clause terms. The real upstream `LayoutGroup` source was copied to
+`unity_package/Editor/ThirdParty/FlowLayoutGroup.cs`, changing ONLY its
+namespace to isolated `Match3.VisualFactory.Editor.ThirdParty` and
+adding explicit UnityEngine/UnityEngine.UI imports. It has no other
+package dependencies and does not create gameplay events.
+
+Home `HOME_CollectionSlots` now uses the ready-made donor wrapping layout
+instead of implementing custom rows: four editable collection cards have
+`LayoutElement` preferred size, simple spacing and can wrap when their
+parent RectTransform narrows. This is a true uGUI LayoutGroup, not an
+image mockup. Two Unity NUnit and three Python source tests authored, NOT
+run locally on current new SHA. Must confirm actual rendered responsive
+geometry in real Unity GUI before owner/phone PASS.
