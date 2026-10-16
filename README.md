@@ -196,3 +196,11 @@ independent `verify_generated_kits.py showcase` validates actual
 15-PNG byte receipts and order first; the Editor viewer checks
 manifest schema, geometry and unapproved stage, not texture SHA bytes.
 New test definitions written for later bulk test checkpoint only.
+
+### R31 | Edge-color extrusion to reduce filtered sprite halos
+New `transparent_rgb_extrusion.py` can prepare a **separate** candidate
+PNG for Unity filtering by spreading neighboring visible RGB only into
+fully transparent pixels. All original alpha and nontransparent RGBA
+bytes are unchanged. Output is strictly opt-in to a **new** external
+file, preserving original owner/source PNGs. This is a code-level
+anti-fringe candidate step, not actual shader/mobile visual QA.

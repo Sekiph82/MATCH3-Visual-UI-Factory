@@ -100,3 +100,27 @@ compositor, not a layered PSD painter, parallax rig or visually approved scene.
 
 `tests/test_layer_compositor.py` adds 12 regression methods; R21 output
 must be tested at its eventual exact final SHA before claiming PASS.
+
+## R31 | Transparent RGB edge bleed for PNG filtering halos
+
+`python -B factory/image_processor/transparent_rgb_extrusion.py --source "D:\\VUF_CANDIDATES\\tile_circle.png" --radius 2`
+
+This asset-tool-only operation **fills RGB of fully transparent pixels**
+outward from nearby nontransparent source pixels while keeping every
+alpha byte and all nontransparent RGBA pixels **bit-identical**. Such
+extrusion helps reduce black/colored fringes when Unity bilinear
+sprite sampling reads transparent texels near sprite edges. The
+propagation is bounded to 1..8 pixels and uses deterministic four-way
+neighbors with fixed tie order. A radius of 2 is the default.
+
+The source PNG must be existing and external to Git. Without
+`--output-file`, results are computed in memory and only a JSON hash
+receipt is printed. An explicit output destination must be a **NEW**
+external PNG file with no overwrite. Original art stays unchanged.
+No actual TextureImporter, mipmap or mobile GPU sampling behavior is
+verified here, and it is not permission to modify owner-approved art.
+
+11 new Python regression case definitions cover alpha invariance,
+partial alpha, radius cutoff, reproducibility, invalid inputs, default
+no-output and never-overwrite. New R31 tests have NOT been executed
+locally on the owner's Windows checkout.

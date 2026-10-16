@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R21–R30 CONSOLIDATED VISUAL AUTHORING SOURCE: REAL PNG SCENES, FIVE THEME TILE PROTOTYPES, PROCEDURAL FX, TRUE FX .anim, PLUS 15 PORTRAIT CONCEPT SCREENS + UNITY GALLERY + EXTERNAL BUNDLE BYTE VERIFIER. LATEST ACTUAL TEST: R20-C008 aa4900aa: PYTHON 189 PASS / 7 WINDOWS SYMLINK SKIP, UNITY 32/32 PASS. R21–R30 NOT YET EXECUTED ON OWNER WINDOWS. PREMIUM ART/REAL GUI/PHONE OPEN.
+**Status:** VUF R21–R31 CONSOLIDATED VISUAL AUTHORING SOURCE: PNG LAYERED SCENES, 5-GAME TILE KITS, PROCEDURAL VFX, .anim EXPORT, 15 PORTRAIT CONCEPT PNGS, INDEPENDENT SHA VERIFIER AND TRANSPARENT RGB HALO PREVENTION. LAST REAL TEST R20-C008 aa4900aa: PYTHON 189 PASS + 7 WINDOWS SKIP, UNITY 32/32 PASS. R21–R31 NOT YET LOCALLY TESTED. GUI/OWNER ART/PHONES OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -57,6 +57,12 @@
 
 **Owner-provided actual local outcome:** SHA `aa4900aadec8debfe902ab860c6900eaea229e07` synchronized on local `main`, `origin/main` and GitHub `main` at the end of C008, zero ahead/behind; GitHub independently confirmed this previous remote source. Python 3.12.10 **196 discovered, 189 PASS, 7 OS symlink SKIP, 0 error/fail**; Unity 6000.6.5f1 **32/32 EditMode PASS**, no compiler diagnostic `CS####`. Two test-only commits corrected R18 expected authored Text field count. Structural, TEST_ONLY manifest, VFX five presets checks passed. Report and SHA256SUMS are in owner Windows `C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R20-C008-20261016\\`; raw log bytes not independently read here.
 **Not accepted:** GUI rendered appearance, mobile devices, actual translation quality, original artwork rights, animated VFX shaders/performance and dependent Engine/LFX production gates NOT RUN / OPEN. No paid GitHub Actions, deletion or other repo work was reported.
+
+## VUF-R31 | TRANSPARENT RGB EXTRUSION TO MITIGATE SPRITE SAMPLING HALOS | SOURCE / BATCH TEST OPEN
+
+**VF-04 asset fidelity:** `factory/image_processor/transparent_rgb_extrusion.py` expands RGB from nearest visible alpha pixels into surrounding fully transparent source pixels up to a 1–8px radius using deterministic four-way BFS, while preserving **all alpha bytes and all original nontransparent RGBA bytes exactly**. Can reduce dark fringes from bilinear texture filtering, without editing original PNGs. Default CLI makes an in-memory candidate+JSON receipt; optional explicit `--output-file` creates a NEW outside-Git PNG (never overwrite), SHA-pinned. No TextureImporter, shader/mobile visual tests or approved artwork edits. Eleven new Python test definitions in `tests/test_transparent_rgb_extrusion.py` authored, **not run on owner Windows**.
+
+**Consolidated current source estimate:** 267 Python test methods (196 last real C008 plus 71 new), 46 Unity EditMode definitions (32 last C008 plus 14 new), **NOT proof of a test PASS at R31 SHA**. The user prefers larger development batches, so Codex is NOT dispatched after each addition; schedule one later full Windows Python+Unity regression before engine/game integration or user QA sign-off. No GitHub Actions/paid services, cache deletion, original-art approval, physical devices or future work claims.
 
 ## VUF-R28–R30 | FIVE GAME 15-SCREEN CONCEPT GENERATION + REVIEW | SOURCE / BATCH TEST OPEN
 
@@ -456,4 +462,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT R21–R30 DIRECT SOURCE AUTHORING. Batch still untested on owner machine; continue meaningful asset workflows before scheduling a SINGLE no-cost local Python/Unity test gate. Do not trigger Github Actions/paid AI, delete local files/caches, write unrelated repos or claim GUI/physical-device/owner-rights PASS.
+**CURRENT_OWNER:** CHATGPT R21–R31 SOURCE DEVELOPMENT, CONTINUE MEANINGFUL AUTHORING CODE IN COHERENT BATCHES. OWNER SAYS NO IMMEDIATE CODEX TEST REQUIRED; ONE LATER LOCAL PYTHON/UNITY GATE BEFORE ENGINE IMPORT, LIVE UI, GPU/DEVICE OR PRODUCTION. NO paid Actions, user file/cache cleanup or cross-repo writes.
