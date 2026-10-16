@@ -45,6 +45,11 @@ class DonorMeshEffectsContracts(unittest.TestCase):
         self.assertIn("image.raycastTarget = false;",self.page)
         self.assertIn("image.raycastTarget = false;",self.motif)
 
+    def test_gradient_mode_enum_is_unambiguous_in_unity_sources(self):
+        expected = "Match3.VisualFactory.Editor.ThirdParty.GradientMode.Global"
+        self.assertIn(expected, self.page)
+        self.assertIn(expected, self.nunit)
+
     def test_editor_nunit_and_meta_guards_present(self):
         self.assertEqual(self.nunit.count("[Test]"),4)
         self.assertIn("UpstreamGradientCanShadeARealUiImage",self.nunit)

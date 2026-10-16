@@ -37,7 +37,8 @@ namespace Match3.VisualFactory.Tests
                 image.raycastTarget = false;
                 var donor = obj.GetComponent<Match3.VisualFactory.Editor.ThirdParty.Gradient>();
                 donor.OverwriteAllColor = true;
-                donor.GradientMode = GradientMode.Global;
+                donor.GradientMode =
+                    Match3.VisualFactory.Editor.ThirdParty.GradientMode.Global;
                 donor.GradientDir = GradientDir.Vertical;
                 donor.Vertex1 = Color.white;
                 donor.Vertex2 = Color.black;
