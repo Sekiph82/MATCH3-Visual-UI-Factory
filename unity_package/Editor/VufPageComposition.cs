@@ -77,6 +77,25 @@ namespace Match3.VisualFactory.Editor
                 Color.Lerp(surface, accent, .68f));
             Label(hero, "HOME_HeroCaption", "HERO / MASCOT ART SLOT",
                 new Vector2(.07f, .03f), new Vector2(.93f, .18f), 20, ink);
+            // R42 donor-first: reuse upstream MIT/BSD3 RadialLayout
+            // instead of implementing our own orbital positioning.
+            RectTransform orbit = Node(hero, "HOME_OrbitLayout_AUTHORING_ONLY",
+                Vector2.zero, Vector2.one);
+            var radial = orbit.gameObject.AddComponent<RadialLayout>();
+            radial.OnlyLayoutVisible = false;
+            radial.fDistance = 135f;
+            radial.MinAngle = 0f;
+            radial.MaxAngle = 360f;
+            radial.StartAngle = 18f;
+            for (int i = 0; i < 5; i++)
+            {
+                RectTransform badge = Panel(orbit,
+                    "HOME_OrbitBadge_STATIC_" + (i + 1).ToString("D2"),
+                    new Vector2(.5f, .5f), new Vector2(.5f, .5f),
+                    Color.Lerp(surface, accent, (i + 2f) / 8f));
+                badge.sizeDelta = new Vector2(28f, 28f);
+            }
+            radial.CalculateLayoutInputHorizontal();
             RectTransform quest = Panel(parent, "HOME_DailyMissionCard",
                 new Vector2(.095f, .34f), new Vector2(.905f, .45f), surface);
             Label(quest, "HOME_MissionTitle", "DAILY QUEST | MOCK",

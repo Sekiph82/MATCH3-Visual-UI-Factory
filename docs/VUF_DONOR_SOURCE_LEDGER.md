@@ -73,3 +73,31 @@ disclaimer and redistribution conditions, so an extracted standalone
 copy is `third_party/UnityUIExtensions/LICENSE.md`. A stable .meta GUID
 for the notice is committed. Neither notice implies a warranty or
 license to original third-party sprites, textures, fonts or demo art.
+
+## R42 | Fifth direct donor: responsive radial Home badge orbit
+
+PRE-CODE DONOR CHECK: inspected actual GitHub upstream source
+`Unity-UI-Extensions/com.unity.uiextensions` at pinned release commit
+`d47f838ba918bbb9b26f242bd944940a711f525f`:
+`Runtime/Scripts/Layout/RadialLayout.cs`, Git blob
+`fc07fac023536cd54f350e8aa3d06c2015c1782c`.
+Original contributor Danny Goodayle and the embedded 2015 MIT
+copyright/permission/disclaimer are retained, along with BSD-3-Clause
+package notices already in `unity_package/NOTICE-UnityUIExtensions.md`.
+Source copied directly as `unity_package/Editor/ThirdParty/RadialLayout.cs`.
+MINIMAL_ADAPTER: added namespace isolation and explicit Unity using
+directives; added ONE guard for zero active visible children when
+`OnlyLayoutVisible` is true, preventing divide by zero.
+No new radial placement algorithm was developed.
+
+R42 reuses this `LayoutGroup` on
+`HOME_HeroArtworkPlaceholder/HOME_OrbitLayout_AUTHORING_ONLY`:
+five separately editable, input-disabled geometric prototype badges,
+with initial 135px radius, 0–360° and user-configurable StartAngle in
+Unity Inspector. Orbit badges are mathematical placeholders, not
+commercial icons, mascot art or live rewards. At source time three
+Unity EditMode tests (five badge positions, all-inactive safe branch,
+rotation after angle edit) and three Python donor/provenance contracts
+are AUTHORED, NOT owner-local tested.
+Donor disposition: DIRECT_REUSE + MINIMAL_ADAPTER (one null-visible guard);
+license MIT embedded + BSD3 package notice, no package install or service.

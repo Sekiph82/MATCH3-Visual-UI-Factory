@@ -280,3 +280,12 @@ tests have not yet run for R41.
 **Third-party redistribution:** Standalone Unity package recipients must
 retain `unity_package/NOTICE-UnityUIExtensions.md`, the verbatim
 BSD-3-Clause copyright, conditions and disclaimer for copied components.
+
+### R42 | Fifth GitHub donor, actual radial layout for editable Home badges
+Copied proven Unity UI Extensions `RadialLayout` with full retained
+upstream embedded MIT and bundled BSD3 notices, adapting only namespace,
+imports and zero-active-item guard. Home candidate prefab contains five
+noninteractive independently editable orbit badges around its central
+hero; inspector can tune radius/start angle without custom geometry code.
+Actual Editor/phone rendering, original art/rights and new tests remain
+OPEN until one local Unity 6000.6.5f1 bulk verification.

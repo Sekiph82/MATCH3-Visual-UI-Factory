@@ -281,3 +281,14 @@ spacing. The upstream source was copied, not rewritten, with only
 namespace/import changes. Real layout depends on parent geometry and
 must be inspected in actual Unity at portrait/tablet sizes.
 R41 Unity and Python source test definitions are written, not yet run.
+
+## R42 | Reused radial UI LayoutGroup for Home hero orbit
+
+The editable Home art stage now includes five individual
+`HOME_OrbitBadge_STATIC_##` cells arranged using the real
+`Unity UI Extensions RadialLayout` donor rather than custom trig.
+The donor component can be adjusted directly in the Unity Inspector
+(radius/angles). Original Danny Goodayle credit, embedded MIT notice
+and publisher BSD3 notice are retained. This is authoring geometry
+with no active touch, reward or game state. Three new Editor NUnit
+and three Python provenance tests are authored but NOT YET RUN.
