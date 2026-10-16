@@ -159,11 +159,49 @@ namespace Match3.VisualFactory.Editor
             }
         }
 
+        private static bool HasTopLevelProperty(string json, string property)
+        {
+            int depth = 0;
+            for (int i = 0; i < json.Length; ++i)
+            {
+                char current = json[i];
+                if (current == '"')
+                {
+                    int start = i + 1;
+                    int end = start;
+                    bool escaped = false;
+                    for (; end < json.Length; ++end)
+                    {
+                        char item = json[end];
+                        if (escaped) { escaped = false; continue; }
+                        if (item == '\\') { escaped = true; continue; }
+                        if (item == '"') break;
+                    }
+                    if (end >= json.Length) return false;
+                    if (depth == 1 && json.Substring(start, end - start) == property)
+                    {
+                        int next = end + 1;
+                        while (next < json.Length && Char.IsWhiteSpace(json[next])) next++;
+                        if (next < json.Length && json[next] == ':') return true;
+                    }
+                    i = end;
+                }
+                else if (current == '{') depth++;
+                else if (current == '}') depth--;
+            }
+            return false;
+        }
+
         internal static Report ParseReport(string source)
         {
             if (String.IsNullOrEmpty(source) || source.Length > 800000)
                 throw new ArgumentException("missing or oversized report text");
             var result = JsonUtility.FromJson<Report>(source);
+            // JsonUtility materializes empty nested classes even when an optional
+            // object is absent. The Python exporter omits palette_review unless
+            // a profile was requested, so preserve that distinction explicitly.
+            if (result != null && !HasTopLevelProperty(source, "palette_review"))
+                result.palette_review = null;
             if (result == null || result.schema_version != 1 ||
                 result.stage != "REVIEW_REQUIRED_NOT_OWNER_APPROVED" ||
                 result.generator != "VF09_PIXEL_HEALTH_V01" ||
