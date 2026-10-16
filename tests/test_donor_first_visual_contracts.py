@@ -61,6 +61,7 @@ class DonorFirstVisualContracts(unittest.TestCase):
         second = (ROOT / "unity_package/Tests/Editor/"
                   "VufCandidateMotionReuseEditModeTests.cs").read_text()
         self.assertEqual(first.count("[Test]"), 2)
+        self.assertIn('new[] { typeof(VertexHelper) }', first)
         self.assertEqual(second.count("[Test]"), 3)
 
     def test_no_prohibited_restricted_or_engine_donors_vendored(self):

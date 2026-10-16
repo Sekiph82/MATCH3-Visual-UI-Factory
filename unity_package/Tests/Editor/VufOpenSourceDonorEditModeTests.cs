@@ -22,7 +22,8 @@ namespace Match3.VisualFactory.Tests
                 Assert.That(root.GetComponent<Image>(), Is.Null);
                 // This directly exercises the donor's empty-mesh effect.
                 MethodInfo render = typeof(NonDrawingGraphic).GetMethod(
-                    "OnPopulateMesh", BindingFlags.NonPublic | BindingFlags.Instance);
+                    "OnPopulateMesh", BindingFlags.NonPublic | BindingFlags.Instance,
+                    null, new[] { typeof(VertexHelper) }, null);
                 Assert.That(render, Is.Not.Null);
                 using (var vh = new VertexHelper())
                 {
