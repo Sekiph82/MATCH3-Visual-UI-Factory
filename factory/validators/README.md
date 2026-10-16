@@ -31,3 +31,21 @@ dispatch only to prevent unexpected per-commit runner costs.
 ## R16 static sprite health QA
 
 Use `python -B factory/validators/visual_qa.py --source <PNG> --profile Coral_Rescue`. Advisory metrics: alpha coverage, visible bounds, colored transparency, matte-fringe hints and draft palette contrast. Optional `--output-file` writes a NEW external JSON report. The read-only Unity `Sprite Pixel Health QA` Editor panel inspects a JSON TextAsset copy. This never approves art or tests real device rendering. The 19 new Python cases require local execution at the R16 SHA.
+
+
+## R20 integrated review evidence board
+Select `Tools > MATCH3 > Review Evidence Board` from Unity Editor or the
+Factory Dashboard. Optionally select a candidate prefab and previously
+inspected `VF09_PIXEL_HEALTH_V01` + `OFFLINE_DRAFT_COVERAGE_V01`
+JSON TextAssets. The window validates report stages and summarizes data
+from the pixel, language and responsive/typography inspectors across
+five synthetic device presets, without modifying assets or calling APIs.
+Missing input creates a visible outstanding evidence gate.
+
+This tool **never authorizes production or shipping**, even if every
+source-only metric reports no warnings. It always keeps original art
+rights, human creative/aesthetic approval, live GUI interaction, physical
+iOS/Android device QA, and Engine/LFX integration in OPEN state.
+An external copied JSON report does not prove artwork ownership or that
+any person accepted an asset. Full dependency, legal and device evidence
+must be documented and reviewed independently.

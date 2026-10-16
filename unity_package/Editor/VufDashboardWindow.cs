@@ -57,6 +57,8 @@ namespace Match3.VisualFactory.Editor
                 VufTypographyLabWindow.Open();
             if (GUILayout.Button("Localization Coverage Studio (read-only)", GUILayout.Height(30)))
                 VufLocaleCoverageWindow.Open();
+            if (GUILayout.Button("Review Evidence Board (all QA gates)", GUILayout.Height(32)))
+                VufReadinessBoardWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Preview", GUILayout.Height(34)))

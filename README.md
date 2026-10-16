@@ -137,3 +137,15 @@ New `Tools > MATCH3 > Localization Coverage Studio` is a **read-only**
 Unity report viewer. No translation is approved, no runtime UI or game
 state is changed, no cloud translation/payment is invoked. R19 source,
 new Python/Unity tests need a later batched local regression.
+
+
+### R20 | Integrated read-only evidence board
+`Tools > MATCH3 > Review Evidence Board` now collates optional VF-09
+pixel-health JSON, draft EN/TR localization coverage JSON and an actual
+unapproved uGUI candidate. It checks each imported report's own schema
+and derives static geometry, typography and contrast warnings across all
+five synthetic viewport presets. **Five mandatory gates remain OPEN**:
+real original art rights, owner aesthetics, live Unity GUI, real physical
+devices, and independent Engine/Level Factory integration. The board has
+no approval/packaging/export/save ability. Three new Editor-only NUnit
+tests plus three Python source guards are authored but not yet executed.
