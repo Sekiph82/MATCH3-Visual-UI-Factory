@@ -44,7 +44,10 @@ namespace Match3.VisualFactory.Tests
                         VufResponsiveGeometry.Presets[0]);
                     Assert.That(report.DeviceName,
                         Is.EqualTo(VufResponsiveGeometry.Presets[0].Name));
-                    Assert.That(report.Items.Count, Is.GreaterThan(4));
+                    Assert.That(report.Items.Count, Is.EqualTo(4),
+                        "Each candidate screen exposes heading, content, action and review-state text slots.");
+                    Assert.That(report.Items.TrueForAll(item => item.MeasurementAvailable),
+                        Is.True, "Every authored text slot must receive a real TextGenerator measurement.");
                     Assert.That(root.GetComponent<VufCandidateScreenMarker>().CandidateStatus,
                         Is.EqualTo("CANDIDATE_NOT_APPROVED"));
                     Assert.That(FindText(root, "Heading").text, Is.EqualTo(heading));
@@ -109,7 +112,10 @@ namespace Match3.VisualFactory.Tests
                 foreach (var device in VufResponsiveGeometry.Presets)
                 {
                     var report = VufTypographyAudit.Analyze(root, device);
-                    Assert.That(report.Items.Count, Is.GreaterThan(4));
+                    Assert.That(report.Items.Count, Is.EqualTo(4),
+                        "Each candidate screen exposes four authored text slots.");
+                    Assert.That(report.Items.TrueForAll(item => item.MeasurementAvailable),
+                        Is.True, "Every authored text slot must receive a real TextGenerator measurement.");
                     Assert.That(report.OverflowCount, Is.GreaterThanOrEqualTo(0));
                     Assert.That(report.LowContrastCount, Is.GreaterThanOrEqualTo(0));
                     Assert.That(report.DeviceName, Is.EqualTo(device.Name));
