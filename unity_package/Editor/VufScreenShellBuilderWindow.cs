@@ -19,6 +19,7 @@ namespace Match3.VisualFactory.Editor
         private int profileIndex;
         private int screenIndex;
         private int previewStateIndex;
+        private int previewLocaleIndex;
         private string[] labels;
         private bool showCandidateGate = true;
 
@@ -74,9 +75,10 @@ namespace Match3.VisualFactory.Editor
             }
             profileIndex = EditorGUILayout.Popup("Draft Style Bible", profileIndex, Profiles);
             screenIndex = EditorGUILayout.Popup("Screen", screenIndex, labels);
-            previewStateIndex = EditorGUILayout.Popup("Review-only label",
-                previewStateIndex, new[] { "Ready", "Loading", "Offline", "Error",
-                    "Owned", "Claimed", "Disabled", "Pending" });
+            previewStateIndex = EditorGUILayout.Popup("Review-only state",
+                previewStateIndex, VufReviewStateCatalog.States);
+            previewLocaleIndex = EditorGUILayout.Popup("Draft copy locale",
+                previewLocaleIndex, new[] { "English mock", "Turkish mock", "Expanded stress mock" });
             showCandidateGate = EditorGUILayout.Toggle("Show binding warning", showCandidateGate);
             var selected = screens[screenIndex];
             EditorGUILayout.LabelField("Stable ID", selected.id);
@@ -178,6 +180,9 @@ namespace Match3.VisualFactory.Editor
             GameObject root = BuildCandidateHierarchy(spec, style, showCandidateGate);
             try
             {
+                VufReviewStateCatalog.Apply(root, spec,
+                    VufReviewStateCatalog.States[previewStateIndex],
+                    VufReviewStateCatalog.Locales[previewLocaleIndex]);
                 GameObject asset = PrefabUtility.SaveAsPrefabAsset(root, path);
                 if (asset == null)
                     throw new InvalidOperationException("Unity prefab writer returned null");
@@ -272,6 +277,10 @@ namespace Match3.VisualFactory.Editor
                     spec.id + " | " + gate + " | CANDIDATE",
                     new Vector2(.04f, .015f), new Vector2(.96f, .07f),
                     19, font);
+                Label(safe, "ReviewState_AlwaysVisible",
+                    "MOCK READY / EN / NOT GAME STATE",
+                    new Vector2(.06f, .765f), new Vector2(.94f, .802f),
+                    17, font);
                 if (includeOwnerReviewWarning)
                     Label(safe, "OwnerReviewWarning",
                         "OWNER ART AND DEVICE QA NOT COMPLETE",

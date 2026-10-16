@@ -103,6 +103,24 @@ class CoralScreenShellContracts(unittest.TestCase):
         self.assertNotIn("GrantReward", runtime)
         self.assertNotIn("PlayerPrefs", runtime)
 
+    def test_review_state_contract_guards_synthetic_locales_and_actions(self):
+        code = (ROOT / "unity_package/Editor/VufReviewStateCatalog.cs").read_text()
+        self.assertIn('"en", "tr", "stress"', code)
+        self.assertIn('"Owned", "Claimed", "Disabled", "Pending"', code)
+        self.assertIn('CANDIDATE_NOT_APPROVED', code)
+        self.assertIn('GetPersistentEventCount()', code)
+        self.assertIn('!Contains(States, state)', code)
+        self.assertNotIn('PlayerPrefs', code)
+        self.assertNotIn('GrantReward', code)
+
+    def test_shell_builder_binds_review_copy_to_visible_mock_only(self):
+        shell = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
+        self.assertIn('ReviewState_AlwaysVisible', shell)
+        self.assertIn('VufReviewStateCatalog.Apply(root, spec,', shell)
+        self.assertIn('VufReviewStateCatalog.Locales[previewLocaleIndex]', shell)
+        self.assertIn('button.interactable = false', shell)
+        self.assertIn('OFF_UNTIL_ENGINE_POLICY_CONFIRMED', shell)
+
     def test_four_page_types_have_distinct_shell_layouts(self):
         script = (ROOT / "unity_package/Editor/VufScreenShellBuilderWindow.cs").read_text()
         for section in ("MODAL OR REWARD CEREMONY", "ENGINE BOARD SLOT",

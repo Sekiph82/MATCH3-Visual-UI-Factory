@@ -101,3 +101,15 @@ python Tools/validate_manifest.py Samples~/sample_manifest.json
 ## Design and ownership
 
 See [architecture](docs/ARCHITECTURE.md) and root [TASKS.md](TASKS.md) for the VF-01..VF-10 module map, VUF-M00..M11 milestones, development sequence and protected upstream integration gates. Google Drive carries prompts and audit evidence, not GitHub. No production game asset pixels are imported into MATCH3_ENGINE.
+
+
+## R17 | Draft UI state and bilingual/stress copy review
+The **28-Screen Shell Builder** now offers **8 review-only UI state labels**
+(Ready/Loading/Offline/Error/Owned/Claimed/Disabled/Pending) and three
+non-shipping mock copy modes: English, Turkish draft, and deliberately
+expanded stress text. Selected mock values are written only onto **NEW**
+candidate-only prefabs at manual save. Preview code cannot enable Buttons,
+attach Engine callbacks, publish art or approve a product. English/Turkish
+copy is not finalized localization. Source-defined R17 validation covers
+28 × 8 × 3 combinations and five Style Bible profiles; real Unity import,
+rendering, typography, overflow and devices still require separate tests.

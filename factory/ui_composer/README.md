@@ -40,3 +40,22 @@ animation, fully working layout, game source, rewards, purchases, localization,
 real screen actions, original rights or owner aesthetic approvals are implied.
 The Unity Editor has not actually compiled these R08 changes yet. Test on
 Unity 6000.6.5f1 before claiming runtime readiness. 
+
+
+## R17: review-only state and locale copy stress
+`VufReviewStateCatalog.cs` is deliberately an **Editor-only mock copy
+utility**, NOT a runtime game state machine or complete translation table.
+All eight possible review state labels can be inspected across all 28 Coral
+draft screens using one of: `en`, `tr`, `stress`. Only Home and Gameplay
+have explicit Turkish **draft** titles; other screens are visibly marked
+`TR TASLAK` pending localization. Expanded stress copy is a synthetic
+layout hazard probe, not shipping text. Every mock label also states
+`NOT GAME STATE`.
+The 28-Screen Shell Builder keeps actual gameplay action Buttons disabled,
+feature-policy banners unchanged and candidate approval stage unmodified.
+It allows manually saving only **new** named candidate prefabs (no overwrite).
+`VufReviewStateEditModeTests.cs` defines three NEW EditMode tests covering
+672 state/locale/Coral combinations, invalid state/locale rejection,
+unchanged policy gates and five-profile palette preservation. These tests
+and two source checks have not been run at R17 exact SHA. No source art,
+copyright acceptance or real device UI is involved.
