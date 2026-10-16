@@ -1,6 +1,6 @@
 # MATCH3 Visual & UI Factory | TASKS.md
 
-**Status:** VUF R21-R26 PRODUCTIVE ART/AUTHORING SOURCE BATCH: RGBA LAYER SCENE, PROCEDURAL FX SHEETS, FIVE-THEME SIX-SHAPE TILE KITS, SAFE UNITY .anim EXPORT AND INDEPENDENT BUNDLE CHECKS. LAST REAL R20-C008 SHA aa4900aa: PYTHON 189 PASS + 7 WIN SYMLINK SKIP; UNITY EDITMODE 32/32 PASS. R21-R26 NEW CODE NOT YET TESTED. REAL GUI/DEVICE/ART OPEN.
+**Status:** VUF R21–R27 FEATURE BATCH: REAL SOURCE-BASED RGBA SCENES, PROCEDURAL FX PNG, ALL FIVE GAME TILE ART PROTOTYPES, TRUE UNITY .anim FX EXPORT, BUNDLE SHA CHECKS, READ-ONLY UNITY TILE INSPECTOR. CURRENT BATCH NOT YET LOCALLY TESTED. LAST REAL R20-C008 at aa4900aa: PYTHON 189 PASS + 7 WINDOWS SKIP, UNITY 32/32 PASS. GUI/PHONE/OWNER-ART OPEN.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -57,6 +57,12 @@
 
 **Owner-provided actual local outcome:** SHA `aa4900aadec8debfe902ab860c6900eaea229e07` synchronized on local `main`, `origin/main` and GitHub `main` at the end of C008, zero ahead/behind; GitHub independently confirmed this previous remote source. Python 3.12.10 **196 discovered, 189 PASS, 7 OS symlink SKIP, 0 error/fail**; Unity 6000.6.5f1 **32/32 EditMode PASS**, no compiler diagnostic `CS####`. Two test-only commits corrected R18 expected authored Text field count. Structural, TEST_ONLY manifest, VFX five presets checks passed. Report and SHA256SUMS are in owner Windows `C:\\Users\\sekip\\Documents\\MATCH3_TEST_EVIDENCE\\VUF-R20-C008-20261016\\`; raw log bytes not independently read here.
 **Not accepted:** GUI rendered appearance, mobile devices, actual translation quality, original artwork rights, animated VFX shaders/performance and dependent Engine/LFX production gates NOT RUN / OPEN. No paid GitHub Actions, deletion or other repo work was reported.
+
+## VUF-R27 | UNITY FIVE-GAME TILE KIT PREVIEW | SOURCE / TEST OPEN
+
+**Unity tool:** `unity_package/Editor/VufTileKitInspectorWindow.cs` adds an Atlas Texture2D + imported R25 tile JSON manifest inspector under `Tools > MATCH3 > Five-Game Tile Kit Inspector`. UI draws actual candidate PNG texture with the six selectable geometric silhouette cells, displays five-game theme identity and candidate state. Parser rejects noncandidate/forged-approval manifests, unknown profiles, wrong 3×2 crop grid, missing SHA receipt formats and duplicate/misordered six-shape contract. It never edits SpriteImporter, source PNG, original artwork or game state; does not independently hash Unity Texture2D bytes. Three authored NUnit test cases in `VufTileKitInspectorEditModeTests.cs` and stable .meta GUIDs. Dashboard and package source guard updated.
+
+**R21–R27 accumulated new source definitions since last actual C008:** 43 new Python + 10 Unity EditMode, reaching approx **239 Python and 42 Unity NUnit authored tests**, NOT locally executed at R27 exact SHA. **Policy:** continue combined work; ONE cost-free owner-local Windows Python/Unity gate when the next integrated batch is ready, not per small task. No visual/physical device/rights approval claims.
 
 ## VUF-R24–R26 | FX CLIP BRIDGE, FIVE-THEME TILE PNG AND BUNDLE BYTE VERIFICATION | SOURCE / TEST GATE OPEN
 
@@ -440,4 +446,4 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - Five games: G01-001..011 original visual identity/production, G02 view binding/animations, G09 responsive/accessibility, G10 packaging cleanliness and G11 owner device acceptance consume specifically pinned approved VUF packs. No final-themed asset production in Engine or LFX.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
-**CURRENT_OWNER:** CHATGPT VUF R21–R26 COMBINED SOURCE DEVELOPMENT. NEXT: continue authoring capability improvements, then ONE owner-local Codex Python + actual Unity test on exact combined SHA; do NOT dispatch GitHub Actions, paid APIs or destructive local cleanup. GUI/visual/rights/mobile/ENG/LFX gates remain OPEN.
+**CURRENT_OWNER:** CHATGPT R21–R27 CONSOLIDATED VISUAL AUTHORING SOURCE. NEXT: source QA on the integrated batch, followed by ONE local Windows/Unity Codex validation only at full batch milestone. No GitHub Actions, paid API, local cleanup, unrelated repo edits or owner rights/device/GUI approval claims.

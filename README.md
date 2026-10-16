@@ -170,3 +170,10 @@ a 3x2 atlas for all five draft palettes. R26 independently checks real
 candidate FX/tile/scene output PNG hashes, frame and atlas pixel geometry.
 They are not high-end final artwork, approved device/GUI output or
 shipping gameplay. Local exact-SHA new tests remain OPEN.
+
+### R27 | Unity five-game prototype tile atlas inspector
+The Dashboard now opens a read-only **Five-Game Tile Kit Inspector** for
+the six mathematically generated R25 shape sprites. It checks per-cell
+atlas bounds, theme profile and strictly non-approved manifest fields.
+It is not an art quality grader or real iOS/Android output; the complete
+R21–R27 source batch awaits one genuine local Unity/Python regression.

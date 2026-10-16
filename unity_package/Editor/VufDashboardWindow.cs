@@ -80,6 +80,8 @@ namespace Match3.VisualFactory.Editor
                 VufFxSheetPreviewWindow.Open();
             if (GUILayout.Button("Procedural FX to .anim Exporter", GUILayout.Height(30)))
                 VufFxClipExporterWindow.Open();
+            if (GUILayout.Button("Five-Game Tile Kit Inspector", GUILayout.Height(30)))
+                VufTileKitInspectorWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Atlas Inspector", GUILayout.Height(32)))

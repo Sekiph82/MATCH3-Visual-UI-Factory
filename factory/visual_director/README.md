@@ -20,3 +20,16 @@ gameplay or grants owner rights/approval.
 
 `tests/test_silhouette_kit.py` includes ten authored Python tests.
 These remain unexecuted on R25 source until a later local batch.
+
+## R27 | Read-only Unity five-game tile kit inspector
+
+After generating a `tile_atlas.png` candidate with R25, import a COPY
+of its PNG and JSON manifest into Unity. Select both in
+`Tools > MATCH3 > Five-Game Tile Kit Inspector`. The inspector refuses
+forged owner rights/approval and broken identity, 3x2 cell coordinates,
+six silhouettes or SHA receipt formats. It draws the actual candidate
+atlas texture with per-cell highlights; the real bytes must be separately
+verified using `verify_generated_kits.py tiles` before inspection.
+No SpriteImporter edits, gameplay bindings, production art acceptance or
+phone performance claims. Three NUnit EditMode methods authored; GUI and
+actual Unity import remain NOT RUN until the consolidated local gate.
