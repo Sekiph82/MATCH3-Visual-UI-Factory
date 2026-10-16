@@ -41,7 +41,8 @@ namespace Match3.VisualFactory.Editor
             {
                 var gradient = rect.gameObject.AddComponent<
                     Match3.VisualFactory.Editor.ThirdParty.Gradient>();
-                gradient.GradientMode = GradientMode.Global;
+                gradient.GradientMode =
+                    Match3.VisualFactory.Editor.ThirdParty.GradientMode.Global;
                 gradient.GradientDir = GradientDir.Vertical;
                 gradient.OverwriteAllColor = true;
                 gradient.Vertex1 = Color.white;

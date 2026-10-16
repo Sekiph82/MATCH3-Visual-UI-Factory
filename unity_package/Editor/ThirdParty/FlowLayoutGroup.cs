@@ -50,7 +50,7 @@ namespace Match3.VisualFactory.Editor.ThirdParty
 			{
 				base.CalculateLayoutInputHorizontal();
 				var minWidth = GetGreatestMinimumChildWidth() + padding.left + padding.right;
-				SetLayoutInputForAxis(minWidth, -1, -1, 0);
+				SetLayoutInputForAxis(minWidth, -1, -1, -1, 0);
 			}
 			else
 			{
@@ -79,7 +79,7 @@ namespace Match3.VisualFactory.Editor.ThirdParty
 			{
 				base.CalculateLayoutInputHorizontal();
 				var minHeight = GetGreatestMinimumChildHeigth() + padding.bottom + padding.top;
-				SetLayoutInputForAxis(minHeight, -1, -1, 1);
+				SetLayoutInputForAxis(minHeight, -1, -1, -1, 1);
 			}
 		}
 
@@ -280,7 +280,7 @@ namespace Match3.VisualFactory.Editor.ThirdParty
 
 			if (layoutInput)
 			{
-				SetLayoutInputForAxis(offset, offset, -1, axis);
+				SetLayoutInputForAxis(offset, -1, offset, -1, axis);
 			}
 			return offset;
 		}

@@ -26,6 +26,11 @@ class DonorFlowContracts(unittest.TestCase):
         self.assertIn("element.preferredHeight = 68f",self.page)
         self.assertIn("image.raycastTarget = false",self.page)
 
+    def test_layout_input_calls_match_unity_6_axis_signature(self):
+        self.assertIn("SetLayoutInputForAxis(minWidth, -1, -1, -1, 0)", self.donor)
+        self.assertIn("SetLayoutInputForAxis(minHeight, -1, -1, -1, 1)", self.donor)
+        self.assertIn("SetLayoutInputForAxis(offset, -1, offset, -1, axis)", self.donor)
+
     def test_stable_meta_and_genuine_nunit_definitions(self):
         self.assertTrue((ROOT/"unity_package/Editor/ThirdParty/FlowLayoutGroup.cs.meta").exists())
         self.assertTrue((ROOT/"unity_package/Tests/Editor/VufDonorFlowLayoutEditModeTests.cs.meta").exists())
