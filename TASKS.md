@@ -46,6 +46,11 @@
 **Tested and published final SHA:** `05566214e6bae0561885f46655f0caf9492c344f`. Python 3.12.10 **170 total, 163 PASS, 7 Windows symlink SKIP, 0 fail/error**; Unity 6000.6.5f1 EditMode **18/18 PASS**, no reported compiler CS errors or warnings. C006 fixed candidate sprite bbox test expectation and hardened Unity pixel-health report against malformed alpha/bbox/contrast metrics and forged rights/approval status; optional palette exporter shape covered. Five VFX presets, design contracts, TEST_ONLY manifest and 33 GUIDs checked. This applies ONLY to SHA 05566214 and is not R17 evidence.
 **Remaining gates:** real native Unity GUI, rendered typography/materials, physical devices, legal source-rights and creative/owner approval NOT RUN; no independent production milestone PASS. No GitHub Actions or paid CI.
 
+## VUF-R17-C007 | LOCAL CODEX PYTHON/UNITY REGRESSION | ASSIGNED / NOT RUN
+
+**Codex prompt:** https://docs.google.com/document/d/1elh_L9qGItsScntDno1ib_Ri8bC4UBED7aE1RL2pHBI/edit
+**R17 source baseline:** `312caeeb0bddc18d26507c632b3e0682a37236c6`. Safely fast-forward existing clean local checkout, run full Python test source suite (172 method definitions) and genuine Unity 6000.6.5f1 EditMode (21 NUnit method definitions) at exact source SHA, preserve 7 Windows symlink SKIPs if environment unchanged. Fix only observed VUF defects, rerun both suites after final commit, ordinary fast-forward Git push if appropriate; no hosted GitHub Actions/paid CI, no deletes or cross-repo changes. No GUI/device/owner translation or artistic approval claimed. ChatGPT alone edits lifecycle statuses.
+
 ## VUF-R17 | VF-07 STATE/COPY VARIATIONS | SOURCE BUILD / UNITY TEST OPEN
 
 **Builder:** `unity_package/Editor/VufReviewStateCatalog.cs` defines eight review-only states and three non-shipping text modes (en, Turkish draft and expanded layout stress). The 28-Screen Shell Builder applies the selected preview-only copy to new, non-overwritten candidate uGUI prefabs, explicitly labels the mock state `NOT GAME STATE`, preserves policy-off feature gates and will not operate if any candidate Button is already interactable or has serialized event bindings. Turkish Home/Gameplay are visibly draft; all other titles remain clearly marked draft pending localization. This is NOT a production translation layer, Engine state, actual reward, game state or new artwork.
