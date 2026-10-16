@@ -42,3 +42,27 @@ touch targets (44 **design units**, explicitly NOT actual platform points/dp).
 * **Nothing here is a GUI, real iPhone/Android, owner creative/art, or product
   release PASS.** Current R15 Editor source/tests require real Unity
   6000.6.5f1 import and exact-SHA regression evidence.
+
+## R18 | Typography and Contrast Lab (Editor-only)
+
+**Tools > MATCH3 > Typography and Contrast Lab** analyses original unapproved
+uGUI candidate hierarchies without saving, approving, editing or rendering
+the prefab. It combines existing five synthetic device anchor/bounds models
+with Unity `TextGenerator.GetPreferredHeight` for the actual `Text.font`
+when installed. Each text node gets measured bounds, approximate preferred
+line-block height, **possible overflow** flag and an advisory foreground vs
+closest opaque Image/fallback canvas background contrast ratio.
+
+Conservative risks include `TEXT_OVERFLOW_RISK`, `LOW_CONTRAST_REVIEW`,
+`BACKGROUND_UNKNOWN` and `TYPOGRAPHY_UNMEASURED`. Null/missing fonts
+and transparent backgrounds remain **UNKNOWN**, never silently pass.
+`4.5:1` is an indicative static threshold, not a WCAG/device certification.
+
+The Inspector is a read-only visual *data report*, **not an actual Unity
+textured frame**, physical safe-area simulation, fully shaped Unicode
+text, RTL, dynamic ContentSizeFitter, Game View screenshot or native
+iPhone/Android test. The Turkish mode remains synthetic draft copy.
+
+Five new Unity EditMode test methods and three Python source contract
+checks are authored for R18. Real Windows Unity 6000.6.5f1 verification
+at the final R18 SHA remains open until explicitly executed.

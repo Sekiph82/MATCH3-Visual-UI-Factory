@@ -113,3 +113,14 @@ attach Engine callbacks, publish art or approve a product. English/Turkish
 copy is not finalized localization. Source-defined R17 validation covers
 28 × 8 × 3 combinations and five Style Bible profiles; real Unity import,
 rendering, typography, overflow and devices still require separate tests.
+
+
+### R18 | Text-fit and color-contrast authoring
+Added a read-only **Typography and Contrast Lab** under
+`Tools > MATCH3`, accessible through the Factory dashboard.
+It uses actual Unity `TextGenerator` with candidate Text components and
+five synthetic viewport bounds, reporting approximate text overflow and
+contrast risks without modifying a prefab. Missing font/background is
+reported as unknown. This is **not** a rendered UI/device or language
+acceptance test. Five new NUnit methods and three Python source guards
+are written but have not run at R18 exact code SHA.

@@ -53,6 +53,8 @@ namespace Match3.VisualFactory.Editor
                 VufSpriteQaReportWindow.Open();
             if (GUILayout.Button("Device & Safe-Area Layout Wireframe", GUILayout.Height(30)))
                 VufResponsivePreviewWindow.Open();
+            if (GUILayout.Button("Typography and Contrast Lab", GUILayout.Height(30)))
+                VufTypographyLabWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Preview", GUILayout.Height(34)))
