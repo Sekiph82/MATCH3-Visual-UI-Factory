@@ -26,7 +26,7 @@ class ShellBridgeContractTests(unittest.TestCase):
                       self.bridge)
         self.assertIn("VufCandidateMotionKit.Attach(safe, page);",
                       self.bridge)
-        self.assertIn("AddComponent<NonDrawingGraphic>()", self.bridge)
+        self.assertIn("typeof(RectTransform), typeof(NonDrawingGraphic)", self.bridge)
 
     def test_policy_locked_and_candidate_only_status_stay_immutable(self):
         self.assertIn('marker.CandidateStatus != "CANDIDATE_NOT_APPROVED"',
