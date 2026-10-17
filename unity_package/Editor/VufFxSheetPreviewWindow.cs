@@ -57,6 +57,9 @@ namespace Match3.VisualFactory.Editor
         private string error;
         private bool play;
         private bool reducedMotion = true;
+        private static readonly float[] PreviewSpeeds = { .25f, .5f, 1f, 2f };
+        private static readonly string[] PreviewSpeedLabels = { "0.25x", "0.5x", "1x", "2x" };
+        private int previewSpeedIndex = 2;
         private int frame;
         private double elapsed;
         private double lastTime;
@@ -86,7 +89,7 @@ namespace Match3.VisualFactory.Editor
             double delta = Math.Max(0d, Math.Min(.25d, now - lastTime));
             lastTime = now;
             if (!play || reducedMotion || verified == null) return;
-            elapsed += delta;
+            elapsed += delta * PreviewSpeeds[previewSpeedIndex];
             double duration = 1d / verified.fps;
             if (elapsed >= duration)
             {
@@ -123,6 +126,8 @@ namespace Match3.VisualFactory.Editor
             EditorGUILayout.LabelField("VFX draft preset", verified.preset_id);
             EditorGUILayout.LabelField("Candidate status", verified.stage);
             reducedMotion = EditorGUILayout.Toggle("Reduced-motion still", reducedMotion);
+            previewSpeedIndex = EditorGUILayout.Popup("Manual replay speed", previewSpeedIndex,
+                PreviewSpeedLabels);
             using (new EditorGUI.DisabledScope(reducedMotion))
             {
                 if (GUILayout.Button(play ? "Pause" : "Play"))
@@ -132,8 +137,23 @@ namespace Match3.VisualFactory.Editor
                 }
             }
             if (reducedMotion) play = false;
-            frame = EditorGUILayout.IntSlider("Frame scrub", frame, 0,
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Previous frame"))
+            {
+                play = false;
+                elapsed = 0;
+                frame = StepFrame(frame, verified.frame_count, -1);
+            }
+            if (GUILayout.Button("Next frame"))
+            {
+                play = false;
+                elapsed = 0;
+                frame = StepFrame(frame, verified.frame_count, 1);
+            }
+            EditorGUILayout.EndHorizontal();
+            int requestedFrame = EditorGUILayout.IntSlider("Frame scrub", frame, 0,
                 verified.frame_count - 1);
+            if (requestedFrame != frame) { play = false; elapsed = 0; frame = requestedFrame; }
             GUILayout.Space(10f);
             Rect outer = GUILayoutUtility.GetRect(220f, 360f, 170f, 360f,
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
@@ -164,6 +184,15 @@ namespace Match3.VisualFactory.Editor
                 "shader blending, VFX lifecycle, mobile GPU cost and owner " +
                 "asset approval remain independent tests.",
                 MessageType.Info);
+        }
+
+        // Deterministic circular frame cursor, no texture/source import or gameplay.
+        internal static int StepFrame(int index, int count, int delta)
+        {
+            if (count < 1 || count > 32 || index < 0 || index >= count ||
+                delta < -1 || delta > 1)
+                throw new ArgumentException("invalid bounded preview frame request");
+            return (index + delta + count) % count;
         }
 
         private void Revalidate()
