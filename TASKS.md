@@ -565,6 +565,14 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 
 **Current milestone focus:** M05 (sprite/atlas deliverable) and dependent M08 source adapters, continuing from R47. R43 screen bridge, R44 release scan, R45/R46 preview/rollback and R47 V2 Atlas are SOURCE IMPLEMENTED / FINAL MILESTONE TEST OPEN, so their broad M03/M08 checkboxes are intentionally NOT checked. Next handoff to Codex is ONE comprehensive Windows/Unity verification **only after the active milestone's feasible code scope is complete**. No paid Actions, destructive cleanup, unapproved other-repo writes, fabricated approvals or invented upstream Engine/LFX SHA freezes.
 
+## Gorev kodlari / alt gorevler / revizyonlar | 2026-10-17
+
+- **`VUF-Mxx-yyy`** = ana milestone gorevi (toplam 64 mevcut madde, orijinal metinler korunur).
+- **`VUF-Mxx-yyy-Snn`** = o ana gorevin kaynak/uygulama ALT GOREVI; **`-Tnn`** = test dogrulama ALT GOREVI. Alt `[x]`, yalniz yazilmis kaynak kodu teslimini gosterir; tam milestone PASS degildir. Ust `[ ]` ise altinda bitmis `[x]` isler olsa bile ust kapsam eksik demektir. Ust `[x]` durumlari onceki R53 kaynak-uygulama degerlendirmesiyle korunmustur; kapanmis Unity GUI, fiziksel cihaz, art haklari veya owner kabulunu ileri surmez.
+- **`Rnn`**, kodlama **revizyonu/gelistirme iterasyonu** kimligidir. Remediation, gorev numarasi, yeni milestone veya test emri **DEGILDIR**. Ornek: `R47` Unity SpriteAtlas V2; `R52` bes tema demo PNG/atlas; `R53` gorev/kanit defteri duzenleme revizyonu. Bir R birden cok ana gorevin alt islerine hizmet edebilir. **`Cnn`** ise Codex **test/kanit oturumu**: `C010` en son gercek Python/Unity sahibi test checkpoint'i; `C011` sonraki M05 toplu test istemi.
+- R04–R53 kronolojik calisma notlari halihazirda **bu ayni `TASKS.md` dosyasinin yukari kisminin icindedir**, fakat daha once ilgili MXX altlarina alt gorev olarak baglanmamis olmaları takibi bozuyordu. Bu tablo yerine artik **dogrudan ilgili ust gorevin altinda S/T kodu vardir**. Ayrica kaynaklar `factory/`, `unity_package/`, `tests/`; donor provenansi `docs/VUF_DONOR_SOURCE_LEDGER.md`; Codex prompt/loglari Drive `01_PROMPTS` / `02_CODEX_LOGS` klasorlerindedir.
+- **Yeni calisma kurali:** Her yeni implementasyon ONCE asil `VUF-Mxx-yyy` altina bir `-Snn` olarak kaydedilecek, R gelistirme revizyonu ona baglanacak, kaynak bitince `[x]` olarak isaretlenecek, test/owner acceptance ayri `-Tnn` ve kapsam notuyla tutulacak. Yeniden tum milestone'lari secerek sahte bitirme yapilmayacak.
+
 ## Factory milestones (M00 EARLY BOOTSTRAP / ALL OTHER PHASES GATED; no PASS claimed)
 
 ### VUF-M00 | Source audit, scope, secure baseline
@@ -573,81 +581,131 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - [x] VUF-M00-003 Establish one-tracker + Drive-only prompts/logs/independent audit/evidence workflow and no-cost execution budget.
 - [x] VUF-M00-004 Establish original/licensed art and font ingestion policy; no unlicensed reference extraction.
 - [x] VUF-M00-005 Initialize minimal reproducible toolchain and targeted negative tests with no large caches, paid APIs or unauthorized local file operations.
+    - [x] `VUF-M00-005-S01` R04/R10/R13: Unity UPM, PowerShell yerel test ve Edition-only NUnit kaynak altyapisi (`unity_package/`, `scripts/`).
 **Exit:** Reproducible tracked source and audited gates without art or engine rules duplication.
 
 ### VUF-M01 | Versioned asset, UI and animation contracts
 - [x] VUF-M01-001 Implement typed five-profile visual manifest with stable game/theme IDs and upstream SHA pins.
+    - [x] `VUF-M01-001-S01` R04: bes profil + Engine/LFX SHA view-only manifest/parser (`Tools/validate_manifest.py`, `VisualAssetManifest.cs`).
 - [ ] VUF-M01-002 Implement 5-profile x 17 Engine UiSurfaceKind x 8-state SYMBOLIC contract mapping to all 26 owner Coral Rescue screens plus Home and Gameplay/HUD (28 total), including route/overlay IDs, applicable state and required dynamic text/icon/action bindings; no imported game pixels in Engine.
+    - [x] `VUF-M01-002-S01` R08/R17: 28 Coral ID × 5 tema, 8 draft UI state; **17 UiSurfaceKind route/action eslesmesi HENUZ YOK** (`VufScreenCatalog.cs`).
+    - [ ] `VUF-M01-002-T01` 5×17×8 goldens ve route/dynamic-action fallback contract baglantisi; ana gorev acik.
 - [ ] VUF-M01-003 Map UI action IDs, dynamic text, localization, visible/disabled accessibility reason and fallback keys.
+    - [x] `VUF-M01-003-S01` R17/R19: EN/TR/stress locale draft + placeholder QA; tum action/fallback semantics acik (`locale_audit.py`).
 - [ ] VUF-M01-004 Map piece/special/combo/goal/obstacle events to versioned view-only skin, VFX and animation keys; expose time, interrupt, replay and accessibility bindings to the external Studio visual consumer. No gameplay logic forks.
+    - [x] `VUF-M01-004-S01` R50/R51: gerçek Engine special/combo ve obstacle damage sembolik visual key map; olay/timing/replay baglantisi acik (`special_skin_map.py`, `obstacle_skin_states.py`).
 - [x] VUF-M01-005 Negative validation: duplicate/missing/unbound asset IDs, unknown state, cross-theme leak, invalid version and unsafe paths.
+    - [x] `VUF-M01-005-S01` R04/R07: Negatif manifest/provenans/PNG/path source guards (`Tools/validate_manifest.py`, `verify_candidates.py`).
 **Exit:** Engine/LevelFactory-compatible manifest consumer with deterministic golden fixtures.
 
 ### VUF-M02 | Five design systems and art-direction bibles
 - [ ] VUF-M02-001 Define typography, layout grid, palette, component tokens, silhouette/contrast and portrait/tablet responsive rules.
+    - [x] `VUF-M02-001-S01` R04/R16/R18: 5 taslak tema paleti/6 silhouette, contrast/text-fit source; final design-token/font rehberi acik (`style_profiles.v1.json`).
 - [ ] VUF-M02-002 Coral Rescue visual bible and icon/character/background reference sheets.
+    - [x] `VUF-M02-002-S01` R28/R36: Coral 3 matematiksel konsept ekran ve motifler; final karakter/reference sheets acik (`concept_showcase.py`, `VufThemeMotifDecor.cs`).
 - [ ] VUF-M02-003 Garage Legends visual bible and component/vehicle/tool identity sheets.
+    - [x] `VUF-M02-003-S01` R28/R36: Garage 3 konsept/motif; gercek vehicle/tool kimlik masterlari acik.
 - [ ] VUF-M02-004 Dino Islands visual bible and creature/habitat/egg identity sheets.
+    - [x] `VUF-M02-004-S01` R28/R36: Dino 3 konsept/motif; gercek creature/egg kimlik masterlari acik.
 - [ ] VUF-M02-005 The Fractured Realms visual bible and elemental/realm identity sheets.
+    - [x] `VUF-M02-005-S01` R28/R36: Fractured Realms 3 konsept/motif; elemental/realm kimlik masterlari acik.
 - [ ] VUF-M02-006 Wonder Pop accessible child-safe visual bible, no adult ad/social pressure.
+    - [x] `VUF-M02-006-S01` R28/R36: Wonder Pop 3 konsept/motif; child-safe owner art/review acik.
 **Exit:** Owner-reviewed reference styles; placeholders clearly distinguished from final approved art.
 
 ### VUF-M03 | Layered screen and UI component factory
 - [ ] VUF-M03-001 Component generator for CTA, cards, modals, badges, counters, tabs, progress bars and disabled/pending/claimed feedback.
+    - [x] `VUF-M03-001-S01` R06/R17: 7 uGUI page archetype + 8 durumlar/disabled actions (`VufUiComposerWindow.cs`, `VufReviewStateCatalog.cs`).
+    - [x] `VUF-M03-001-S02` R35–R42: uGUI editable components, Home flow/radial, gradient/mirror/raycast, reduced motion donor reuse (`VufPageComposition.cs`, donor ledger).
 - [ ] VUF-M03-002 Layered interactive templates, modal/ceremony/mode variants for all 28 Coral Rescue experiences in the inventory, with reusable consent/account/booster/surface components for all five themed games; no flattened unclickable full-screen images.
+    - [x] `VUF-M03-002-S01` R08/R32/R35/R36: 28 shell, editable Home/Gameplay/World concept staging ve 5 motif (`VufScreenShellBuilderWindow.cs`, `VufConceptStageBuilderWindow.cs`).
+    - [x] `VUF-M03-002-S02` R43: 28 Coral shell icine R35–R42 donor component bridge; C011 kaynak testi henuz kosulmadi (`VufScreenShellLayoutBridge.cs`).
+    - [ ] `VUF-M03-002-T01` 28 ekranin gercek bagli runtime aksiyonlari/modal/consent/booster ve owner GUI kabulu.
 - [x] VUF-M03-003 Runtime text/icon placement stays separate from artwork and supports EN/TR plus pseudo-long localized strings.
+    - [x] `VUF-M03-003-S01` R17/R19: editable text slot + EN/TR uzun metin onizlemesi (`locale_audit.py`, `VufReviewStateCatalog.cs`).
 - [ ] VUF-M03-004 Safe-area, tall phone, compact phone and tablet layout with usable touch targets and no cropped background text.
+    - [x] `VUF-M03-004-S01` R06/R15/R18: SafeAreaFitter, 5 synthetic responsive wireframe + typography QA; gercek telefon/tablet testi eksik.
 - [ ] VUF-M03-005 Five-title theme swap never changes the semantic UI route graph or player state.
 **Exit:** Source-layered template packages for every screen and state family.
 
 ### VUF-M04 | AI artwork provider and human-review pipeline
 - [x] VUF-M04-001 ChatGPT-assisted concept/master intake and optional approved image-provider adapter; clean no-API/manual path.
+    - [x] `VUF-M04-001-S01` R14/R28: No-cost manuel/batch candidate PNG import ve 15 konsept PNG onizleme; harici AI-provider entegrasyonu iddia edilmez (`offline_batch.py`, `concept_showcase.py`).
 - [ ] VUF-M04-002 Source reference/character identity lock, palette/style continuity and explicit image originality review.
 - [ ] VUF-M04-003 Review loop: generate -> candidate -> compare -> owner approve/reject -> immutable approved master; no self-approval.
+    - [x] `VUF-M04-003-S01` R09/R11/R34: SQLite immutable revision/rollback + queue + 5×3 owner karsilastirma sheet; gercek owner yaratıcı approve UI eksik (`catalog.py`, `contact_sheet.py`).
 - [x] VUF-M04-004 Stable asset lineage, image dimension/alpha/hash metadata, deduplication and licence provenance.
+    - [x] `VUF-M04-004-S01` R04/R07: hash/alpha/PNG/source receipt ve immutable lineage (`catalog.py`, `verify_candidates.py`).
 - [x] VUF-M04-005 Fail-closed paid-provider approval budget; no automatic credential capture or GitHub-stored tokens.
 **Exit:** Reproducible art transformations and provenance, without pretending that generative images are bit-for-bit deterministic.
 
 ### VUF-M05 | Tile, booster, obstacle and sprite-atlas factory
 - [x] VUF-M05-001 Six accessible base tile silhouettes for each title; separate shape from color.
+    - [x] `VUF-M05-001-S01` R25: 5 tema icin 6 alpha silhouette PNG ve 3×2 candidate atlas (`silhouette_kit.py`).
 - [x] VUF-M05-002 All horizontal/vertical/area/color/missile special combinations mapped to engine IDs.
+    - [x] `VUF-M05-002-S01` R50: gercek Engine 5 special enum ve 15 unordered combo x 5 temali symbolic skin map (`special_skin_map.py`).
 - [ ] VUF-M05-003 Obstacle states, damage variations, collectibles, goals, equipment and boosters.
+    - [x] `VUF-M05-003-S01` R51: Engine layer/damage enum tabanli 5 rol ve HP visual-state taslagi; demo ID (`obstacle_skin_states.py`).
+    - [x] `VUF-M05-003-S02` R52: her oyun icin 38 matematiksel ornek sprite + candidate atlas (toplam 190, PREMIUM DEGIL) (`sample_sprite_pack.py`).
+    - [ ] `VUF-M05-003-T01` Tum gercek obstacle/goal/booster final Engine IDs ve owner art/state parity dogrulama.
 - [ ] VUF-M05-004 Trim/pivot/transparent margins, 1x/2x/3x image exports and Sprite Atlas V2 import settings.
+    - [x] `VUF-M05-004-S01` R05/R07/R31: trim, 1×/2×/3×, alpha mask, edge-extrusion, deterministik atlas (`png_pipeline.py`, `atlas_pipeline.py`).
+    - [x] `VUF-M05-004-S02` R27/R47: Unity tile/atlas inspector ve SpriteAtlas V2 draft export authoring (`VufTileKitInspectorWindow.cs`, `VufSpriteAtlasV2Window.cs`).
+    - [ ] `VUF-M05-004-T01` Unity'de gercek SpriteAtlas V2 import/pivot/texture settings ve 1×/2×/3× kabul; C011 toplu test acik.
 - [x] VUF-M05-005 Automatic alpha/dimension/duplicates/missing-state/atlas memory-budget tests.
+    - [x] `VUF-M05-005-S01` R07/R26/R49: Bagimsiz alpha/CRC/hash/UV/pixel/state/duplicate/memory estimate negatifs (`verify_generated_kits.py`, `atlas_candidate_audit.py`).
 **Exit:** Complete five-title sample atlas packs with no unsupported runtime assumptions.
 
 ### VUF-M06 | Backgrounds, characters and maps
 - [ ] VUF-M06-001 Layered World/Chapter maps, Gameplay backdrops, reef restoration, Marine Collection, My Aquarium decoration, and New Region reveal scene layers; no flattened runtime buttons or text.
+    - [x] `VUF-M06-001-S01` R21/R28/R30: Real PNG katman compositoru ve 5×3 concept preview; eksik reef/aquarium/region final sahneleri var (`layer_compositor.py`, `concept_showcase.py`).
 - [ ] VUF-M06-002 Character/mascot reference sheets with consistent poses and silhouette identity.
 - [ ] VUF-M06-003 Parallax/background/screen scaling exports and relevant overlays.
 - [x] VUF-M06-004 Title/theme naming, provenance and version pinning through generation and export.
+    - [x] `VUF-M06-004-S01` R21/R52: theme source SHA, PNG provenance ve generated asset metadata (`sample_sprite_pack.py`, `layer_compositor.py`).
 **Exit:** At least one representative scene package per profile, owner-reviewable.
 
 ### VUF-M07 | Animations, VFX and reduced-effects parity
 - [ ] VUF-M07-001 Idle, reward, win/fail, tile, combo, character and UI transition effect contracts.
+    - [x] `VUF-M07-001-S01` R22: 5 deterministic VFX sprite-sheet + reduced-motion still; full event/FX ontology eksik (`procedural_fx_sheet.py`).
 - [ ] VUF-M07-002 Sprite-sheet/Unity animation bindings: manual frame-by-frame scrub, frame rate/loop/ping-pong, pivots, alignment, transparency, scale, clipping, atlas swaps, transition priority and interruption/replay parity.
+    - [x] `VUF-M07-002-S01` R05/R23/R24: Sprite clip authoring, scrub, ping-pong/loop ve procedural FX-to-Unity clip exporter (`VufSpriteClipBuilderWindow.cs`, `VufFxClipExporterWindow.cs`).
+    - [ ] `VUF-M07-002-T01` Olay/replay/interrupt/atlas swap/pivot/transition priority gercek Unity playback parity testi.
 - [x] VUF-M07-003 Full/reduced-motion mode and optional middleware-absent fallback.
+    - [x] `VUF-M07-003-S01` R12/R38: CanvasGroup tween + reduced-motion gercek source ve yeniden kullanim (`VufUiTween.cs`).
 - [x] VUF-M07-004 Enforce no animation/VFX callback may mutate engine board, rewards or save transactions.
+    - [x] `VUF-M07-004-S01` R06/R12/R22/R24: gameplay/save/score/reward mute eden presentation-only runtime/Editor sinirlari (`VufUiTween.cs`, `VufVfxLabWindow.cs`).
 - [ ] VUF-M07-005 Frame, audio cue, haptic trigger, particle, texture/atlas, draw-call, memory and CPU/GPU budget diagnostics on genuine demo runs; distinguish simulation from real-device verification.
 - [ ] VUF-M07-006 **Manual Sprite & VFX Lab (OWNER REQUIRED):** User selects a game profile, asset, animation, event and state; manually plays/pauses/scrubs frame-by-frame at 0.25x/0.5x/1x/2x, compares sprite sheets, keyframes, particle bursts/trails, masks, lighting/parallax, combo/chained VFX, success/fail and transitions. Test loop/pivot/atlas/crop/alpha, overlapping effects, interruption, replay, reduced-motion, mute and logged haptic events. No VFX callback may mutate gameplay or rewards; save reproducible test receipts. Do not claim physical haptic/audio-device PASS from desktop simulation.
+    - [x] `VUF-M07-006-S01` R06/R23: Manual Unity Particle Lab ve imported sheet frame preview (`VufVfxLabWindow.cs`, `VufFxSheetPreviewWindow.cs`).
+    - [ ] `VUF-M07-006-T01` Owner-required 0.25×/0.5×/1×/2× tam olay/VFX/sprite editor Studio ve gercek GUI evidence.
 **Exit:** Real Unity-consumable effects and replay-invariant acceptance.
 
 ### VUF-M08 | Unity UI and asset packaging adapters
 - [ ] VUF-M08-001 Unity 6000.6.5f1 Editor authoring interface and import automation; choose runtime uGUI/TMP versus UI Toolkit based on actual animation/safe-area tests, not assumptions.
 - [ ] VUF-M08-002 Build layered interactive prefabs/UXML and real action bindings with dev-only UI inspector for z-order, touch targets, layout anchors, safe areas, tween/transition states, disabled/offline/loading and localized text.
 - [ ] VUF-M08-003 Package sprite atlases, imports, locales, effect configs and optional Addressables with fallback.
+    - [x] `VUF-M08-003-S01` R47: Unity SDK SpriteAtlasAsset V2 candidate authoring, production asset paketi degil (`VufSpriteAtlasV2Window.cs`).
 - [x] VUF-M08-004 Offline/missing image/incorrect manifest/version conflict and rollback negative checks.
+    - [x] `VUF-M08-004-S01` R09/R45/R46: SQLite restore ile bagimsiz manifest version/rollback diff negative checker (`catalog.py`, `preview_compatibility.py`).
 - [x] VUF-M08-005 Release scanner rejects test assembly, templates, raw reference art, secrets and generated evidence from game players.
+    - [x] `VUF-M08-005-S01` R44: Editor/tests/ref art/secret/evidence deny rules olan read-only player preflight (`player_pack_preflight.py`).
 - [ ] VUF-M08-006 **External Visual Test Studio adapter (OWNER REQUIRED):** After Engine and LFX are independently closed, connect versioned VUF asset packs to ENG-M12-010 neutral event/replay contracts in a separate Unity consumer or compatible Studio plugin. Preview real layered graphics, sprites, VFX, camera/UI transitions without inserting any artwork into MATCH3_ENGINE repo, tests or runtime source. Permit owner manual asset/theme hot-swap in sandbox only, with immutable hashes, schema mismatch, missing-pack fallbacks and no revenue/save authority.
 **Exit:** Working external Unity consumer of one export per five neutral game profiles.
 
 ### VUF-M09 | Automated visual QA and rights acceptance
 - [ ] VUF-M09-001 Test rendered five-profile screen/component state matrices and Coral 28-experience inventory across phone/tablet ratios (Ready/Loading/Offline/Error/Owned/Claimed/Disabled/Pending where applicable); record explicit N/A/disabled evidence, no fake feature availability.
+    - [x] `VUF-M09-001-S01` R17: 28 ID × 8 mock state × 3 locale stress source/in-memory kontrol; rendered device matrix yok (`VufReviewStateCatalog.cs`).
 - [ ] VUF-M09-002 Accessibility: color-independent shapes, contrast, text fitting, focus, hit targets, reduced motion and translated long strings.
+    - [x] `VUF-M09-002-S01` R18/R19: Unity text height contrast ve offline EN/TR placeholder audit; accessibility manual focus/device yok (`VufTypographyAudit.cs`, `locale_audit.py`).
 - [ ] VUF-M09-003 Visual consistency regression, missing overlays, resolution sharpness, safe area, sprite pixel fidelity, transparency/fringing, layer ordering, 1x/2x/3x atlas swaps and frame-by-frame animation diffs.
+    - [x] `VUF-M09-003-S01` R16/R26/R30/R33: sprite pixel-health, source re-composition ve concept bundle SHA/visual negatives (`visual_qa.py`, `verify_generated_kits.py`).
 - [ ] VUF-M09-004 Original/licensed artwork and font receipts, approved source revisions and no forbidden lookalikes.
 - [x] VUF-M09-005 Separate mechanical automated PASS from human creative acceptance and real device signoff.
+    - [x] `VUF-M09-005-S01` R20: mekanik/rights/owner/device onaylarini ayiran release evidence board (`VufReadinessBoardWindow.cs`).
 - [ ] VUF-M09-006 **Owner Manual Visual QA Studio acceptance (MANDATORY):** Desktop Unity Editor and development Windows viewer must expose manual, clickable inspection of every supported screen, button state, gameplay tile/obstacle/booster animation, sprite-sheet frame, particle/VFX cue, camera/parallax, layer/z-order, popup transitions, sound cue and simulated haptic event. Controls: profile/asset/screen/state/level/seed selector, pause/single-frame/event stepping, speed, before/after or A/B compare, overlay and safe-area guides, multiple phone/tablet ratios, EN/TR long strings, disabled/offline/loading, full/reduced-motion, FPS/memory/draw-call metrics where supported, screenshot/video or frame-sequence export and deterministic event trace. Separate automatic rendering PASS, human aesthetic approval, and real iOS/Android physical tests. Any unavailable feature shows explicit UNSUPPORTED/N-A reason. Owner must be able to manually reproduce animation/cropping/state errors; no mere static mockup is accepted.
+    - [x] `VUF-M09-006-S01` R06: manual prefab QA inspector baslangic modulu; tam owner GUI/animation controls eksik (`VufQaStudioWindow.cs`).
+    - [ ] `VUF-M09-006-T01` Tam clickable owner Visual QA Studio, dev Windows viewer, screenshot/video, speed/scrub/event A/B ve gercek kabul.
 **Exit:** Fail-closed audit that produces reproducible visual proof, never forged owner approval.
 
 ### VUF-M10 | Five-profile executable vertical slice
