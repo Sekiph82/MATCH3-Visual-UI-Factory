@@ -309,3 +309,20 @@ It makes **no files** and always returns
 `release_allowed=false`; a clean scan is a review-only finding.
 This advances VUF-M08-005 implementation but does NOT close Engine/LFX,
 commercial art, iOS/Android, owner or release milestones.
+
+### R45 | Safe version/pin preview and symbolic rollback diff
+`preview_compatibility.py` **reuses** existing strict visual asset
+manifest validation, compares expected exact Engine/LevelFactory commit
+pins and optionally the asset IDs/hashes of a prior manifest. It never
+changes the active revision, rolls back gameplay, approves a source or
+ships a player pack. Asset bytes and real upstream acceptance remain
+separately unverified. Ten new Python test definitions await milestone
+batch verification.
+
+### R46 | Existing runtime manifest reused for Unity Editor draft comparator
+The **Preview Version Compatibility** Editor window reads selected
+TEST_ONLY VisualAssetManifest objects using the existing runtime
+parser. Users may inspect asset ID/hash changes and expected SHA pin
+drift but cannot approve a pack, trigger true rollback, create assets,
+or certify independent Engine/LFX contracts. Source/unit definitions
+exist; real owner-local EditMode/GUI evidence is pending.

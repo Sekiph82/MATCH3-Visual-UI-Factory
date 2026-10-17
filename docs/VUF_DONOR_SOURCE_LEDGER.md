@@ -174,3 +174,40 @@ exporter or rights authority.
 Twelve source-defined Python unit cases; at R44 SHA no actual Windows
 execution claimed. Real consumer package, licensed art, owner sign-off,
 device QA and Engine/LFX compatibility remain OPEN.
+
+## R45 | M08-004 compatibility and rollback-diff donor-first analysis
+
+BEFORE source implementation: inspected existing
+`Tools/validate_manifest.py` exact `validate_manifest(doc)` and
+`_safe_relative_path` contract, existing `factory/asset_catalog/catalog.py`
+content-addressed/revision history, and `unity_package/Runtime/VisualAssetManifest.cs`
+preview-only Unity manifest consumer. These provide reusable hardened
+validation and hash semantics without introducing a third-party parser.
+Reviewed Unity UI Extensions pinned `package.json` at blob
+`6bb5e0dbfa6878c24df2e8d1b5e42e4c970c1b15` for a production
+release-contract donor; REJECTED_REASON it describes a Unity UI package,
+not interoperable Engine/LFX visual pack history or owner approvals.
+**INTERNAL_REUSE** `Tools.validate_manifest.validate_manifest` directly
+with Python stdlib `json`, `hashlib`, `re`, `pathlib` for only missing
+read-only version/pin comparison and symbolic rollback-diff inspection.
+No vendor source/import needed; no new asset-manifest standard fork.
+
+Actual packaging, independently verified upstream contracts, source art
+byte validation and full owner/device signoff remain NOT RUN / OPEN.
+
+## R46 | Unity preview GUI is INTERNAL_REUSE of runtime manifest
+
+PRE-CODE DONOR check: read the already vetted
+`unity_package/Runtime/VisualAssetManifest.cs` concrete
+`TryParsePreview` API and existing `VufProductionQueueWindow` read-only
+TextAsset patterns. Compared pinned external Unity UI Extensions
+`package.json` upstream commit
+`d47f838ba918bbb9b26f242bd944940a711f525f`, blob
+`6bb5e0dbfa6878c24df2e8d1b5e42e4c970c1b15`.
+REJECTED_REASON: that UI package has no compatible 5-title Engine/LFX
+asset-manifest reader and would add redundant UI code.
+INTERNAL_REUSE: use exact existing `VisualAssetManifest.TryParsePreview`
+with a small isolated Unity Editor diff/pin display component. No
+external source/vendor or licensing change, no duplicate manifest
+authority and no gameplay transaction code. Four Unity NUnit and
+three Python contract tests authored, NOT actually executed at new SHA.

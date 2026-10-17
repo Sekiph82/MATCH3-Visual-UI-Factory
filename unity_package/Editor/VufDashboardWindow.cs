@@ -59,6 +59,9 @@ namespace Match3.VisualFactory.Editor
                 VufLocaleCoverageWindow.Open();
             if (GUILayout.Button("Review Evidence Board (all QA gates)", GUILayout.Height(32)))
                 VufReadinessBoardWindow.Open();
+            if (GUILayout.Button("Version/Manifest Compatibility (read-only)",
+                GUILayout.Height(30)))
+                VufPreviewCompatibilityWindow.Open();
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("Sprite Preview", GUILayout.Height(34)))

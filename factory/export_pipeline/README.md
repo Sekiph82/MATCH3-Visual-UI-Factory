@@ -33,3 +33,47 @@ for clean candidate hashes, forbidden directories/extensions, secret
 and authoring markers, unsafe roots, empty/oversize content, file
 counts/case collisions, supported symlink denial and source immutability.
 These are source definitions, **not yet executed** on owner Windows.
+
+## R45 | Non-writing manifest compatibility and rollback-diff preflight (M08-004)
+
+`python -B factory/export_pipeline/preview_compatibility.py --candidate-manifest "D:\\VUF_CANDIDATES\\current.json" --profile Coral_Rescue --engine-sha <40hex> --level-factory-sha <40hex> --previous-manifest "D:\\VUF_CANDIDATES\\older.json"`
+
+**INTERNAL_REUSE** of existing strict
+`Tools.validate_manifest.validate_manifest`, not a new metadata parser,
+gameplay API, asset downloader, approval mechanism, transaction/rollback
+executor or release publisher. It reads explicit external nonlinked JSON
+manifests (<=2 MiB, <=512 assets), rejects duplicate fields and unsafe
+paths/versions/theme IDs, confirms declared full SHA pins against explicitly
+supplied expected values, compares optional previous/next manifest asset
+hash IDs to report ADDED/CHANGED/REMOVED diffs.
+
+The output ALWAYS reports `release_allowed=false`,
+`previous_release_available=false`,
+`asset_file_bytes_reverified=false`; an owner receipt or an APPROVED-stage
+assertion cannot be authenticated by this tool. The old pack cannot be
+restored merely from JSON. Actual blobs, Engine/LFX independently closed
+gates, owner art licensing, real devices and visual QA remain OPEN.
+
+Ten regression source tests authored in
+`tests/test_preview_compatibility.py` for pinned/nonpinned SHA, duplicate
+fields, path traversal, cross-theme, owner receipt forgery, non-mutating
+asset diff and missing manifest. **NOT YET RUN ON OWNER WINDOWS.**
+
+## R46 | Read-only Unity manifest version/pin inspector
+
+`Tools > MATCH3 > Preview Version Compatibility` is a Unity Editor
+visual metadata comparator. It reuses existing
+`VisualAssetManifest.TryParsePreview` from the Runtime package and
+existing draft `VufProductionQueueWindow` patterns, rather than
+rewriting a JSON parser. Select a TEST_ONLY current and optional
+TEST_ONLY previous imported TextAsset manifest, choose one game and
+expected exact 40-character Engine/LFX pins. The panel reports
+pin drift, ADDED/REMOVED/CHANGED asset IDs and a hardcoded
+`Release permitted: NO`. It NEVER writes or restores packages,
+approves art, reads secret sources or claims actual Engine compatibility.
+Python R45 accepts unapproved CANDIDATE in its strict schema; Unity
+intentionally handles TEST_ONLY only.
+
+Four EditMode NUnit test methods (plus three static Python test methods)
+are authored, but actual Unity GUI, new-source tests and owner/phone
+approval are NOT YET RUN.
