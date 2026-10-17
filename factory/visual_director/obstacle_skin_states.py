@@ -65,9 +65,10 @@ def build_state_map(profile: str, definitions: list[Mapping]) -> dict:
         if layer not in LAYER_KINDS:
             raise ObstacleSkinError("unknown actual Engine layer enum")
         allowed_damage = item.get("damage_kinds", [])
-        if (not isinstance(allowed_damage, list) or len(allowed_damage) !=
-                len(set(allowed_damage)) or
-                any(x not in DAMAGE_KINDS for x in allowed_damage)):
+        if (not isinstance(allowed_damage, list) or
+                any(not isinstance(x, str) or x not in DAMAGE_KINDS
+                    for x in allowed_damage) or
+                len(allowed_damage) != len(set(allowed_damage))):
             raise ObstacleSkinError("invalid or duplicate actual Engine damage enum")
         stem = profile.lower() + "." + role + "." + semantic_id
         phases = [{"durability": n, "sprite_key": stem + ".hp" + str(n)}
