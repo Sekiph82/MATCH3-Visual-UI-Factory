@@ -286,6 +286,9 @@ namespace Match3.VisualFactory.Editor
                         "OWNER ART AND DEVICE QA NOT COMPLETE",
                         new Vector2(.06f, .79f), new Vector2(.94f, .855f),
                         20, font);
+                // R43 links the already-authored R35-R42 donor-backed
+                // modules to all 28 original Coral contract shells.
+                VufScreenShellLayoutBridge.Enhance(root, spec, style);
                 return root;
             }
             catch

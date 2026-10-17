@@ -66,6 +66,8 @@ def validate_structure() -> dict:
         "Editor/VufQaStudioWindow.cs",
         "Editor/VufAtlasPreviewWindow.cs",
         "Editor/VufScreenShellBuilderWindow.cs",
+        "Editor/VufScreenShellLayoutBridge.cs",
+        "Tests/Editor/VufShellLayoutBridgeEditModeTests.cs",
         "Editor/VufReviewStateCatalog.cs",
         "Editor/VufProductionQueueWindow.cs",
         "Editor/VufResponsiveGeometry.cs",

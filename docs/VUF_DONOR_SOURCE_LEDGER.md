@@ -116,3 +116,36 @@ FlowLayoutGroup calls now explicitly preserve the upstream min/preferred/
 flexible semantics. Gradient enum references are fully qualified to avoid
 the collision with `UnityEngine.GradientMode`. Full Python and Unity results
 for this correction are recorded in the C010 evidence report.
+
+## R43 | Direct integration through INTERNAL_REUSE instead of another imported dependency
+
+Mandatory pre-code donor comparison completed:
+- Existing VUF `VufScreenShellBuilderWindow`, R35 `VufPageComposition`, R36
+  `VufThemeMotifDecor`, R38 `VufCandidateMotionKit`, and pinned BSD3 UI
+  Extensions `NonDrawingGraphic` donor were inspected for direct reuse.
+- Also checked maintained upstream Unity UI Extensions `TableLayoutGroup.cs`
+  at release commit `d47f838ba918bbb9b26f242bd944940a711f525f`,
+  blob `663857f6abd05a54159a1c0cc112371c9cb26b92`.
+  **REJECTED_REASON:** adding another dynamic nonuniform layout component to
+  already working Home/Game/Map shells would duplicate R35's existing
+  donor-backed FlowLayoutGroup and require unnecessary extra dependency.
+- **INTERNAL_REUSE selected**: small glue module
+  `unity_package/Editor/VufScreenShellLayoutBridge.cs` uses the existing
+  28 exact Coral screen contracts with the five Style Bible profiles.
+  It decorates all 140 candidate screens with the five profile-specific
+  existing motif grammars and the real original BSD3
+  `NonDrawingGraphic` last-child raycast shield. Only the five clearly
+  matching screen contracts Home, World Map, Gameplay/HUD, Endless and
+  Time Attack receive the already implemented appropriate
+  `VufPageComposition` and existing reduced-motion `VufUiTween`.
+  No gameplay logic, new vendor copies, original art, file writes or
+  callback activation. Original five disabled/policy-locked social pages
+  remain locked. This is glue code, not a new layout or tween algorithm.
+
+Four new Unity EditMode NUnit definitions exercise five profiles × 28 screens
+(140 in-memory structures), five actual page layouts, all five social
+policy-locked screens, strict identity and duplicate enhancement rejection.
+Four new source-only Python contract definitions. **NEW R43 tests NOT YET RUN.**
+Previous C010 Python 294 PASS/7 OS SKIP and Unity 72/72 PASS apply only to
+the earlier final commit `1ea8ac06dd13485d6c5c42a30c6d98154259c959`.
+No new source rights, GPU performance, phone UI or owner artistic approval.

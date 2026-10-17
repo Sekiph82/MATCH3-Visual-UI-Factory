@@ -294,3 +294,18 @@ The donor component can be adjusted directly in the Unity Inspector
 and publisher BSD3 notice are retained. This is authoring geometry
 with no active touch, reward or game state. Three new Editor NUnit
 and three Python provenance tests are authored but NOT YET RUN.
+
+## R43 | Enrich existing twenty-eight Coral contract shells
+
+The 28-screen builder reuses the already functioning five-game
+`VufThemeMotifDecor`, `VufPageComposition`,
+`VufCandidateMotionKit` and licensed `NonDrawingGraphic` for **140
+draft uGUI shell permutations** (five themes × all 28 original Coral IDs).
+Only Home, World Map, Gameplay/HUD, Endless and Time Attack get the
+corresponding actual editable Home/Map/Game layout. Other pages keep
+their separate existing generic shell, plus themed decoration and a
+non-drawing raycast blocker. No Engine bindings, real rewards, unlocked
+social/tournament services, interactive demo approval, or existing
+asset overwrite. No new external donor copied because reviewed
+`TableLayoutGroup` is redundant to the already copied flow/radial UI
+primitives. Actual Editor/NUnit testing of R43 remains OPEN.

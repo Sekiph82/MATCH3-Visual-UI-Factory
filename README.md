@@ -289,3 +289,13 @@ noninteractive independently editable orbit badges around its central
 hero; inspector can tune radius/start angle without custom geometry code.
 Actual Editor/phone rendering, original art/rights and new tests remain
 OPEN until one local Unity 6000.6.5f1 bulk verification.
+
+### R43 | Reuse the tested donor-backed UI components across all 28 Coral screen contracts
+The original 28-screen shell builder now invokes a small **INTERNAL_REUSE**
+bridge to the existing theme motifs, page-specific editable Home/Game/Map
+layouts, reduced-motion motion primitive, and invisible BSD3 input shield.
+Across five draft themes, the same logic supports **140 candidate shell
+hierarchies** without adding a new animation engine or another third-party
+layout dependency. All buttons and five policy-disabled social/event
+surfaces stay blocked; everything is draft-only. R43 new tests are authored
+but *not* locally run on the newer commit.
