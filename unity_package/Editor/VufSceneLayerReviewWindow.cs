@@ -137,7 +137,7 @@ namespace Match3.VisualFactory.Editor
                             layer.draw_order != i ||
                             layer.parallax_factor_milli != ParallaxMilli[i] ||
                             layer.dimensions == null || layer.dimensions.Length != 2 ||
-                            layer.dimensions[0] < 180 || layer.dimensions[0] > 360 ||
+                            (layer.dimensions[0] != 180 && layer.dimensions[0] != 360) ||
                             layer.dimensions[1] != layer.dimensions[0] * 320 / 180 ||
                             !IsSha(layer.png_sha256) ||
                             !IsSha(layer.style_source_sha256) ||
@@ -210,6 +210,8 @@ namespace Match3.VisualFactory.Editor
                 // not the Unity decompressed platform texture.
                 var file = Path.Combine(Directory.GetCurrentDirectory(), pngPath);
                 if (!File.Exists(file) ||
+                    (File.GetAttributes(file) & FileAttributes.ReparsePoint) != 0 ||
+                    new FileInfo(file).Length > 4 * 1024 * 1024 ||
                     Sha256(File.ReadAllBytes(file)) != spec.png_sha256)
                     throw new ArgumentException("source PNG SHA differs from manifest: " + pngPath);
                 loaded[i] = texture;
@@ -243,6 +245,7 @@ namespace Match3.VisualFactory.Editor
                 {
                     validated = ValidateJson(manifestSource != null ?
                                              manifestSource.text : null);
+                    for (int i = 0; i < loaded.Length; i++) loaded[i] = null;
                     validationMessage = "Structural manifest accepted as UNAPPROVED CANDIDATE";
                 }
                 catch (Exception e)
@@ -263,8 +266,15 @@ namespace Match3.VisualFactory.Editor
                 profileIndex = nextProfile;
                 sceneIndex = 0;
                 inspectedHashes = null;
+                for (int i = 0; i < loaded.Length; i++) loaded[i] = null;
             }
-            sceneIndex = EditorGUILayout.Popup("Scene", sceneIndex, ScenesFor(profileIndex));
+            int nextScene = EditorGUILayout.Popup("Scene", sceneIndex, ScenesFor(profileIndex));
+            if (nextScene != sceneIndex)
+            {
+                sceneIndex = nextScene;
+                inspectedHashes = null;
+                for (int i = 0; i < loaded.Length; i++) loaded[i] = null;
+            }
             aspectIndex = EditorGUILayout.Popup("Synthetic preview ratio", aspectIndex,
                 new[] { "9:16 phone", "9:19.5 tall phone", "3:4 tablet" });
             parallaxPixels = EditorGUILayout.Slider(
