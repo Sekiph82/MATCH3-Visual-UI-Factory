@@ -13,7 +13,7 @@ import json
 from collections.abc import Mapping
 
 from factory.visual_director.special_skin_map import (
-    PROFILES, SPECIAL_KINDS, pair_key,
+    PROFILES, SPECIAL_KINDS, pair_key, _key,
 )
 from factory.vfx_builder.procedural_fx_sheet import _preset
 
@@ -80,7 +80,7 @@ def _verify_params(event: str, special: str | None,
         if event == "special_trigger":
             if second_special is not None:
                 raise TimelineError("single special cannot name a second kind")
-            return special.lower()
+            return _key(special)
         if second_special not in SPECIAL_NAMES:
             raise TimelineError("combo event requires two actual Engine kinds")
         return pair_key(special, second_special)
@@ -149,31 +149,34 @@ def build_timeline(profile: str, event: str, *,
 
 
 def verify_timeline(packet: Mapping) -> None:
+    """Recreate canonical packet from verified Engine symbolic enum names."""
     if not isinstance(packet, dict):
         raise TimelineError("candidate timeline must be a plain mapping")
     try:
+        event = packet["event_id"]
+        variant = packet["event_variant"]
+        first = second = None
+        if event == "special_trigger":
+            first = next((name for name, _ in SPECIAL_KINDS
+                          if _key(name) == variant), None)
+            if first is None:
+                raise TimelineError("unknown actual single Engine enum variant")
+        elif event == "combo_chain":
+            for a, _ in SPECIAL_KINDS:
+                for b, _ in SPECIAL_KINDS:
+                    if pair_key(a, b) == variant:
+                        first, second = a, b
+                        break
+                if first is not None:
+                    break
+            if first is None:
+                raise TimelineError("unknown canonical Engine combo pair variant")
         expected = build_timeline(
-            packet["profile_id"], packet["event_id"],
-            special=(packet["event_variant"] if
-                     packet["event_id"] == "special_trigger" else None),
-            reduced_motion=packet["reduced_motion"],
+            packet["profile_id"], event, special=first,
+            second_special=second, reduced_motion=packet["reduced_motion"],
             muted=packet["muted"], seed=packet["replay_seed"])
     except (KeyError, TypeError, ValueError) as exc:
         raise TimelineError("invalid/forged candidate packet") from exc
-    if packet["event_id"] == "combo_chain":
-        # Combo contains only canonical merged key, not the original pair.
-        # Rebuild from a verified canonical Engine enum cross-product.
-        for first in SPECIAL_NAMES:
-            for second in SPECIAL_NAMES:
-                if pair_key(first, second) == packet.get("event_variant"):
-                    expected = build_timeline(
-                        packet["profile_id"], packet["event_id"],
-                        special=first, second_special=second,
-                        reduced_motion=packet["reduced_motion"],
-                        muted=packet["muted"], seed=packet["replay_seed"])
-                    break
-            if expected.get("event_variant") == packet.get("event_variant"):
-                break
     if packet != expected:
         raise TimelineError("event/frames/effects/approval/replay changed or forged")
 
