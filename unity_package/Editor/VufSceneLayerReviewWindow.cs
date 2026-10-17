@@ -314,7 +314,13 @@ namespace Match3.VisualFactory.Editor
                 float insetX = rect.width * .07f, insetY = rect.height * .065f;
                 var guide = new Rect(insetX, insetY, rect.width - 2f * insetX,
                                      rect.height - 2f * insetY);
-                GUI.Box(guide, "SYNTHETIC SAFE AREA");
+                Color line = new Color(1f, 0.85f, 0.12f, 0.85f);
+                EditorGUI.DrawRect(new Rect(guide.xMin, guide.yMin, guide.width, 2f), line);
+                EditorGUI.DrawRect(new Rect(guide.xMin, guide.yMax - 2f, guide.width, 2f), line);
+                EditorGUI.DrawRect(new Rect(guide.xMin, guide.yMin, 2f, guide.height), line);
+                EditorGUI.DrawRect(new Rect(guide.xMax - 2f, guide.yMin, 2f, guide.height), line);
+                GUI.Label(new Rect(guide.xMin + 4f, guide.yMin + 4f,
+                                   guide.width - 8f, 20f), "SYNTHETIC SAFE AREA");
             }
             GUI.EndGroup();
         }
