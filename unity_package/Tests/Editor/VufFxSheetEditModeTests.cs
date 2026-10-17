@@ -71,6 +71,28 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void ManualFrameSteppingIsDeterministicAndWrapsWithoutEngineRules()
+        {
+            Assert.That(VufFxSheetPreviewWindow.StepFrame(0, 4, 1), Is.EqualTo(1));
+            Assert.That(VufFxSheetPreviewWindow.StepFrame(3, 4, 1), Is.EqualTo(0));
+            Assert.That(VufFxSheetPreviewWindow.StepFrame(0, 4, -1), Is.EqualTo(3));
+            Assert.That(VufFxSheetPreviewWindow.StepFrame(2, 4, 0), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void InvalidManualFrameRequestsAreRejectedWithoutTextureChanges()
+        {
+            Assert.Throws<ArgumentException>(() =>
+                VufFxSheetPreviewWindow.StepFrame(-1, 4, 1));
+            Assert.Throws<ArgumentException>(() =>
+                VufFxSheetPreviewWindow.StepFrame(4, 4, -1));
+            Assert.Throws<ArgumentException>(() =>
+                VufFxSheetPreviewWindow.StepFrame(0, 0, 1));
+            Assert.Throws<ArgumentException>(() =>
+                VufFxSheetPreviewWindow.StepFrame(0, 4, 2));
+        }
+
+        [Test]
         public void WrongFrameRectsSizesAndHashesAreRejected()
         {
             var obj = Fixture();
