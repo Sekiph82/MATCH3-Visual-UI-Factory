@@ -468,22 +468,39 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - **Tests:** Unity compilation, actual Editor Studio run, Windows local checkout sync, physical phone tests, image-generation providers, Engine/LFX compatibility and independent audit are **NOT VERIFIED**. CI configuration is source only until an actual job result is inspected; never mark M00 PASS from writing test definitions.
 - **Task ownership:** VUF-M00-003 and VUF-M00-005 are IN_PROGRESS / READY_FOR_FOCUSED_VERIFICATION. M00-001/002/004 are open, with upstream final SHA/policy decisions required. None of VUF-M00..M11 are PASS/CLOSED.
 
+## R48 | TASKS.md CHECKBOX RECONCILIATION AND MILESTONE SOURCE GATE | 2026-10-17
+
+**Meaning of `[x]`:** The narrowly stated task's *implemented deliverable* exists with available historical source/test evidence. A checkmark never automatically means all tasks in a milestone, a final branded visual, owner art approval, rights authenticity, Unity GUI acceptance, device QA or a five-game shipping release have passed. Historical R03/R04 notes above predate this R48 reconciliation; the current authoritative individual statuses are the boxes below. Do not erase historical provenance. For partial work keep `[ ]` and specify exactly what is missing.
+
+**Checked, evidence-grounded tasks (12):**
+- `M00-002/003/004/005`: upstream no-cross-repo release-gate policies + sole TASKS/Drive no-cost discipline, original/licensed intake restrictions, real Windows Python/Unity toolchain and negative tests. The Engine/LFX **final pins remain open** (`M00-001`).
+- `M01-001/005`: typed five-profile TEST_ONLY/CANDIDATE asset manifest with declared upstream SHA fields and negative structural/path/state/theme validation (e.g. `Tools/validate_manifest.py`, `unity_package/Runtime/VisualAssetManifest.cs`). Complete 5×17×8 plus 28 route/action/event mapping remains **OPEN** (`M01-002..004`).
+- `M03-003`: source separates artwork from runtime dynamic UI copy and icons, including EN/TR and pseudo-long candidate copy (R19 and later Editor components). Actual locale pixel QA remains **OPEN** (`M03-004`, `M09-002`).
+- `M04-004/005`: SHA-addressed original/licensed intake, revision/provenance/dimension metadata, immutable approval-history records and explicit no-paid-provider/no-secret fail-closed policy. These receipts do **not** authenticate owner/legal rights; `M04-001..003` remain open for full creative flow.
+- `M05-001`: R25 six visibly distinct mathematical alpha silhouettes × 5 themed candidate profiles, with original candidate PNGs/atlas and verified source-suite tests. These are **prototypes, not approved premium sprites**. Full sprite combo/obstacle/booster/packing work is open.
+- `M07-003`: standalone Tween + static reduced-motion FX candidate path/fallback without additional effect middleware. Playback/device parity and manual Lab remain open.
+- `M09-005`: mechanical test outcome, separate artistic owner approval, legal-rights review and physical device approval are maintained as distinct fail-closed gates. This does not represent those approvals being granted.
+
+**Historical verified checkpoint:** C010 published SHA `1ea8ac06dd13485d6c5c42a30c6d98154259c959`: 301 Python discovered, 294 passed, 7 OS skips; real Unity 6000.6.5f1 EditMode 72/72 passed. **New R43-R47 and subsequent source tests were not run at this checkpoint.** Source completion is NOT a newly verified test result. Full M00–M11 milestone PASS/CLOSED statuses remain OPEN.
+
+**Current milestone focus:** M05 (sprite/atlas deliverable) and dependent M08 source adapters, continuing from R47. R43 screen bridge, R44 release scan, R45/R46 preview/rollback and R47 V2 Atlas are SOURCE IMPLEMENTED / FINAL MILESTONE TEST OPEN, so their broad M03/M08 checkboxes are intentionally NOT checked. Next handoff to Codex is ONE comprehensive Windows/Unity verification **only after the active milestone's feasible code scope is complete**. No paid Actions, destructive cleanup, unapproved other-repo writes, fabricated approvals or invented upstream Engine/LFX SHA freezes.
+
 ## Factory milestones (M00 EARLY BOOTSTRAP / ALL OTHER PHASES GATED; no PASS claimed)
 
 ### VUF-M00 | Source audit, scope, secure baseline
 - [ ] VUF-M00-001 Freeze existing Engine M09 and LFX M08 APIs by exact SHA; extract screen/state/asset key inventory and legal restrictions.
-- [ ] VUF-M00-002 Record upstream Engine/LevelFactory PASS prerequisites and no-cross-repo implementation policy.
-- [ ] VUF-M00-003 Establish one-tracker + Drive-only prompts/logs/independent audit/evidence workflow and no-cost execution budget.
-- [ ] VUF-M00-004 Establish original/licensed art and font ingestion policy; no unlicensed reference extraction.
-- [ ] VUF-M00-005 Initialize minimal reproducible toolchain and targeted negative tests with no large caches, paid APIs or unauthorized local file operations.
+- [x] VUF-M00-002 Record upstream Engine/LevelFactory PASS prerequisites and no-cross-repo implementation policy.
+- [x] VUF-M00-003 Establish one-tracker + Drive-only prompts/logs/independent audit/evidence workflow and no-cost execution budget.
+- [x] VUF-M00-004 Establish original/licensed art and font ingestion policy; no unlicensed reference extraction.
+- [x] VUF-M00-005 Initialize minimal reproducible toolchain and targeted negative tests with no large caches, paid APIs or unauthorized local file operations.
 **Exit:** Reproducible tracked source and audited gates without art or engine rules duplication.
 
 ### VUF-M01 | Versioned asset, UI and animation contracts
-- [ ] VUF-M01-001 Implement typed five-profile visual manifest with stable game/theme IDs and upstream SHA pins.
+- [x] VUF-M01-001 Implement typed five-profile visual manifest with stable game/theme IDs and upstream SHA pins.
 - [ ] VUF-M01-002 Implement 5-profile x 17 Engine UiSurfaceKind x 8-state SYMBOLIC contract mapping to all 26 owner Coral Rescue screens plus Home and Gameplay/HUD (28 total), including route/overlay IDs, applicable state and required dynamic text/icon/action bindings; no imported game pixels in Engine.
 - [ ] VUF-M01-003 Map UI action IDs, dynamic text, localization, visible/disabled accessibility reason and fallback keys.
 - [ ] VUF-M01-004 Map piece/special/combo/goal/obstacle events to versioned view-only skin, VFX and animation keys; expose time, interrupt, replay and accessibility bindings to the external Studio visual consumer. No gameplay logic forks.
-- [ ] VUF-M01-005 Negative validation: duplicate/missing/unbound asset IDs, unknown state, cross-theme leak, invalid version and unsafe paths.
+- [x] VUF-M01-005 Negative validation: duplicate/missing/unbound asset IDs, unknown state, cross-theme leak, invalid version and unsafe paths.
 **Exit:** Engine/LevelFactory-compatible manifest consumer with deterministic golden fixtures.
 
 ### VUF-M02 | Five design systems and art-direction bibles
@@ -498,7 +515,7 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 ### VUF-M03 | Layered screen and UI component factory
 - [ ] VUF-M03-001 Component generator for CTA, cards, modals, badges, counters, tabs, progress bars and disabled/pending/claimed feedback.
 - [ ] VUF-M03-002 Layered interactive templates, modal/ceremony/mode variants for all 28 Coral Rescue experiences in the inventory, with reusable consent/account/booster/surface components for all five themed games; no flattened unclickable full-screen images.
-- [ ] VUF-M03-003 Runtime text/icon placement stays separate from artwork and supports EN/TR plus pseudo-long localized strings.
+- [x] VUF-M03-003 Runtime text/icon placement stays separate from artwork and supports EN/TR plus pseudo-long localized strings.
 - [ ] VUF-M03-004 Safe-area, tall phone, compact phone and tablet layout with usable touch targets and no cropped background text.
 - [ ] VUF-M03-005 Five-title theme swap never changes the semantic UI route graph or player state.
 **Exit:** Source-layered template packages for every screen and state family.
@@ -507,12 +524,12 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - [ ] VUF-M04-001 ChatGPT-assisted concept/master intake and optional approved image-provider adapter; clean no-API/manual path.
 - [ ] VUF-M04-002 Source reference/character identity lock, palette/style continuity and explicit image originality review.
 - [ ] VUF-M04-003 Review loop: generate -> candidate -> compare -> owner approve/reject -> immutable approved master; no self-approval.
-- [ ] VUF-M04-004 Stable asset lineage, image dimension/alpha/hash metadata, deduplication and licence provenance.
-- [ ] VUF-M04-005 Fail-closed paid-provider approval budget; no automatic credential capture or GitHub-stored tokens.
+- [x] VUF-M04-004 Stable asset lineage, image dimension/alpha/hash metadata, deduplication and licence provenance.
+- [x] VUF-M04-005 Fail-closed paid-provider approval budget; no automatic credential capture or GitHub-stored tokens.
 **Exit:** Reproducible art transformations and provenance, without pretending that generative images are bit-for-bit deterministic.
 
 ### VUF-M05 | Tile, booster, obstacle and sprite-atlas factory
-- [ ] VUF-M05-001 Six accessible base tile silhouettes for each title; separate shape from color.
+- [x] VUF-M05-001 Six accessible base tile silhouettes for each title; separate shape from color.
 - [ ] VUF-M05-002 All horizontal/vertical/area/color/missile special combinations mapped to engine IDs.
 - [ ] VUF-M05-003 Obstacle states, damage variations, collectibles, goals, equipment and boosters.
 - [ ] VUF-M05-004 Trim/pivot/transparent margins, 1x/2x/3x image exports and Sprite Atlas V2 import settings.
@@ -529,7 +546,7 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 ### VUF-M07 | Animations, VFX and reduced-effects parity
 - [ ] VUF-M07-001 Idle, reward, win/fail, tile, combo, character and UI transition effect contracts.
 - [ ] VUF-M07-002 Sprite-sheet/Unity animation bindings: manual frame-by-frame scrub, frame rate/loop/ping-pong, pivots, alignment, transparency, scale, clipping, atlas swaps, transition priority and interruption/replay parity.
-- [ ] VUF-M07-003 Full/reduced-motion mode and optional middleware-absent fallback.
+- [x] VUF-M07-003 Full/reduced-motion mode and optional middleware-absent fallback.
 - [ ] VUF-M07-004 Enforce no animation/VFX callback may mutate engine board, rewards or save transactions.
 - [ ] VUF-M07-005 Frame, audio cue, haptic trigger, particle, texture/atlas, draw-call, memory and CPU/GPU budget diagnostics on genuine demo runs; distinguish simulation from real-device verification.
 - [ ] VUF-M07-006 **Manual Sprite & VFX Lab (OWNER REQUIRED):** User selects a game profile, asset, animation, event and state; manually plays/pauses/scrubs frame-by-frame at 0.25x/0.5x/1x/2x, compares sprite sheets, keyframes, particle bursts/trails, masks, lighting/parallax, combo/chained VFX, success/fail and transitions. Test loop/pivot/atlas/crop/alpha, overlapping effects, interruption, replay, reduced-motion, mute and logged haptic events. No VFX callback may mutate gameplay or rewards; save reproducible test receipts. Do not claim physical haptic/audio-device PASS from desktop simulation.
@@ -549,7 +566,7 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - [ ] VUF-M09-002 Accessibility: color-independent shapes, contrast, text fitting, focus, hit targets, reduced motion and translated long strings.
 - [ ] VUF-M09-003 Visual consistency regression, missing overlays, resolution sharpness, safe area, sprite pixel fidelity, transparency/fringing, layer ordering, 1x/2x/3x atlas swaps and frame-by-frame animation diffs.
 - [ ] VUF-M09-004 Original/licensed artwork and font receipts, approved source revisions and no forbidden lookalikes.
-- [ ] VUF-M09-005 Separate mechanical automated PASS from human creative acceptance and real device signoff.
+- [x] VUF-M09-005 Separate mechanical automated PASS from human creative acceptance and real device signoff.
 - [ ] VUF-M09-006 **Owner Manual Visual QA Studio acceptance (MANDATORY):** Desktop Unity Editor and development Windows viewer must expose manual, clickable inspection of every supported screen, button state, gameplay tile/obstacle/booster animation, sprite-sheet frame, particle/VFX cue, camera/parallax, layer/z-order, popup transitions, sound cue and simulated haptic event. Controls: profile/asset/screen/state/level/seed selector, pause/single-frame/event stepping, speed, before/after or A/B compare, overlay and safe-area guides, multiple phone/tablet ratios, EN/TR long strings, disabled/offline/loading, full/reduced-motion, FPS/memory/draw-call metrics where supported, screenshot/video or frame-sequence export and deterministic event trace. Separate automatic rendering PASS, human aesthetic approval, and real iOS/Android physical tests. Any unavailable feature shows explicit UNSUPPORTED/N-A reason. Owner must be able to manually reproduce animation/cropping/state errors; no mere static mockup is accepted.
 **Exit:** Fail-closed audit that produces reproducible visual proof, never forged owner approval.
 
