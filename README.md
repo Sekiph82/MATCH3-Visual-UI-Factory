@@ -299,3 +299,13 @@ hierarchies** without adding a new animation engine or another third-party
 layout dependency. All buttons and five policy-disabled social/event
 surfaces stay blocked; everything is draft-only. R43 new tests are authored
 but *not* locally run on the newer commit.
+
+### R44 | Safe player build inclusion scanner (NOT a release builder)
+An offline `player_pack_preflight.py` accepts ONE external candidate
+directory and scans actual file bytes for SHA receipts, limits, allowed
+player-relevant types, and leaks of Unity Editor, tests, raw references,
+credentials, evidence, development samples, unapproved art or source.
+It makes **no files** and always returns
+`release_allowed=false`; a clean scan is a review-only finding.
+This advances VUF-M08-005 implementation but does NOT close Engine/LFX,
+commercial art, iOS/Android, owner or release milestones.

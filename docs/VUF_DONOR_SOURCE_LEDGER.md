@@ -149,3 +149,28 @@ Four new source-only Python contract definitions. **NEW R43 tests NOT YET RUN.**
 Previous C010 Python 294 PASS/7 OS SKIP and Unity 72/72 PASS apply only to
 the earlier final commit `1ea8ac06dd13485d6c5c42a30c6d98154259c959`.
 No new source rights, GPU performance, phone UI or owner artistic approval.
+
+## R44 | VF-10 / M08-005 player content scanner donor-first decision
+
+BEFORE source coding: inspected the existing VUF `Tools/validate_manifest.py`,
+`Tools/validate_repo_structure.py`, `factory/validators/verify_candidates.py`
+and export pipeline README; also reviewed the pinned Unity UI Extensions
+`package.json` at exact upstream commit
+`d47f838ba918bbb9b26f242bd944940a711f525f`,
+Git blob `6bb5e0dbfa6878c24df2e8d1b5e42e4c970c1b15`,
+and `Unity-Technologies/Addressables-Sample` repository metadata.
+**REJECTED_REASON**: full Unity UI Extensions and Addressables samples are
+editor/package demos, not a standalone, fail-closed, read-only player file
+allowlist/security checker. Importing those would add unnecessary
+dependencies and falsely conflate dev packages and player shipping.
+**INTERNAL_REUSE / STDLIB MINIMAL ADAPTER**: preserve existing VUF
+candidate-approval and SHA/path philosophy with Python `pathlib`,
+`os.walk`, `hashlib`, `re`, `stat`, `json` (standard library)
+in a new bounded read-only `factory/export_pipeline/player_pack_preflight.py`.
+No downloaded code/vendor source, no need for external copyright terms.
+It is an independent inspect-only fail-closed preflight, not a release
+exporter or rights authority.
+
+Twelve source-defined Python unit cases; at R44 SHA no actual Windows
+execution claimed. Real consumer package, licensed art, owner sign-off,
+device QA and Engine/LFX compatibility remain OPEN.
