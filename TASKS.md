@@ -92,7 +92,7 @@
 - [x] VUF-M03-006 R06/R17: 7 uGUI page archetype + 8 durumlar/disabled actions (`VufUiComposerWindow.cs`, `VufReviewStateCatalog.cs`).
 - [x] VUF-M03-007 R35–R42: uGUI editable components, Home flow/radial, gradient/mirror/raycast, reduced motion donor reuse (`VufPageComposition.cs`, donor ledger).
 - [x] VUF-M03-008 R08/R32/R35/R36: 28 shell, editable Home/Gameplay/World concept staging ve 5 motif (`VufScreenShellBuilderWindow.cs`, `VufConceptStageBuilderWindow.cs`).
-- [x] VUF-M03-009 R43: 28 Coral shell icine R35–R42 donor component bridge; C011 kaynak testi henuz kosulmadi (`VufScreenShellLayoutBridge.cs`).
+- [x] VUF-M03-009 R43: 28 Coral shell icine R35–R42 donor component bridge; VUF-M05-015 kapsamli yerel kaynak testi henuz kosulmadi (`VufScreenShellLayoutBridge.cs`).
 - [ ] VUF-M03-010 28 ekranin gercek bagli runtime aksiyonlari/modal/consent/booster ve owner GUI kabulu.
 - [x] VUF-M03-011 R17/R19: editable text slot + EN/TR uzun metin onizlemesi (`locale_audit.py`, `VufReviewStateCatalog.cs`).
 - [x] VUF-M03-012 R06/R15/R18: SafeAreaFitter, 5 synthetic responsive wireframe + typography QA; gercek telefon/tablet testi eksik.
@@ -130,9 +130,9 @@
 - [ ] VUF-M05-010 Tum gercek obstacle/goal/booster final Engine IDs ve owner art/state parity dogrulama.
 - [x] VUF-M05-011 R05/R07/R31: trim, 1×/2×/3×, alpha mask, edge-extrusion, deterministik atlas (`png_pipeline.py`, `atlas_pipeline.py`).
 - [x] VUF-M05-012 R27/R47: Unity tile/atlas inspector ve SpriteAtlas V2 draft export authoring (`VufTileKitInspectorWindow.cs`, `VufSpriteAtlasV2Window.cs`).
-- [ ] VUF-M05-013 Unity'de gercek SpriteAtlas V2 import/pivot/texture settings ve 1×/2×/3× kabul; C011 toplu test acik.
+- [ ] VUF-M05-013 Unity'de gercek SpriteAtlas V2 import/pivot/texture settings ve 1×/2×/3× kabul; VUF-M05-015 toplu test acik.
 - [x] VUF-M05-014 R07/R26/R49: Bagimsiz alpha/CRC/hash/UV/pixel/state/duplicate/memory estimate negatifs (`verify_generated_kits.py`, `atlas_candidate_audit.py`).
-- [ ] VUF-M05-015 Codex: M05 toplu Windows Python + Unity 6000.6.5f1 SpriteAtlas V2/190 demo-sprite/alpha/UV/bellek/animasyon ve adversarial testlerini gerçekleştirmek üzere mevcut tek Codex istemini uygula. İstem oluşturuldu, test HENÜZ YAPILMADI: https://docs.google.com/document/d/1QxRlHespXcVw4gg__FXMnctm6szpF4bd9A06U1VQvfI/edit?usp=drivesdk
+- [ ] VUF-M05-015 Codex: TEK toplu M05 yerel test gorevi. En guncel main'i guvenle denetle; tum Python/Unity 6000.6.5f1, SpriteAtlas V2, 5 oyun x 38 demo sprite, alpha/UV/CRC/texture/memory budget, R43–R52 regresyon ve negatifleri gercekten calistir; hata varsa dar kapsamli duzelt ve FINAL SHA'da tam regresyonu tekrarla. Kanitlari Drive 02_CODEX_LOGS'da TEK rapora kaydet; gercek GUI/cihaz/owner art onayi yoksa NOT RUN. Codex henüz çalıştırılmadı. Tek gorev istemi: https://docs.google.com/document/d/1QxRlHespXcVw4gg__FXMnctm6szpF4bd9A06U1VQvfI/edit?usp=drivesdk
 
 **Exit:** Complete five-title sample atlas packs with no unsupported runtime assumptions.
 
