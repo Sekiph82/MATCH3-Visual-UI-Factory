@@ -9,7 +9,7 @@
 **Owner requirement for EVERY future VUF code task:** Read this existing root `TASKS.md` task, then inspect existing working VUF modules and the actual files of previously discussed pinned GitHub donors BEFORE writing new code. Prefer direct legally permitted source adoption with minimal namespace/Unity 6.6/asset-schema changes and baseline+integration tests over rewriting equivalent functionality. The existing `docs/VUF_DONOR_SOURCE_LEDGER.md` is source provenance evidence, NOT another task tracker. Reuse already adopted BSD-3-Clause Unity-UI-Extensions `NonDrawingGraphic` and other now-adopted inspected UGUI effects plus VUF's existing `VufUiTween` before adding redundant UI/animation libraries. UltraGem and Unity Game Simulation level-edit code belong to LFX, LibraStack match logic to Engine; CC BY-NC-ND Rimaethon/unlicensed assets or code are not import candidates under current rights. For EACH coding step, record exact donor repo/commit/file/blob SHA, licence and dependency review, selected functions, `DIRECT_REUSE`/`MINIMAL_ADAPTER`/`INTERNAL_REUSE`/`REJECTED_REASON`, necessary changes, actual test status and original notices in the existing Drive workflow. Update this same `TASKS.md` after real source changes/audits; no task ID/milestone count edits, no false PASS for unrun Unity, device, visuals or licensing, no GitHub Actions/paid CI or destructive cleanup. This is a **process-only instruction**, not an import or task closure.
 
 
-**Status (2026-10-17 / R51):** C010 owner-local checkpoint at SHA 1ea8ac06: Python 294 PASS / 7 OS SKIP, real Unity EditMode 72/72 PASS. Later R43–R52 SOURCE ONLY includes UI shell donor reuse, player-pack scanner, version/rollback preview, Unity SpriteAtlas V2 candidate, atlas pixel/estimated-memory audit and upstream-blob-pinned special/obstacle symbolic skins. R49–R52 added 37 authored Python unit methods; all later-source Python/Unity/GUI tests NOT RUN. Individual milestone checklist now has 12 evidenced checked items and 52 open (see R48). No VUF-M00..M11 full production milestone acceptance, human art/right approval, GPU/device proof or final Engine/LFX release claimed.
+**Status (2026-10-17 / R53 COMPLETE SOURCE INVENTORY AUDIT):** C010 owner-local checkpoint at SHA 1ea8ac06: Python 294 PASS / 7 OS SKIP, real Unity EditMode 72/72 PASS. R43–R52 SOURCE ONLY: UI donor-backed shells, security scan, manifest/version diff, SpriteAtlas V2 candidate, atlas byte/memory QA, Engine-sourced special/obstacle skin maps and five-theme sample PNG exports. Later-source Python/Unity/GUI tests NOT RUN. Reconciled 64 IDs: **19 checked source obligations and 45 open** (see R53 for full evidence matrix and why partial deliverables stay unchecked). No full M00–M11 release milestone, art/right/owner/GPU/device, final Engine/LFX PASS or production release claimed.
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
 **Authority:** This root TASKS.md is the only lifecycle tracker in this repository; ChatGPT alone writes auditable task statuses. Keep full prompts, Codex logs, independent audits, and evidence in designated Google Drive project folders, not in GitHub coordination files.
@@ -468,6 +468,52 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - **Tests:** Unity compilation, actual Editor Studio run, Windows local checkout sync, physical phone tests, image-generation providers, Engine/LFX compatibility and independent audit are **NOT VERIFIED**. CI configuration is source only until an actual job result is inspected; never mark M00 PASS from writing test definitions.
 - **Task ownership:** VUF-M00-003 and VUF-M00-005 are IN_PROGRESS / READY_FOR_FOCUSED_VERIFICATION. M00-001/002/004 are open, with upstream final SHA/policy decisions required. None of VUF-M00..M11 are PASS/CLOSED.
 
+## VUF-R53 | FULL REPOSITORY + DRIVE CROSS-AUDIT, TASK CHECKBOX RECONCILIATION | 2026-10-17
+
+**Owner-requested full evidence reassessment:** This is a broad task-by-task reconciliation, not a new claim of production maturity. GitHub `main` source/commit lineage inspected through R52, including the ten VF module READMEs, root TASKS.md, manifest/schema/style contracts, Unity Editor/Runtime code, source validators, authored unit/NUnit tests, provenance and donor-licence ledger; compared against Google Drive project six folders: `01_PROMPTS` (13 files), `02_CODEX_LOGS` (25 files), `03_AUDIT_CRITERIA` (3 files), and empty `04_AUDIT_RESULTS`, `05_EVIDENCE`, `06_RELEASES` at this inspection. All 41 indexed Drive files were read (including the stored Markdown C007 result), plus milestone-relevant GitHub source and historical feature-commit diffs. We did **not** claim to re-run any local Windows test, independently rehash external Windows raw XML/logs, inspect every generated binary that lives outside Git or authenticate the owner's licence/rights/visual signature. This review also checked current main and distinguishes source-done from product-ready.
+
+**Why the old list badly understated development:** In R04–R52 there are ten VF modules with many significant implemented candidate tools, tens of Unity windows/adapters and hundreds of Python/Unity test cases, but the milestone checklist is a collection of broad acceptance criteria, not a commit counter. The earlier policy left every checkbox open until full milestone PASS, even when a discrete deliverable had been coded, locally tested and was materially complete. We now mark completed *individual implementation obligations* in that same original checklist, while keeping their independent technical and owner-creative acceptance gates separate. An `[x]` means the substantive scoped deliverable exists in source; **it NEVER asserts a full VUF milestone has passed** and does not certify art, phone performance, commercial rights or final Engine/LFX binding. Source delivered since the last actual C010 test is flagged TEST_PENDING, even for `[x]` items.
+
+**Checkbox outcome:** 64 milestone task IDs total. **19 implementation obligations `[x]`, 45 `[ ]` with real remaining work or external gates.** The previous R48 reconciliation had 12 `[x]`. Newly source-completed in this review (7 additional):
+- `VUF-M04-001`: Real no-API, original/licensed PNG concept/manual candidate intake, default DRY RUN, reproducible 15 five-theme concept previews and offline versioned catalog. The paid-provider adapter is OPTIONAL/OFF, not advertised as built. Evidence: `factory/asset_generator/offline_batch.py`, `factory/ui_composer/concept_showcase.py`, `factory/asset_catalog/catalog.py`, C009 273 Python + 50 Unity passed at SHA 6c70a6a (applicable earlier implementation only). Master artwork approval stays OPEN.
+- `VUF-M05-002`: R50 original Engine source-blob-pinned view-only mapping of all five actual `SpecialActivationKind` enum ordinals, including `Targeted` missile, **15 unordered pairs per theme**, five separate skin namespaces and 8 authored negative tests. `factory/visual_director/special_skin_map.py`; source finished for symbolic keys, later SHA new Python tests NOT RUN and actual Engine final replay/Unity visual binding OPEN.
+- `VUF-M05-005`: R49 read-only candidate atlas verifier covers actual PNG hash/decode, RGBA alpha/bounds, duplicate sprite ID/pixels and optional masks, required missing-state IDs, UV overlap/geometry and estimated RGBA8+mipmap byte-budget negatives; plus independent preexisting VF09 pixel verifiers. `factory/validators/atlas_candidate_audit.py`, `tests/test_atlas_candidate_audit.py`. New tests NOT RUN; real Unity texture packing/GPU budgets and device QA remain M05 exit OPEN.
+- `VUF-M06-004`: Generation/EXTERNAL CANDIDATE export preserves five-profile theme naming, style-source SHA receipts, deterministic PNG/layer versions, atlas/asset hash lineage and explicit upstream source-blob identity; `factory/visual_director/silhouette_kit.py`, `factory/ui_composer/concept_showcase.py`, `factory/image_processor/layer_compositor.py`, `factory/visual_director/sample_sprite_pack.py`. No shipping licensed art/package approval.
+- `VUF-M07-004`: Implemented presentation-only APIs/callback isolation: existing runtime `VufUiTween`, Editor `VufFxSheetPreviewWindow`, `VufVfxLabWindow` and `VufFxClipExporterWindow` do not expose gameplay board, scoring, wallet, reward or save writes. Historical C010 real Unity/Source tests include motion/FX source invariants. This does **not** replace later ENGINE replay/presentation callback integration checks under M07-002/M08-006/M10-005.
+- `VUF-M08-004`: Source-level fail-closed tests and inspectors for absent/malformed manifests, stage/profile/asset/version/pin mismatch and candidate rollback ADDED/REMOVED/CHANGED diffs, paired with existing SQLite actual immutable approved-revision rollback and stale-revision negative tests. `factory/export_pipeline/preview_compatibility.py`, `unity_package/Editor/VufPreviewCompatibilityWindow.cs`, `factory/asset_catalog/catalog.py`. R45–R46 local Unity/negative tests remain NOT RUN. Real released pack restore is NOT implemented and is still part of M11-001.
+- `VUF-M08-005`: R44 bounded, read-only, fail-closed player content candidate scanner rejects Editor/tests/tools/docs/raw references/evidence, dangerous extensions, secret-like bytes, links and source/approval spoofing. `factory/export_pipeline/player_pack_preflight.py`, authored 12 tests. **Scanner exists, but has NOT been integrated into a real platform player release pipeline or locally retested**; release approval remains OFF under M11.
+
+**Evidence by historic pinned windows checkpoint:**
+| Gate | SHA of ACTUAL local run | Python | Unity EditMode | Remaining |
+| --- | --- | --- | --- | --- |
+| C005 | `9dcca802` | 144 PASS, 7 SKIP | 16/16 | GUI/device/art |
+| C006 | `05566214` | 163 PASS, 7 SKIP | 18/18 | GUI/device/art |
+| C007 | `f6984497` | 165 PASS, 7 SKIP | 21/21 | GUI/device/art |
+| C008 | `aa4900aa` | 189 PASS, 7 SKIP | 32/32 | GUI/device/art |
+| C009 | `6c70a6a0` | 273 PASS, 7 SKIP | 50/50 | GUI/device/art |
+| C010 | `1ea8ac06` | **294 PASS, 7 SKIP** | **72/72** | GUI/device/art |
+**Hard boundary:** All R43–R52 additions came AFTER `1ea8ac06`, so none has a genuinely completed Python+Unity owner-local C011 test yet. The real C010 72/72 does NOT cover R43–R52. Existing C011 prompt remains ONE full M05 QA handoff: https://docs.google.com/document/d/1QxRlHespXcVw4gg__FXMnctm6szpF4bd9A06U1VQvfI/edit?usp=drivesdk .
+
+**Full 64-ID milestone matrix after repo+Drive review:**
+| Milestone | Checked source obligations | Still unchecked, with reason | Milestone EXIT |
+| --- | --- | --- | --- |
+| M00 | 002/003/004/005 | 001 final Engine M09/LFX M08 SHA/API freeze still upstream/open | OPEN; dependent final pins |
+| M01 | 001/005 | 002 5×17×8 + 28 complete route/action binding; 003 real action/accessibility fallback map; 004 full event/timing/replay/view keys | OPEN; contract consumer |
+| M02 | none | 001 typography/grid/token spec partial; 002–006 all five draft style palettes exist, but original/licensed icon/character/background identity reference sheets and owner sample reviews absent | OPEN; owner art |
+| M03 | 003 | 001 full reusable states/component generator partial; 002 28 candidate shells exist but not 28 functional layered templates/booster/consent flows; 004 synthetic safe-area/text diagnostics not physical proof; 005 theme route graph/state invariant not exercised with real Engine | OPEN; real interactive screens |
+| M04 | 001/004/005 | 002 image/character identity lock + originality approval; 003 human compare/reject/immutable approved-master creative loop incomplete in actual graphic workflow | OPEN; owner art |
+| M05 | 001/002/005 | 003 demo obstacle states/goal/booster sprites aren't full real Engine taxonomy; 004 atlas/trim/1×2×3 source exists but complete SpriteAtlas V2 Unity importer/pivot/texture proof not yet done | **ONE C011 Windows/Unity gate assigned; milestone OPEN** |
+| M06 | 004 | 001 required actual layered reef/aquarium/region/world scene packs not fully authored; 002 consistent real mascot/character identity sheets not made; 003 actual parallax/scene scaling combinations incomplete | OPEN; five sample scenes |
+| M07 | 003/004 | 001 incomplete all FX event families; 002 not all frame/atlas/transition/replay behaviors; 005 real FPS/voice/haptic/GPU evidence missing; 006 owner full manual Sprite/VFX Lab unavailable | OPEN; manual Studio/device |
+| M08 | 004/005 | 001 actual uGUI vs UI Toolkit assessment not completed; 002 live Engine actions/UI inspector missing; 003 V2 candidate atlas not full export pack/locales/effects/Addressables fallback; 006 external ENG-M12-010 consumer and final upstream PASS missing | OPEN; Unity packaging |
+| M09 | 005 | 001 no rendered 5-profile×state×device screenshot matrix; 002 incomplete focus/tap/locale/reduced-motion visual acceptance; 003 no full pixel/regression/performance matrix; 004 authentic source rights/lookalike signoff unverified; 006 required interactive owner Manual QA Studio not completed | OPEN; genuine visual QA |
+| M10 | none | 001–006 real Engine/LFX integrated runtime vertical slices, phone/platform testing and complete end-to-end five-theme test all absent or blocked upstream | OPEN; final upstream dependencies |
+| M11 | none | 001–005 production-compatible signed export/rollback, owner approval, independent audit, game handoff and frozen v1 release not complete | OPEN; no v1 shipping |
+
+**DO NOT misread progress:** VUF has extensive real SOURCE progress in VF01..VF10. Current checkboxes quantify only complete narrowly scoped implementation obligations, not all coded subfeatures. The major unfinished work is functional UI bindings, real final art, an extensive manual visual Studio, Engine/LFX integration, device/performance acceptance and production packaging. Google Drive `04_AUDIT_RESULTS`, `05_EVIDENCE`, `06_RELEASES` folders currently have no listed final VUF independent audit/release artifacts; earlier owner-local raw artifacts are reported at explicit external Windows evidence locations.
+
+**Audit next action:** C011 run and evidence must be independently inspected before moving M05 from SOURCE_DONE/PARTIAL to TESTED and before any milestone PASS. Update the original per-task `[x]` promptly after a discrete deliverable truly completes; do NOT delay all checkbox changes until M11, and do NOT represent unrun tests or owner approvals as done.
+
 ## VUF-M05-C011 | ONE FULL MILESTONE CODEX WINDOWS/UNITY GATE | PROMPT READY; TESTS NOT YET EXECUTED
 
 **ONE consolidated milestone prompt (2026-10-17):** https://docs.google.com/document/d/1QxRlHespXcVw4gg__FXMnctm6szpF4bd9A06U1VQvfI/edit?usp=drivesdk . Read-back verified as a real Google Doc inside the project's `01_PROMPTS` Google Drive folder. This is the **single** M05 milestone QA handoff, NOT a per-R49/R50/R51/R52 test. The prompt uses actual C010 SHA-bound history; tests all R43–R52 and M05-001..005 together; requires full real Python 3.12 + actual Unity 6000.6.5f1 EditMode and physical sample/atlas/import tests, honest GUI/rights/device blockers, a complete final-SHA rerun after necessary repairs, and ONE Drive log in `02_CODEX_LOGS`. No paid Actions, duplicate local checkout/worktree, destructive TEMP/Library cleanup, other repo writes or auto art/release approval.
@@ -555,7 +601,7 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 **Exit:** Source-layered template packages for every screen and state family.
 
 ### VUF-M04 | AI artwork provider and human-review pipeline
-- [ ] VUF-M04-001 ChatGPT-assisted concept/master intake and optional approved image-provider adapter; clean no-API/manual path.
+- [x] VUF-M04-001 ChatGPT-assisted concept/master intake and optional approved image-provider adapter; clean no-API/manual path.
 - [ ] VUF-M04-002 Source reference/character identity lock, palette/style continuity and explicit image originality review.
 - [ ] VUF-M04-003 Review loop: generate -> candidate -> compare -> owner approve/reject -> immutable approved master; no self-approval.
 - [x] VUF-M04-004 Stable asset lineage, image dimension/alpha/hash metadata, deduplication and licence provenance.
@@ -564,24 +610,24 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 
 ### VUF-M05 | Tile, booster, obstacle and sprite-atlas factory
 - [x] VUF-M05-001 Six accessible base tile silhouettes for each title; separate shape from color.
-- [ ] VUF-M05-002 All horizontal/vertical/area/color/missile special combinations mapped to engine IDs.
+- [x] VUF-M05-002 All horizontal/vertical/area/color/missile special combinations mapped to engine IDs.
 - [ ] VUF-M05-003 Obstacle states, damage variations, collectibles, goals, equipment and boosters.
 - [ ] VUF-M05-004 Trim/pivot/transparent margins, 1x/2x/3x image exports and Sprite Atlas V2 import settings.
-- [ ] VUF-M05-005 Automatic alpha/dimension/duplicates/missing-state/atlas memory-budget tests.
+- [x] VUF-M05-005 Automatic alpha/dimension/duplicates/missing-state/atlas memory-budget tests.
 **Exit:** Complete five-title sample atlas packs with no unsupported runtime assumptions.
 
 ### VUF-M06 | Backgrounds, characters and maps
 - [ ] VUF-M06-001 Layered World/Chapter maps, Gameplay backdrops, reef restoration, Marine Collection, My Aquarium decoration, and New Region reveal scene layers; no flattened runtime buttons or text.
 - [ ] VUF-M06-002 Character/mascot reference sheets with consistent poses and silhouette identity.
 - [ ] VUF-M06-003 Parallax/background/screen scaling exports and relevant overlays.
-- [ ] VUF-M06-004 Title/theme naming, provenance and version pinning through generation and export.
+- [x] VUF-M06-004 Title/theme naming, provenance and version pinning through generation and export.
 **Exit:** At least one representative scene package per profile, owner-reviewable.
 
 ### VUF-M07 | Animations, VFX and reduced-effects parity
 - [ ] VUF-M07-001 Idle, reward, win/fail, tile, combo, character and UI transition effect contracts.
 - [ ] VUF-M07-002 Sprite-sheet/Unity animation bindings: manual frame-by-frame scrub, frame rate/loop/ping-pong, pivots, alignment, transparency, scale, clipping, atlas swaps, transition priority and interruption/replay parity.
 - [x] VUF-M07-003 Full/reduced-motion mode and optional middleware-absent fallback.
-- [ ] VUF-M07-004 Enforce no animation/VFX callback may mutate engine board, rewards or save transactions.
+- [x] VUF-M07-004 Enforce no animation/VFX callback may mutate engine board, rewards or save transactions.
 - [ ] VUF-M07-005 Frame, audio cue, haptic trigger, particle, texture/atlas, draw-call, memory and CPU/GPU budget diagnostics on genuine demo runs; distinguish simulation from real-device verification.
 - [ ] VUF-M07-006 **Manual Sprite & VFX Lab (OWNER REQUIRED):** User selects a game profile, asset, animation, event and state; manually plays/pauses/scrubs frame-by-frame at 0.25x/0.5x/1x/2x, compares sprite sheets, keyframes, particle bursts/trails, masks, lighting/parallax, combo/chained VFX, success/fail and transitions. Test loop/pivot/atlas/crop/alpha, overlapping effects, interruption, replay, reduced-motion, mute and logged haptic events. No VFX callback may mutate gameplay or rewards; save reproducible test receipts. Do not claim physical haptic/audio-device PASS from desktop simulation.
 **Exit:** Real Unity-consumable effects and replay-invariant acceptance.
@@ -590,8 +636,8 @@ The owner specified **26 named Coral Rescue UI/game experiences**. Home and the 
 - [ ] VUF-M08-001 Unity 6000.6.5f1 Editor authoring interface and import automation; choose runtime uGUI/TMP versus UI Toolkit based on actual animation/safe-area tests, not assumptions.
 - [ ] VUF-M08-002 Build layered interactive prefabs/UXML and real action bindings with dev-only UI inspector for z-order, touch targets, layout anchors, safe areas, tween/transition states, disabled/offline/loading and localized text.
 - [ ] VUF-M08-003 Package sprite atlases, imports, locales, effect configs and optional Addressables with fallback.
-- [ ] VUF-M08-004 Offline/missing image/incorrect manifest/version conflict and rollback negative checks.
-- [ ] VUF-M08-005 Release scanner rejects test assembly, templates, raw reference art, secrets and generated evidence from game players.
+- [x] VUF-M08-004 Offline/missing image/incorrect manifest/version conflict and rollback negative checks.
+- [x] VUF-M08-005 Release scanner rejects test assembly, templates, raw reference art, secrets and generated evidence from game players.
 - [ ] VUF-M08-006 **External Visual Test Studio adapter (OWNER REQUIRED):** After Engine and LFX are independently closed, connect versioned VUF asset packs to ENG-M12-010 neutral event/replay contracts in a separate Unity consumer or compatible Studio plugin. Preview real layered graphics, sprites, VFX, camera/UI transitions without inserting any artwork into MATCH3_ENGINE repo, tests or runtime source. Permit owner manual asset/theme hot-swap in sandbox only, with immutable hashes, schema mismatch, missing-pack fallbacks and no revenue/save authority.
 **Exit:** Working external Unity consumer of one export per five neutral game profiles.
 
