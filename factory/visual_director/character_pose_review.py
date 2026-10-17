@@ -175,6 +175,8 @@ def inspect_character(manifest_file: Path, source_root: Path) -> tuple[dict, byt
             any(_is_link(p) for p in manifest_file.parents) or
             manifest_file.resolve(strict=True).is_relative_to(ROOT)):
         raise PoseReviewError("source manifest must be ordinary external file")
+    if manifest_file.stat().st_size > 128 * 1024:
+        raise PoseReviewError("source manifest exceeds bounded byte limit")
     data = manifest_file.read_bytes()
     spec = _manifest(data)
     frames = []
