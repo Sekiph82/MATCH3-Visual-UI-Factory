@@ -181,6 +181,40 @@ def verify_timeline(packet: Mapping) -> None:
         raise TimelineError("event/frames/effects/approval/replay changed or forged")
 
 
+def sample_timeline(packet: dict, *, elapsed_ms: int,
+                    speed: float = 1.0, interrupted: bool = False) -> dict:
+    """Manual Studio stepper, NOT Unity real-time playback or an event callback.
+
+    Derives a frame cursor from the same immutable verified packet, allowing
+    0.25x/0.5x/1x/2x scrubbing and interruption simulation without executing
+    any effects, sounds, haptics, game-board logic or reward actions.
+    """
+    verify_timeline(packet)
+    if type(elapsed_ms) is not int or not 0 <= elapsed_ms <= 60_000:
+        raise TimelineError("elapsed preview time must be integer milliseconds")
+    if type(speed) not in (float, int) or speed not in FULL_SPEEDS:
+        raise TimelineError("manual preview speed must be 0.25/0.5/1/2")
+    if type(interrupted) is not bool:
+        raise TimelineError("interrupted must be explicit bool")
+    t = min(packet["duration_ms"], round(elapsed_ms * speed))
+    ix = max(i for i, frame in enumerate(packet["keyframes"])
+             if frame["time_ms"] <= t)
+    return {
+        "profile_id": packet["profile_id"],
+        "event_id": packet["event_id"],
+        "replay_sha256": packet["replay_sha256"],
+        "elapsed_scaled_ms": t,
+        "frame_index": ix,
+        "normalized_progress_milli": packet["keyframes"][ix]["normalized_progress_milli"],
+        "complete": bool(t == packet["duration_ms"]),
+        "view_canceled_only": interrupted,
+        "draw_candidate_frame": not interrupted,
+        "gameplay_mutations": False,
+        "sound_or_haptic_playback": False,
+        "save_or_reward_mutations": False,
+    }
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--profile", required=True, choices=PROFILES)
