@@ -9,7 +9,7 @@
 **Owner requirement for EVERY future VUF code task:** Read this existing root `TASKS.md` task, then inspect existing working VUF modules and the actual files of previously discussed pinned GitHub donors BEFORE writing new code. Prefer direct legally permitted source adoption with minimal namespace/Unity 6.6/asset-schema changes and baseline+integration tests over rewriting equivalent functionality. The existing `docs/VUF_DONOR_SOURCE_LEDGER.md` is source provenance evidence, NOT another task tracker. Reuse already adopted BSD-3-Clause Unity-UI-Extensions `NonDrawingGraphic` and other now-adopted inspected UGUI effects plus VUF's existing `VufUiTween` before adding redundant UI/animation libraries. UltraGem and Unity Game Simulation level-edit code belong to LFX, LibraStack match logic to Engine; CC BY-NC-ND Rimaethon/unlicensed assets or code are not import candidates under current rights. For EACH coding step, record exact donor repo/commit/file/blob SHA, licence and dependency review, selected functions, `DIRECT_REUSE`/`MINIMAL_ADAPTER`/`INTERNAL_REUSE`/`REJECTED_REASON`, necessary changes, actual test status and original notices in the existing Drive workflow. Update this same `TASKS.md` after real source changes/audits; no unapproved ad hoc task renumbering, no false PASS for unrun Unity, device, visuals or licensing, no GitHub Actions/paid CI or destructive cleanup. This is a **process-only instruction**, not an import or task closure.
 
 
-**Status (2026-10-17):** Tek formatli milestone checklist: **82 isaretli, 63 acik, toplam 145 gorev.** Owner-local VUF-M05-015 teknik regresyonu GitHub main `cd9f9bfd6750ffeee850e700ac1c3691358b1f2b` uzerinde Python 361 PASS / 9 Windows symlink SKIP (370 discovered), Unity 6000.6.5f1 EditMode 85/85 PASS olarak raporlandi. Kaynak kodu testleri gecmis olsa da Unity GUI, sanat/hak onayi, final Engine/LFX IDs, mobil/GPU/cihaz ve tum M05 milestone cikis kabulleri acik.
+**Status (2026-10-17):** Tek formatli milestone checklist: **84 isaretli, 63 acik, toplam 147 gorev.** Owner-local VUF-M05-015 teknik regresyonu GitHub main `cd9f9bfd6750ffeee850e700ac1c3691358b1f2b` uzerinde Python 361 PASS / 9 Windows symlink SKIP (370 discovered), Unity 6000.6.5f1 EditMode 85/85 PASS olarak raporlandi. Kaynak kodu testleri gecmis olsa da Unity GUI, sanat/hak onayi, final Engine/LFX IDs, mobil/GPU/cihaz ve tum M05 milestone cikis kabulleri acik.
 
 **Repository:** Sekiph82/MATCH3-Visual-UI-Factory
 **Local folder (owner-reported, never modified by this planning file):** C:\Users\sekip\Desktop\GAMES\MATCH3 GAMES\MATCH3-Visual-UI-Factory
@@ -22,7 +22,7 @@
 - Kaynak kodu ilerlemesi ile Unity GUI, Engine/LFX nihai pinleri, orijinal sanat haklari, sahibi manuel kabulü ve fiziksel cihaz PASS birbirinden ayridir. Yeni/kodlanmamis gorevler sadece gercek kanit oldugunda `[x]` olur. Biten her işte dogrudan bu numarali satiri guncelle.
 - Codex testleri son kaynak koduna uygun tek kapsamli milestone test görevi olarak planlanir; asagidaki gecmis Codex PASS sonuçları test edildikleri *eski* SHA'da gecerlidir. Son kaynak degisikligi için Python/Unity PASS uydurulmaz.
 
-**Durum (17.10.2026):** **82 isaretli, 63 acik, toplam 145 tek formatli gorev.** VUF-M05-015 Codex teknik test/duzeltme/kanit oturumu tamamlandi; M05 milestone'unun owner/GUI/gercek Engine kimlikleri/mobil kabulleri acik. Bitenlerden bir bolumu sadece kaynak uygulama veya belirli SHA'da testtir, milestone onayi degildir.
+**Durum (17.10.2026):** **84 isaretli, 63 acik, toplam 147 tek formatli gorev.** VUF-M05-015 Codex teknik test/duzeltme/kanit oturumu tamamlandi; M05 milestone'unun owner/GUI/gercek Engine kimlikleri/mobil kabulleri acik. Bitenlerden bir bolumu sadece kaynak uygulama veya belirli SHA'da testtir, milestone onayi degildir.
 
 
 ## MILESTONES | TEK GOREV ID FORMATI
@@ -158,7 +158,7 @@
 
 ### VUF-M07 | Animations, VFX and reduced-effects parity
 
-- [ ] VUF-M07-001 Idle, reward, win/fail, tile, combo, character and UI transition effect contracts. **KIRILIM:** M06 candidate layers tamamlaninca view-only event/FX timeline contract ve reduced-motion/replay timing keys yazilacak; canli Engine gameplay yazma yetkisi yok.
+- [ ] VUF-M07-001 Idle, reward, win/fail, tile, combo, character and UI transition effect contracts. **SOURCE PROGRESS:** `view_event_timeline.py` 5 tema × 14 typed view-only event, Engine special/combo symbolic ID, VF06 preset, reduced-motion, frames, replay SHA, priority/interrupt, muted audio/haptic LOG_ONLY and 0.25x-2x manual cursors kodlandı. **GERCEK Unity FX/sprite clip adapter ve audio/haptic/GUI replay NOT RUN**; milestone owner visual approval acik.
 - [ ] VUF-M07-002 Sprite-sheet/Unity animation bindings: manual frame-by-frame scrub, frame rate/loop/ping-pong, pivots, alignment, transparency, scale, clipping, atlas swaps, transition priority and interruption/replay parity.
 - [x] VUF-M07-003 Full/reduced-motion mode and optional middleware-absent fallback.
 - [x] VUF-M07-004 Enforce no animation/VFX callback may mutate engine board, rewards or save transactions.
@@ -166,12 +166,14 @@
 - [ ] VUF-M07-006 **Manual Sprite & VFX Lab (OWNER REQUIRED):** User selects a game profile, asset, animation, event and state; manually plays/pauses/scrubs frame-by-frame at 0.25x/0.5x/1x/2x, compares sprite sheets, keyframes, particle bursts/trails, masks, lighting/parallax, combo/chained VFX, success/fail and transitions. Test loop/pivot/atlas/crop/alpha, overlapping effects, interruption, replay, reduced-motion, mute and logged haptic events. No VFX callback may mutate gameplay or rewards; save reproducible test receipts. Do not claim physical haptic/audio-device PASS from desktop simulation.
 - [x] VUF-M07-007 R22: 5 deterministic VFX sprite-sheet + reduced-motion still; full event/FX ontology eksik (`procedural_fx_sheet.py`).
 - [x] VUF-M07-008 R05/R23/R24: Sprite clip authoring, scrub, ping-pong/loop ve procedural FX-to-Unity clip exporter (`VufSpriteClipBuilderWindow.cs`, `VufFxClipExporterWindow.cs`).
-- [ ] VUF-M07-009 Olay/replay/interrupt/atlas swap/pivot/transition priority gercek Unity playback parity testi.
+- [ ] VUF-M07-009 Olay/replay/interrupt/atlas swap/pivot/transition priority gercek Unity playback parity testi. **SOURCE PROGRESS:** 14-event symbolic replay snapshots + priority/channel/interruption view-only contracts hazir, 10 Python test authored. Actual Unity event playback, sprite pivot/atlas swap, manual frame/animation parity **NOT RUN**.
 - [x] VUF-M07-010 R12/R38: CanvasGroup tween + reduced-motion gercek source ve yeniden kullanim (`VufUiTween.cs`).
 - [x] VUF-M07-011 R06/R12/R22/R24: gameplay/save/score/reward mute eden presentation-only runtime/Editor sinirlari (`VufUiTween.cs`, `VufVfxLabWindow.cs`).
 - [x] VUF-M07-012 R06/R23: Manual Unity Particle Lab ve imported sheet frame preview (`VufVfxLabWindow.cs`, `VufFxSheetPreviewWindow.cs`).
 - [ ] VUF-M07-013 Owner-required 0.25×/0.5×/1×/2× tam olay/VFX/sprite editor Studio ve gercek GUI evidence.
 - [ ] VUF-M07-014 Codex: tüm VFX/sprite animasyonu, frame scrub/loop/interrupt/reduced-motion/replay/ses-haptik simülasyonu ve ayrık callback güvenliği için tek milestone Unity test görevi yap; gerçek cihaz durumunu ayrı raporla.
+- [x] VUF-M07-015 5 tema x 14 view-only event icin UI/tile/match/special/combo/obstacle/booster/win/fail/reward/character/region animasyon zarfı, VF-06 beş mevcut particle preset pin'i, gerçek Engine special 5 enum + combo semantiği, channel/interrupt önceligi, full/reduced-motion, mute, audio/haptic LOG_ONLY ve canonical replay SHA256 kaynak kodlandi (`factory/vfx_builder/view_event_timeline.py`). 0.25x/0.5x/1x/2x deterministik frame cursor var. **SOURCE ONLY, Python/Unity/GUI NOT RUN; gameplay/save/reward yazma yok.**
+- [x] VUF-M07-016 Yeni M07 timeline icin 10 Python negatif ve regression test source metodu yazildi (`tests/test_view_event_timeline.py`): 5x14, 5 special/15 pair canonical, frame order, reduced motion, mute, fake approval, unsafe seed/speed/interrupt, gameplay authority reddi. **AUTHORED, NOT RUN**; M07-014 birlestirilmis milestone testine dahil.
 
 **Exit:** Real Unity-consumable effects and replay-invariant acceptance.
 
