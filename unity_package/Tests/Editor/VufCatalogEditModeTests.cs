@@ -200,30 +200,34 @@ namespace Match3.VisualFactory.Tests
         public void ResponsiveGeometryAuditsAllSyntheticDevicePresets()
         {
             var screens = VufScreenCatalog.LoadScreens();
-            var style = VufScreenCatalog.LoadStyle("Coral_Rescue");
-            foreach (var device in VufResponsiveGeometry.Presets)
+            foreach (string profile in Profiles)
             {
-                foreach (var screen in screens)
+                var style = VufScreenCatalog.LoadStyle(profile);
+                foreach (var device in VufResponsiveGeometry.Presets)
                 {
-                    GameObject root = VufScreenShellBuilderWindow.BuildCandidateHierarchy(
-                        screen, style, true);
-                    try
+                    foreach (var screen in screens)
                     {
-                        var report = VufResponsiveGeometry.Analyze(root, device);
-                        Assert.That(report.CandidateOnly, Is.True);
-                        Assert.That(report.ButtonCount, Is.EqualTo(1));
-                        Assert.That(report.Nodes.Count, Is.GreaterThan(10));
-                        Assert.That(report.Device.Name, Is.EqualTo(device.Name));
-                        var safe = report.Nodes.Find(node => node.IsSafeArea);
-                        Assert.That(safe, Is.Not.Null);
-                        Assert.That(safe.Bounds, Is.EqualTo(device.SafeRect));
-                        Assert.That(report.Warnings.Exists(
-                            warning => warning.StartsWith("SAFE-AREA:")), Is.False,
-                            screen.id + " on " + device.Name);
-                    }
-                    finally
-                    {
-                        UnityEngine.Object.DestroyImmediate(root);
+                        GameObject root = VufScreenShellBuilderWindow.BuildCandidateHierarchy(
+                            screen, style, true);
+                        try
+                        {
+                            var report = VufResponsiveGeometry.Analyze(root, device);
+                            Assert.That(report.CandidateOnly, Is.True);
+                            Assert.That(report.ButtonCount, Is.EqualTo(1));
+                            Assert.That(report.Nodes.Count, Is.GreaterThan(10));
+                            Assert.That(report.Device.Name, Is.EqualTo(device.Name));
+                            var safe = report.Nodes.Find(node => node.IsSafeArea);
+                            Assert.That(safe, Is.Not.Null);
+                            Assert.That(safe.Bounds, Is.EqualTo(device.SafeRect));
+                            Assert.That(report.Warnings.Exists(
+                                warning => warning.StartsWith("SAFE-AREA:")), Is.False,
+                                profile + " " + screen.id + " on " + device.Name + ": " +
+                                string.Join("; ", report.Warnings));
+                        }
+                        finally
+                        {
+                            UnityEngine.Object.DestroyImmediate(root);
+                        }
                     }
                 }
             }

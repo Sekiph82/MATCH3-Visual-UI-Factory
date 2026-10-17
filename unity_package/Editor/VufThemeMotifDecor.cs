@@ -44,7 +44,7 @@ namespace Match3.VisualFactory.Editor
             // preliminary "bubbles" art-direction schematic, NOT true masks.
             for (int i = 0; i < 12; i++)
             {
-                float x = .04f + ((i * 29) % 87) / 100f;
+                float x = .06f + ((i * 29) % 87) / 100f;
                 float y = .07f + ((i * 41) % 83) / 100f;
                 float side = 18f + (i % 5) * 9f;
                 RectTransform bubble = Shape(parent,

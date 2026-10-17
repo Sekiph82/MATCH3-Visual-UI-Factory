@@ -32,7 +32,9 @@ class VufAtlasV2SourceTests(unittest.TestCase):
         self.assertNotIn("includeInBuild = true", self.src)
 
     def test_real_editor_nunit_and_meta_source_defined(self):
-        self.assertEqual(self.nunit.count("[Test]"), 4)
+        self.assertGreaterEqual(self.nunit.count("[Test]"), 5)
+        self.assertIn("CreatesOnlyNewV2CandidateAndPreservesImportedSource",
+                      self.nunit)
         self.assertTrue((ROOT/"unity_package/Editor/"
                          "VufSpriteAtlasV2Window.cs.meta").is_file())
         self.assertTrue((ROOT/"unity_package/Tests/Editor/"

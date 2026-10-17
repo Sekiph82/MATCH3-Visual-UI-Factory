@@ -83,6 +83,20 @@ namespace Match3.VisualFactory.Editor
         private void SaveNew()
         {
             Texture2D[] textures = ValidateDraft(selected);
+            string path = EditorUtility.SaveFilePanelInProject(
+                "Create NEW unapproved SpriteAtlas V2",
+                "VUF_SpriteAtlasV2_CANDIDATE", "spriteatlasv2",
+                "Pick an unused Assets path. NEVER overwrite an atlas.");
+            if (String.IsNullOrEmpty(path)) return;
+            lastCandidate = CreateNewCandidate(textures, path);
+            Selection.activeObject = AssetDatabase.LoadMainAssetAtPath(path);
+        }
+
+        // The same guarded save path is exercised by EditMode tests with
+        // isolated temporary source textures and a unique candidate path.
+        internal static string CreateNewCandidate(Texture2D[] input, string path)
+        {
+            Texture2D[] textures = ValidateDraft(input);
             var unique = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (Texture2D texture in textures)
             {
@@ -98,11 +112,6 @@ namespace Match3.VisualFactory.Editor
                     throw new ArgumentException(
                         "packable is not already imported as Unity Sprite");
             }
-            string path = EditorUtility.SaveFilePanelInProject(
-                "Create NEW unapproved SpriteAtlas V2",
-                "VUF_SpriteAtlasV2_CANDIDATE", "spriteatlasv2",
-                "Pick an unused Assets path. NEVER overwrite an atlas.");
-            if (String.IsNullOrEmpty(path)) return;
             if (!path.StartsWith("Assets/", StringComparison.Ordinal) ||
                 !path.EndsWith(".spriteatlasv2", StringComparison.OrdinalIgnoreCase) ||
                 AssetDatabase.LoadMainAssetAtPath(path) != null ||
@@ -127,8 +136,7 @@ namespace Match3.VisualFactory.Editor
                 importer.includeInBuild = false;
                 importer.SaveAndReimport();
                 AssetDatabase.SaveAssets();
-                lastCandidate = path;
-                Selection.activeObject = AssetDatabase.LoadMainAssetAtPath(path);
+                return path;
             }
             finally
             {

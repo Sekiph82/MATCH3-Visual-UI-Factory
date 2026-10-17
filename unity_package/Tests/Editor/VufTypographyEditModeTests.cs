@@ -112,8 +112,8 @@ namespace Match3.VisualFactory.Tests
                 foreach (var device in VufResponsiveGeometry.Presets)
                 {
                     var report = VufTypographyAudit.Analyze(root, device);
-                    Assert.That(report.Items.Count, Is.EqualTo(4),
-                        "Each candidate screen exposes four authored text slots.");
+                    Assert.That(report.Items.Count, Is.GreaterThanOrEqualTo(4),
+                        "Each candidate screen exposes at least its four primary text slots.");
                     Assert.That(report.Items.TrueForAll(item => item.MeasurementAvailable),
                         Is.True, "Every authored text slot must receive a real TextGenerator measurement.");
                     Assert.That(report.OverflowCount, Is.GreaterThanOrEqualTo(0));

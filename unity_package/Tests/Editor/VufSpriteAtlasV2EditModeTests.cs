@@ -1,5 +1,9 @@
 using System;
+using System.IO;
+using System.Linq;
 using NUnit.Framework;
+using UnityEditor;
+using UnityEditor.U2D;
 using UnityEngine;
 using Match3.VisualFactory.Editor;
 
@@ -68,6 +72,67 @@ namespace Match3.VisualFactory.Tests
         {
             Assert.That(typeof(UnityEditor.U2D.SpriteAtlasAsset).IsClass, Is.True);
             Assert.That(typeof(UnityEditor.U2D.SpriteAtlasImporter).IsClass, Is.True);
+        }
+
+        [Test]
+        public void CreatesOnlyNewV2CandidateAndPreservesImportedSource()
+        {
+            string folderName = "__VUF_M05_015_" + Guid.NewGuid().ToString("N");
+            string folder = "Assets/" + folderName;
+            Assert.That(AssetDatabase.IsValidFolder(folder), Is.False);
+            Assert.That(Directory.Exists(folder), Is.False);
+            AssetDatabase.CreateFolder("Assets", folderName);
+            try
+            {
+                string sourcePath = folder + "/candidate.png";
+                string atlasPath = folder + "/candidate.spriteatlasv2";
+                var source = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                try
+                {
+                    source.SetPixels(new[] { Color.red, Color.green,
+                        Color.blue, Color.white });
+                    source.Apply();
+                    File.WriteAllBytes(sourcePath, source.EncodeToPNG());
+                }
+                finally { UnityEngine.Object.DestroyImmediate(source); }
+                AssetDatabase.ImportAsset(sourcePath, ImportAssetOptions.ForceUpdate);
+                var sourceImporter = AssetImporter.GetAtPath(sourcePath) as TextureImporter;
+                Assert.That(sourceImporter, Is.Not.Null);
+                sourceImporter.textureType = TextureImporterType.Sprite;
+                sourceImporter.SaveAndReimport();
+
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(sourcePath);
+                Assert.That(texture, Is.Not.Null);
+                byte[] sourceBytes = File.ReadAllBytes(sourcePath);
+                string sourceGuid = AssetDatabase.AssetPathToGUID(sourcePath);
+                string sourceImporterBefore = EditorJsonUtility.ToJson(sourceImporter);
+
+                Assert.That(VufSpriteAtlasV2Window.CreateNewCandidate(
+                    new[] { texture }, atlasPath), Is.EqualTo(atlasPath));
+                Assert.That(File.Exists(atlasPath), Is.True);
+                var atlasImporter = AssetImporter.GetAtPath(atlasPath) as SpriteAtlasImporter;
+                Assert.That(atlasImporter, Is.Not.Null);
+                Assert.That(atlasImporter.includeInBuild, Is.False);
+                string atlasGuid = AssetDatabase.AssetPathToGUID(atlasPath);
+                Assert.That(atlasGuid, Is.Not.Empty);
+                byte[] atlasBytes = File.ReadAllBytes(atlasPath);
+
+                Assert.Throws<ArgumentException>(() =>
+                    VufSpriteAtlasV2Window.CreateNewCandidate(
+                        new[] { texture }, atlasPath));
+                Assert.That(File.ReadAllBytes(atlasPath), Is.EqualTo(atlasBytes));
+                AssetDatabase.ImportAsset(atlasPath, ImportAssetOptions.ForceUpdate);
+                Assert.That(AssetDatabase.AssetPathToGUID(atlasPath), Is.EqualTo(atlasGuid));
+                Assert.That(File.ReadAllBytes(sourcePath), Is.EqualTo(sourceBytes));
+                Assert.That(AssetDatabase.AssetPathToGUID(sourcePath), Is.EqualTo(sourceGuid));
+                Assert.That(EditorJsonUtility.ToJson(sourceImporter),
+                    Is.EqualTo(sourceImporterBefore));
+            }
+            finally
+            {
+                AssetDatabase.DeleteAsset(folder);
+                AssetDatabase.Refresh();
+            }
         }
     }
 }
