@@ -72,6 +72,8 @@ def validate_structure() -> dict:
         "Tests/Editor/VufSpriteAtlasV2EditModeTests.cs",
         "Editor/VufSceneLayerReviewWindow.cs",
         "Tests/Editor/VufSceneLayerReviewEditModeTests.cs",
+        "Runtime/VufParallaxCanvasController.cs",
+        "Tests/Editor/VufParallaxCanvasEditModeTests.cs",
         "Tests/Editor/VufPreviewCompatibilityEditModeTests.cs",
         "Tests/Editor/VufShellLayoutBridgeEditModeTests.cs",
         "Editor/VufReviewStateCatalog.cs",
