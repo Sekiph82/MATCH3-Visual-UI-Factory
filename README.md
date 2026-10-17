@@ -326,3 +326,12 @@ parser. Users may inspect asset ID/hash changes and expected SHA pin
 drift but cannot approve a pack, trigger true rollback, create assets,
 or certify independent Engine/LFX contracts. Source/unit definitions
 exist; real owner-local EditMode/GUI evidence is pending.
+
+### R47 | Actual Unity 6 SpriteAtlas V2 draft asset, still excluded from builds
+The UI Factory can now author a separate NEW `.spriteatlasv2` using
+Unity's official built-in `SpriteAtlasAsset` and
+`SpriteAtlasImporter`, with `includeInBuild=false` until licensed
+art, real Unity rendering and device/owner tests pass. No existing
+SpriteImporter configuration is changed; no Unity proprietary source
+files are copied. This is authoring output, not a finished 5-game
+production atlas pack or acceptance of all VUF-M05/M08 tasks.

@@ -77,3 +77,28 @@ intentionally handles TEST_ONLY only.
 Four EditMode NUnit test methods (plus three static Python test methods)
 are authored, but actual Unity GUI, new-source tests and owner/phone
 approval are NOT YET RUN.
+
+## R47 | Real Unity SpriteAtlas V2 candidate authoring (M05-004/M08-003)
+
+`Tools > MATCH3 > SpriteAtlas V2 Candidate Builder` chooses 1–32
+existing imported Sprite PNG Texture2D copies, checks identical
+assets/dimensions/TextureImporter Sprite type and explicit new path,
+then calls **native Unity 6000.6** `UnityEditor.U2D.SpriteAtlasAsset`
+APIs (`new SpriteAtlasAsset`, `Add`, `Save`).
+After import, `SpriteAtlasImporter.includeInBuild=false` and
+SaveAndReimport keep the output **excluded from player builds** while
+owner art/GPU/memory/atlas QA remains open. It does not rewrite
+source TextureImporter settings or crop/slice input assets.
+Only a brand-new `.spriteatlasv2` in Assets may be saved.
+
+The model's manual output is a Unity-side asset candidate, not an
+approved/release sprite atlas; creating a SpriteAtlasAsset alone cannot
+prove packed sizes, trim/pivot, platform texture compression, 1x/2x/3x
+swap correctness or mobile memory/GPU budgets. Real Unity Editor tests
+and owner manual inspections are required.
+
+Four Unity EditMode tests cover nonwriting packable validation, null,
+duplicate and >32 packables, original pixel invariants, and real
+SpriteAtlasAsset/SpriteAtlasImporter API types; three additional
+Python source guards inspect safety rules. All R47 additions are
+AUTHORED, NOT owner-local tested at new source SHA.

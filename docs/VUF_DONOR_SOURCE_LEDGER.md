@@ -211,3 +211,31 @@ with a small isolated Unity Editor diff/pin display component. No
 external source/vendor or licensing change, no duplicate manifest
 authority and no gameplay transaction code. Four Unity NUnit and
 three Python contract tests authored, NOT actually executed at new SHA.
+
+## R47 | M05-004/M08-003 actual Unity built-in SpriteAtlas V2 API adoption
+
+MANDATORY PRE-CODE DONOR SEARCH: read local
+`VufAtlasPreviewWindow`, Python `atlas_pipeline.py` and
+`verify_candidates.py` to avoid rewriting existing image packers.
+Inspected actual `Unity-Technologies/UnityCsReference` upstream
+`Editor/Mono/2D/SpriteAtlas/SpriteAtlasAsset.bindings.cs` (blob
+`9ebbbce17756251d89549df92dd55b2b0f1ed6fc`), and
+`SpriteAtlasImporter.bindings.cs` (blob
+`4f6d6a7c3b92a05d73e4b6874b197c08582dabbf`). Native
+`SpriteAtlasAsset.Add/Save` and
+`SpriteAtlasImporter.includeInBuild` signatures were confirmed
+against Unity 6000.6 scripting docs
+`https://docs.unity.com/en-us/engine/6000.6/script-reference/unityeditor/u2d/spriteatlasasset`.
+
+**REJECTED_SOURCE_COPY**: UnityCsReference files explicitly carry
+Unity Reference Only License, not redistribution permission to copy
+their native bindings. No Unity proprietary source was copied.
+**SDK_REUSE / MINIMAL ADAPTER**: call the real installed public Unity
+Editor API directly from new EditorWindow
+`VufSpriteAtlasV2Window.cs`; reuse existing Atlas Preview and
+Sprite importer source discipline, no new atlas packing algorithm.
+Create only NEW authoring candidate .spriteatlasv2 and explicitly
+set `includeInBuild=false` to prevent accidental player inclusion.
+Preserve original texture importers/assets untouched. Four real
+EditMode and three Python source-only regression methods authored;
+actual Unity Editor execution and mobile atlas QA still OPEN.
