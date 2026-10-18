@@ -404,7 +404,7 @@ namespace Match3.VisualFactory.Editor
             return true;
         }
 
-        private static int NaturalSpriteNameOrder(string a, string b)
+        internal static int NaturalSpriteNameOrder(string a, string b)
         {
             int aStart = a.Length;
             int bStart = b.Length;
