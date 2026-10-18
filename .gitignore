@@ -32,3 +32,6 @@ candidates/
 asset_store/
 blobs/
 Assets/VufCandidates/
+
+# Explicit owner imported TEST_ONLY candidates never enter Git or players
+Assets/Editor/VUF_ReviewImports/
