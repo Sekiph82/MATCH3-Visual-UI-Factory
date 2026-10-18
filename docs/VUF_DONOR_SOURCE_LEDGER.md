@@ -289,3 +289,66 @@ M05 Codex 361 Python PASS + 85 Unity EditMode PASS applies ONLY to
 `cd9f9bfd6750ffeee850e700ac1c3691358b1f2b`, **not** this
 source change. Test/GUI/physical-device, final art, rights and owner
 approval remain separately open in VUF-M06-007 and M09.
+
+## 2026-10-18 | VUF-M07-002 / M07-009 Sprite playback/atlas/replay consumer
+
+**Source baseline:** `8922dc5647116c5fe58e4abdc00bb3182e9ef2ae`;
+the only lifecycle tracker is root `TASKS.md`. Reviewed the existing
+`VufSpriteClipBuilderWindow.cs` sprite ordering/AnimationClip implementation,
+the genuine `VufFxClipExporterWindow.cs` asset-authoring path and the already
+adopted `VufUiTween.cs` CanvasGroup transition primitive **before writing
+new playback logic**. The five-profile `view_event_timeline.py` event/replay
+schema and M07 owner review requirements were also inspected.
+
+**INTERNAL_REUSE**, exact current blobs after implementation:
+- `unity_package/Editor/VufSpriteClipBuilderWindow.cs`, blob
+  `5aa133aa4b9313e80c3de30c438e6c983f7a2849`;
+  existing Sprite selection, natural sprite ordering, Editor loop/ping-pong
+  and real SpriteRenderer AnimationClip exporter were **retained**. Existing
+  `BuildFrameSequence` now delegates to the SAME reusable view-only runtime
+  sequence, preventing Editor vs Runtime playback order drift. Added human
+  0.25/0.5/1/2x timeline speed controls, Sprite alpha checkerboard and
+  zoom/clipping, normalized-pivot guide and PPU drift warnings. A deliberate
+  owner button creates only a **DontSaveInEditor / DontSaveInBuild temporary**
+  Scene SpriteRenderer preview; it is cleaned up on window close/source
+  change. Optional alternative imported Sprite atlas can be swapped in the
+  temporary preview only after runtime frame-geometry/normalized-pivot
+  validation. No sprite importer/asset, existing scene GameObject or Engine
+  code gets edited.
+- `unity_package/Editor/VufFxClipExporterWindow.cs` blob
+  `64b6e3ce980e672927101170a37aa29bfb1f4e1c`: existing candidate-only
+  SpriteRenderer AnimationClip export implementation re-used unchanged.
+- `unity_package/Runtime/VufUiTween.cs` blob
+  `c86d73f1eb024539a00460c5258864c046e3bd44`: existing built-in UI
+  tween and reduced-motion transition primitive deliberately preserved.
+
+**SDK_REUSE / ORIGINAL_VUF_CODE:** `unity_package/Runtime/VufSpritePlaybackPreview.cs`
+current blob `d4e6e6374ea434c3505b693c99019bb286f36812`
+uses only public Unity `SpriteRenderer`, `Sprite`, `MonoBehaviour` and
+bounded manual `Advance` APIs. Deterministic real SpriteRenderer
+sprite assignments, loop/non-loop ping-pong, pause/replay/interrupt,
+full/reduced-motion, import-safe atlas Sprite replacement and same-channel
+visual-only event priority competition have **no** Engine/save/reward callbacks
+or gameplay dependency. Invalid sprite/frame/priority/asset inputs reject
+before modifying the current preview renderer. Renderer original Sprite is
+restored on Clear/disable; no Editor-only APIs enter runtime.
+
+**REJECTED_REASON:** do not add DOTween, reinvent exporter, copy
+UnityCsReference reference-license native source or bring in additional
+animation frameworks when current SDK and adopted VUF tween/FX clip modules
+already supply needed functionality. No vendor art/files, license-bearing
+code copy or paid services were used.
+
+**Test authored:** `VufSpritePlaybackEditModeTests.cs` has 11 NUnit
+methods covering real in-memory Unity SpriteRenderer binding, sequence and
+timing, pause/resume, loop/ping-pong, replay/interrupt, alpha geometry/PPU
+identity, safe atlas-swap, rejected corrupted inputs/priority and restoring
+the previously attached Sprite on clear/disable. New Unity source/test
+`.meta` GUIDs are registered with the existing
+`Tools/validate_repo_structure.py` source-layout contract.
+**NEW UNITY EDITMODE/GUI TESTS NOT RUN ON OWNER WINDOWS**. Prior C011
+85/85 PASS occurred on M05 SHA `cd9f9bfd6750ffeee850e700ac1c3691358b1f2b`
+and cannot validate this source. The manual owner GUI, real player/device/GPU,
+actual Engine view-channel event parity, stable provider art/licence,
+and final M07 milestone signoff remain **OPEN** in M07-006/009/013/014 and M09.
+
