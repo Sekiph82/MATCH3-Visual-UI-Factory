@@ -383,3 +383,88 @@ and final M07 milestone signoff remain **OPEN** in M07-006/009/013/014 and M09.
 **MINIMAL_ADAPTER / UNITY_SDK_REUSE:** `unity_package/Editor/VufExternalPackSandboxWindow.cs` adds one read-only Editor tool for manually imported `Assets/` copies: apply existing VisualAssetManifest.TryParsePreview, verify allowed TEST_ONLY profile and image name/path, reject duplicate namespace/asset/path and art-rights shipping spoof, hash every actual imported PNG byte with SHA256, render side-by-side visually inspected profile/theme asset images. Switching a preview never writes source TextureImporters, asset GUIds, original VUF or Engine files, game score/save state or runtime game content. Add stable Unity `.meta` GUIDs and `Tools/validate_repo_structure.py` source gate. Tests authored: `unity_package/Tests/Editor/VufExternalPackSandboxEditModeTests.cs` seven NUnit cases for 5 profiles, 2 image digests, duplicate/invalid IDs and paths, traversal, forged rights and changed source. These tests have NOT been run in owner's Unity Editor.
 
 **REJECTED_REASON:** Avoid copying more UI/asset framework code, installing paid or external Unity plugins and inventing final ENG-M12-010 consumer/runtime contracts before independently pinning Engine and LevelFactory final releases. This is an *offline source candidate browser only*, NOT asset-pack shipping, actual animated consumer, phone GPU acceptance, or visual owner signoff. Previous Codex M05 tests on `cd9f9bfd` do not verify this new M08 code.
+
+## 2026-10-18 | VUF-M08 comprehensive source delivery and no-self-approval
+
+**Only task authority** is original root TASKS.md M08-001..010. No new
+lifecycle, test-subtask or R/C task IDs were introduced. This is an internal
+licence/reuse ledger, not project progress tracker.
+
+**PRE-CODE inspected actual in-repo existing candidates/donors:**
+- Unity `VisualAssetManifest.TryParsePreview` (strict TEST_ONLY schema),
+  `VufExternalPackSandboxWindow` (existing SHA-verifying imported copies),
+  `VufScreenShellBuilderWindow.BuildCandidateHierarchy` (28 Coral contract
+  IDs; 5 draft visual styles; uGUI Canvas/disabled Button),
+  `VufReviewStateCatalog` (8 synthetic states and en/tr/stress copy),
+  `VufResponsiveGeometry` (synthetic safe area/anchors),
+  `VufSafeAreaFitter`, `VufUiTween` and existing M07
+  `VufVisualEventCatalog` (view-only 14-event namespace). No source consumer
+  game or ENGINE/LFX repo changed or even imported here.
+- Python `representative_scene_pack.build_representative_pack` (existing
+  mathematical 3-layer scenes); `sample_sprite_pack.build_sample_pack` (M05
+  R52 38 geometrical sprite candidates/real source receipt);
+  `procedural_fx_sheet.build_candidate` (five known VFX frame sheets and
+  reduced-motion stills); `atlas_pipeline.create_atlas_candidate` (actual
+  VF04 original pixel shelf packing and UV/extrusion); the existing
+  `atlas_candidate_audit.audit_candidate` and `png_pipeline.decode_png`.
+  No Pillow/Photoshop, new vendor FX library, donor artwork or paid tooling
+  added.
+
+**MINIMAL_ADAPTER / ORIGINAL_VUF_CODE:**
+- `factory/asset_packaging/candidate_pack.py` bundles only one of 5
+  source-pinned theme namespaces, with separate 1x independent RGBA scene
+  layers, 38 R52 mathematical sprite prototypes, five local VF06 FX
+  animation/still pairs and their receipts, en/tr DRAFT locales, actual VF04
+  SOURCE atlas, and immutable full SHA256/file receipt. All writes are
+  explicitly requested to a NEW folder **outside** checkout. Unity
+  JsonUtility supports its typed `file_entries` receipt array alongside
+  Python `file_sha256` dictionary. Emitted manifest is `TEST_ONLY` with
+  unknown/unpinned final ENG/LFX release, and no original source rights or
+  actual game transactions. Release impossible by design.
+- `factory/asset_packaging/verify_offline_bundle.py` independent read-only
+  receipt/SHA/PNG/VF04 atlas revalidator. No writing to original artwork or
+  Git source. `tests/test_m08_candidate_pack.py` contains eight new
+  deterministic/negative test methods, including actual one-folder export and
+  corrupted copy rejection; `tests/test_m08_unity_source_parity.py` adds four
+  static Python↔Unity source parity/authority checks.
+- `unity_package/Editor/VufCandidatePackImporterWindow.cs` explicitly
+  imports verified TEST_ONLY source **copies**, not originals, solely into
+  Unity's Editor-only Assets subtree, with exact file whitelist, symlink,
+  traversal, digest, no-overwrite and 128MiB safety bounds. The .gitignore
+  excludes `Assets/Editor/VUF_ReviewImports/` to avoid source pollution.
+- `VufInteractiveUiReviewWindow.cs` reuses existing REAL uGUI input components,
+  policy-locked original candidate prefabs and existing native layout/
+  safe-area/tween modules as nonpersistent, owner-invoked GUI **review** only.
+  One explicitly enabled temporary test action writes ONLY a local inspector
+  text log; no Engine business action. Does not falsify five separate games'
+  approved layout contracts.
+- `VufExternalPackViewStage.cs` and enhancements to
+  `VufExternalPackSandboxWindow.cs` stage a SHA rechecked imported PNG in
+  an actual TEMP Scene SpriteRenderer, with candidate 14-event view label,
+  5-theme A/B browse, validated synthetic en/tr locale and inert absent-
+  locale fallback. The existing M07 Unified FX Studio is reusable separately;
+  no saved original Scenes or runtime gameplay update performed.
+- Unity `.meta` GUIDs and existing `Tools/validate_repo_structure.py`
+  source/module .meta coverage were extended, not replaced.
+
+**REJECTED_REASON:** no unjustified new UGUI/UIToolkit fork, game-rule SDK,
+cloud Addressables/mobile billing or reference-licence UnityCsReference code
+copy: the installed uGUI, existing original candidate builder, original
+mathematical VUF assets and existing VF04/VF06 Python source cover **current
+offline Editor candidate needs**. Optional production Addressables/cloud
+streaming cannot be approved before final Engine/LFX runtime and actual
+device/network tests. No source assumes owner art-rights or final marketing
+approval.
+
+**VALIDATION STATUS AT PUBLICATION:** all newly added Python unittest,
+C# EditMode test, importer/editor UI and pack verification **SOURCE AUTHORED
+ONLY; NOT EXECUTED on the owner's actual Windows Unity 6000.6.5f1 yet**.
+The previously confirmed Codex M07 Python 404 PASS/9 OS symlink SKIP,
+Unity 126/126 EditMode PASS is tied ONLY to tested SHA
+`469233cccb1ad533c6b32cd946e915e98bc22543`. New M08 source is a
+different SHA and requires a fresh SINGLE owner-local
+VUF-M08-010 final-SHA whole-milestone test. Manual uGUI, original art
+licensing, real ENG-M12/LFX neutral consumer parity, mobile GPU/device and
+production player build acceptance remain OPEN. The unique whole-M08 Codex
+prompt is a native Google Doc:
+https://docs.google.com/document/d/19mAHGyJM3978LW9S5YBYCw_BnLTv8-kUu7w0M92tXEA/edit
