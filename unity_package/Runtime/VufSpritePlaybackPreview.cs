@@ -15,7 +15,7 @@ namespace Match3.VisualFactory
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class VufSpritePlaybackPreview : MonoBehaviour
     {
-        private const int MaxFrames = 1024;
+        private const int MaxFrames = 4096;
         private const double TickEpsilon = 1e-9;
 
         private SpriteRenderer target;
@@ -61,7 +61,7 @@ namespace Match3.VisualFactory
                 source.Length > MaxFrames ||
                 (expectedCount >= 0 && source.Length != expectedCount))
                 throw new ArgumentException(
-                    "View-only preview needs 2..1024 frames with stable count.");
+                    "View-only preview needs 2..4096 frames with stable count.");
             foreach (Sprite frame in source)
             {
                 if (frame == null || frame.rect.width <= 0 ||
