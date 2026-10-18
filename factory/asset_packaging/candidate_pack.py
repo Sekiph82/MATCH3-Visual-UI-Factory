@@ -309,6 +309,12 @@ def export_pack(profile: str, destination: Path) -> dict:
         }.items())
     }
     summary["file_sha256"] = digest_files
+    # Unity's built-in JsonUtility cannot deserialize dynamic JSON
+    # dictionaries: expose the SAME immutable digest map as a typed array.
+    summary["file_entries"] = [
+        {"path": name, "sha256": digest}
+        for name, digest in sorted(digest_files.items())
+    ]
     with (path / "candidate_pack_receipt.json").open("xb") as handle:
         handle.write(_json(summary))
         handle.flush()
