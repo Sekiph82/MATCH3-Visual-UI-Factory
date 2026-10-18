@@ -16,6 +16,10 @@ namespace Match3.VisualFactory.Editor
         private int frameIndex;
         private int sequenceCursor;
         private float fps = 12f;
+        private static readonly float[] PreviewSpeeds = { .25f, .5f, 1f, 2f };
+        private static readonly string[] SpeedLabels = { "0.25×", "0.5×", "1×", "2×" };
+        private int previewSpeedIndex = 2;
+        private bool showPivotGuide = true;
         private bool loop = true;
         private bool pingPong;
         private bool reducedMotion;
@@ -50,7 +54,7 @@ namespace Match3.VisualFactory.Editor
             lastTick = now;
             if (!playing || reducedMotion || sprites.Count == 0)
                 return;
-            elapsed += delta;
+            elapsed += delta * PreviewSpeeds[previewSpeedIndex];
             double step = 1d / fps;
             if (elapsed >= step)
             {
@@ -81,6 +85,10 @@ namespace Match3.VisualFactory.Editor
             loop = EditorGUILayout.Toggle("Loop", loop);
             pingPong = EditorGUILayout.Toggle("Ping-pong", pingPong);
             reducedMotion = EditorGUILayout.Toggle("Reduced-motion preview", reducedMotion);
+            previewSpeedIndex = EditorGUILayout.Popup("View-only playback speed",
+                previewSpeedIndex, SpeedLabels);
+            showPivotGuide = EditorGUILayout.Toggle("Show source pivot crosshair",
+                showPivotGuide);
 
             if (source == null)
             {
@@ -95,6 +103,10 @@ namespace Match3.VisualFactory.Editor
                     "open Sprite Editor, slice the sheet and Apply.", MessageType.Warning);
                 return;
             }
+            string alignmentMessage;
+            if (!CheckFrameAlignment(sprites, out alignmentMessage))
+                EditorGUILayout.HelpBox(alignmentMessage + " No sprite/importer is modified.",
+                    MessageType.Warning);
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUI.enabled = !reducedMotion;
@@ -131,7 +143,7 @@ namespace Match3.VisualFactory.Editor
             Rect target = GUILayoutUtility.GetRect(250, 400, 165, 400,
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             EditorGUI.DrawRect(target, new Color(.09f, .13f, .16f));
-            DrawUnpackedSprite(current, target);
+            DrawUnpackedSprite(current, target, showPivotGuide);
             EditorGUILayout.LabelField("Current frame", current.name);
             EditorGUILayout.LabelField("Pivot (normalized)", current.pivot.ToString());
             EditorGUILayout.LabelField("Animation build authority: presentation only", EditorStyles.miniLabel);
@@ -146,7 +158,7 @@ namespace Match3.VisualFactory.Editor
             EditorGUILayout.EndScrollView();
         }
 
-        private static void DrawUnpackedSprite(Sprite sprite, Rect target)
+        private static void DrawUnpackedSprite(Sprite sprite, Rect target, bool drawPivotGuide)
         {
             if (sprite == null || sprite.texture == null)
                 return;
@@ -159,6 +171,19 @@ namespace Match3.VisualFactory.Editor
             Rect uv = new Rect(pixel.x / tex.width, pixel.y / tex.height,
                 pixel.width / tex.width, pixel.height / tex.height);
             GUI.DrawTextureWithTexCoords(drawRect, tex, uv, true);
+            if (drawPivotGuide)
+            {
+                // Imported Sprite.pivot is in bottom-left sprite pixels;
+                // Unity IMGUI preview is top-left. This guide is visual only.
+                float px = drawRect.x + drawRect.width * sprite.pivot.x / pixel.width;
+                float py = drawRect.y + drawRect.height *
+                    (1f - sprite.pivot.y / pixel.height);
+                Color tint = new Color(.2f, 1f, .75f, .8f);
+                EditorGUI.DrawRect(new Rect(px - .5f, drawRect.y, 1f,
+                    drawRect.height), tint);
+                EditorGUI.DrawRect(new Rect(drawRect.x, py - .5f,
+                    drawRect.width, 1f), tint);
+            }
         }
 
         private void ReloadSprites()
@@ -178,6 +203,52 @@ namespace Match3.VisualFactory.Editor
                     sprites.Add(sprite);
             }
             sprites.Sort((a, b) => NaturalSpriteNameOrder(a.name, b.name));
+        }
+
+
+        // Diagnostics only. Real artist frames may intentionally vary; report
+        // drift rather than silently aligning or mutating source importers.
+        internal static bool CheckFrameAlignment(IList<Sprite> frames,
+            out string explanation)
+        {
+            explanation = "Candidate frames ready for manual visual review";
+            if (frames == null || frames.Count < 2)
+            {
+                explanation = "At least two source sprites are required";
+                return false;
+            }
+            Sprite original = frames[0];
+            if (original == null || original.rect.width <= 0f ||
+                original.rect.height <= 0f || original.pixelsPerUnit <= 0f)
+            {
+                explanation = "Reference sprite rect or PPU is invalid";
+                return false;
+            }
+            Vector2 origin = new Vector2(
+                original.pivot.x / original.rect.width,
+                original.pivot.y / original.rect.height);
+            float ppu = original.pixelsPerUnit;
+            for (int i = 1; i < frames.Count; i++)
+            {
+                Sprite frame = frames[i];
+                if (frame == null || frame.rect.width <= 0f ||
+                    frame.rect.height <= 0f || frame.pixelsPerUnit <= 0f)
+                {
+                    explanation = "Null or malformed sprite frame at " + i;
+                    return false;
+                }
+                Vector2 center = new Vector2(
+                    frame.pivot.x / frame.rect.width,
+                    frame.pivot.y / frame.rect.height);
+                if ((origin - center).sqrMagnitude > .000001f ||
+                    Mathf.Abs(ppu - frame.pixelsPerUnit) > .0001f)
+                {
+                    explanation = "Candidate pivot/PPU drift near frame " + i +
+                        "; verify intentional motion with pivot crosshair";
+                    return false;
+                }
+            }
+            return true;
         }
 
         private static int NaturalSpriteNameOrder(string a, string b)
