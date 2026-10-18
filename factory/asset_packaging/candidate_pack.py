@@ -120,10 +120,12 @@ def build_pack(profile: str) -> tuple[dict, dict[str, bytes], dict]:
         })
 
     count_scenes = 0
+    selected_style_sha = None
     for row in scene_manifest["scenes"]:
         if row["profile_id"] != profile:
             continue
         count_scenes += 1
+        selected_style_sha = row["layers"][0]["style_source_sha256"]
         for layer in row["layers"]:
             filename = "scenes/" + row["scene_id"] + "_" + layer["layer_id"] + ".png"
             add("scene." + row["scene_id"] + "." + layer["layer_id"],
@@ -146,7 +148,8 @@ def build_pack(profile: str) -> tuple[dict, dict[str, bytes], dict]:
     files["locales/en.json"] = _json(_locale(profile, "en"))
     files["locales/tr.json"] = _json(_locale(profile, "tr"))
     files["receipts/scene_sources.json"] = _json({
-        "source_sha256": scene_manifest["generator"],
+        "source_generator_id": scene_manifest["generator"],
+        "style_bible_sha256": selected_style_sha,
         "source_stage": scene_manifest["stage"],
         "profile_id": profile,
         "scene_count": count_scenes,
