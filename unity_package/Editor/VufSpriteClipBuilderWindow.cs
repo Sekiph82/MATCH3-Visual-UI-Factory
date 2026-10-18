@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,6 +26,9 @@ namespace Match3.VisualFactory.Editor
         private double elapsed;
         private bool playing;
         private Vector2 scroll;
+        private GameObject temporaryScenePreview;
+        private VufSpritePlaybackPreview temporaryPlayback;
+        private string previewIssue;
 
         [MenuItem("Tools/MATCH3/Sprite Animation Builder")]
         public static void Open()
@@ -45,6 +47,7 @@ namespace Match3.VisualFactory.Editor
         private void OnDisable()
         {
             EditorApplication.update -= Tick;
+            RemoveTemporaryScenePreview();
         }
 
         private void Tick()
@@ -63,6 +66,7 @@ namespace Match3.VisualFactory.Editor
                 int[] sequence = BuildFrameSequence(sprites.Count, pingPong);
                 sequenceCursor = (sequenceCursor + count) % sequence.Length;
                 frameIndex = sequence[sequenceCursor];
+                SyncTemporarySceneFrame();
                 Repaint();
             }
         }
@@ -81,6 +85,7 @@ namespace Match3.VisualFactory.Editor
             if (EditorGUI.EndChangeCheck())
                 ReloadSprites();
 
+            EditorGUI.BeginChangeCheck();
             fps = EditorGUILayout.Slider("Frames per second", fps, 1f, 60f);
             loop = EditorGUILayout.Toggle("Loop", loop);
             pingPong = EditorGUILayout.Toggle("Ping-pong", pingPong);
@@ -89,6 +94,8 @@ namespace Match3.VisualFactory.Editor
                 previewSpeedIndex, SpeedLabels);
             showPivotGuide = EditorGUILayout.Toggle("Show source pivot crosshair",
                 showPivotGuide);
+            if (EditorGUI.EndChangeCheck() && temporaryPlayback != null)
+                RebindTemporaryScenePreview();
 
             if (source == null)
             {
@@ -122,11 +129,13 @@ namespace Match3.VisualFactory.Editor
                 {
                     playing = false;
                     frameIndex = (frameIndex + sprites.Count - 1) % sprites.Count;
+                    SyncTemporarySceneFrame();
                 }
                 if (GUILayout.Button("Next"))
                 {
                     playing = false;
                     frameIndex = (frameIndex + 1) % sprites.Count;
+                    SyncTemporarySceneFrame();
                 }
             }
             int scrubbedFrame = EditorGUILayout.IntSlider(
@@ -137,6 +146,7 @@ namespace Match3.VisualFactory.Editor
                 frameIndex = scrubbedFrame;
                 sequenceCursor = Array.IndexOf(
                     BuildFrameSequence(sprites.Count, pingPong), frameIndex);
+                SyncTemporarySceneFrame();
             }
             if (reducedMotion) playing = false;
             Sprite current = sprites[frameIndex];
@@ -144,6 +154,15 @@ namespace Match3.VisualFactory.Editor
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             EditorGUI.DrawRect(target, new Color(.09f, .13f, .16f));
             DrawUnpackedSprite(current, target, showPivotGuide);
+            if (GUILayout.Button(temporaryScenePreview == null ?
+                    "Create TEMPORARY real SpriteRenderer preview in Scene" :
+                    "Remove TEMPORARY real SpriteRenderer preview"))
+            {
+                if (temporaryScenePreview != null) RemoveTemporaryScenePreview();
+                else CreateTemporaryScenePreview();
+            }
+            if (!String.IsNullOrEmpty(previewIssue))
+                EditorGUILayout.HelpBox(previewIssue, MessageType.Warning);
             EditorGUILayout.LabelField("Current frame", current.name);
             EditorGUILayout.LabelField("Pivot (normalized)", current.pivot.ToString());
             EditorGUILayout.LabelField("Animation build authority: presentation only", EditorStyles.miniLabel);
@@ -188,6 +207,7 @@ namespace Match3.VisualFactory.Editor
 
         private void ReloadSprites()
         {
+            RemoveTemporaryScenePreview();
             playing = false;
             frameIndex = 0;
             sequenceCursor = 0;
@@ -203,6 +223,71 @@ namespace Match3.VisualFactory.Editor
                     sprites.Add(sprite);
             }
             sprites.Sort((a, b) => NaturalSpriteNameOrder(a.name, b.name));
+        }
+
+
+        // New nonserialized, Editor-only SpriteRenderer preview. Never persists
+        // in a scene or asset. No existing scene objects are touched.
+        private void CreateTemporaryScenePreview()
+        {
+            previewIssue = null;
+            if (sprites.Count < 2 || temporaryScenePreview != null) return;
+            GameObject created = null;
+            try
+            {
+                created = new GameObject(
+                    "VUF_TEMP_RealSpritePreview_DONT_SAVE",
+                    typeof(SpriteRenderer), typeof(VufSpritePlaybackPreview));
+                created.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+                var renderer = created.GetComponent<SpriteRenderer>();
+                renderer.sortingOrder = 999;
+                var playback = created.GetComponent<VufSpritePlaybackPreview>();
+                playback.Bind(sprites.ToArray(), fps, loop, pingPong, reducedMotion);
+                temporaryScenePreview = created;
+                temporaryPlayback = playback;
+                SyncTemporarySceneFrame();
+                Selection.activeGameObject = created; // explicit owner button
+                previewIssue = "VIEW ONLY: real Unity SpriteRenderer in Scene. " +
+                    "Never saved. Press F in Scene view to frame. " +
+                    "Closing this Builder removes only this temporary preview.";
+            }
+            catch (Exception e)
+            {
+                if (created != null) DestroyImmediate(created);
+                temporaryScenePreview = null;
+                temporaryPlayback = null;
+                previewIssue = "Scene preview could not be created: " + e.Message;
+            }
+        }
+
+        private void RebindTemporaryScenePreview()
+        {
+            if (temporaryPlayback == null || sprites.Count < 2) return;
+            try
+            {
+                temporaryPlayback.Bind(sprites.ToArray(), fps, loop, pingPong, reducedMotion);
+                SyncTemporarySceneFrame();
+            }
+            catch (Exception error)
+            {
+                previewIssue = "Read-only Scene preview rebind refused: " + error.Message;
+                RemoveTemporaryScenePreview();
+            }
+        }
+
+        private void SyncTemporarySceneFrame()
+        {
+            if (temporaryPlayback != null && temporaryPlayback.IsBound &&
+                frameIndex >= 0 && frameIndex < sprites.Count)
+                temporaryPlayback.ScrubFrame(frameIndex);
+        }
+
+        private void RemoveTemporaryScenePreview()
+        {
+            if (temporaryScenePreview != null)
+                DestroyImmediate(temporaryScenePreview);
+            temporaryScenePreview = null;
+            temporaryPlayback = null;
         }
 
 
@@ -276,13 +361,9 @@ namespace Match3.VisualFactory.Editor
 
         internal static int[] BuildFrameSequence(int spriteCount, bool usePingPong)
         {
-            if (spriteCount < 2 || spriteCount > 4096)
-                throw new ArgumentOutOfRangeException(nameof(spriteCount));
-            List<int> sequence = Enumerable.Range(0, spriteCount).ToList();
-            if (usePingPong && spriteCount > 2)
-                for (int n = spriteCount - 2; n > 0; n--)
-                    sequence.Add(n);
-            return sequence.ToArray();
+            // One identical view-only frame-order implementation is shared
+            // with the new real SpriteRenderer runtime preview component.
+            return VufSpritePlaybackPreview.FrameSequence(spriteCount, usePingPong);
         }
 
         private void SaveClip()
