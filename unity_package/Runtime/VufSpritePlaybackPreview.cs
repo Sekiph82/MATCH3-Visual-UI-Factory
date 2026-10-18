@@ -11,6 +11,9 @@ using UnityEngine;
 
 namespace Match3.VisualFactory
 {
+    // The Editor QA Studio uses this component in a temporary EditMode Scene.
+    // ExecuteAlways makes disable/destroy cleanup run in both Editor and Play Mode.
+    [ExecuteAlways]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(SpriteRenderer))]
     public sealed class VufSpritePlaybackPreview : MonoBehaviour
