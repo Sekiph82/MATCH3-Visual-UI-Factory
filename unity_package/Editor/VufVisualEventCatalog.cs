@@ -47,6 +47,43 @@ namespace Match3.VisualFactory.Editor
 
         private static readonly HashSet<string> ProfilesSet =
             new HashSet<string>(Profiles, StringComparer.Ordinal);
+        // Verified source-pinned Engine SpecialActivationKind ordinals, NOT
+        // final Engine/LFX release parity. Exact Python R50 keys and order.
+        internal static readonly string[] EngineSpecials = {
+            "HorizontalLine", "VerticalLine", "Area", "Color", "Targeted"
+        };
+        private static readonly string[] SpecialKeys = {
+            "horizontal_line", "vertical_line", "area", "color", "targeted"
+        };
+        private static int SpecialIndex(string kind)
+        {
+            for (int i = 0; i < EngineSpecials.Length; ++i)
+                if (String.Equals(EngineSpecials[i], kind, StringComparison.Ordinal))
+                    return i;
+            throw new ArgumentException("unknown source-pinned Engine special name");
+        }
+
+        internal static string ViewEventKey(string profile, string eventName,
+            string firstSpecial, string secondSpecial = null)
+        {
+            string baseKey = EventKey(profile, eventName);
+            if (eventName == "special_trigger")
+            {
+                if (secondSpecial != null)
+                    throw new ArgumentException("one special only");
+                return baseKey + "." + SpecialKeys[SpecialIndex(firstSpecial)];
+            }
+            if (eventName == "combo_chain")
+            {
+                int first = SpecialIndex(firstSpecial);
+                int second = SpecialIndex(secondSpecial);
+                return baseKey + "." + SpecialKeys[Math.Min(first, second)] +
+                       "__" + SpecialKeys[Math.Max(first, second)];
+            }
+            if (firstSpecial != null || secondSpecial != null)
+                throw new ArgumentException("non-special events cannot carry special IDs");
+            return baseKey;
+        }
 
         internal static Entry Get(string eventName)
         {
