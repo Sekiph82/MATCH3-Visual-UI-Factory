@@ -416,6 +416,48 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void SpriteFramePivotAndPixelsPerUnitSourceReviewDetectsDrift()
+        {
+            var texture = new Texture2D(16, 8, TextureFormat.RGBA32, false);
+            Sprite a = null, b = null, moved = null;
+            try
+            {
+                a = Sprite.Create(texture, new Rect(0, 0, 8, 8),
+                    new Vector2(.5f, .5f), 32f);
+                b = Sprite.Create(texture, new Rect(8, 0, 8, 8),
+                    new Vector2(.5f, .5f), 32f);
+                moved = Sprite.Create(texture, new Rect(8, 0, 8, 8),
+                    new Vector2(0f, .5f), 32f);
+                string reason;
+                Assert.That(VufSpriteClipBuilderWindow.CheckFrameAlignment(
+                    new[] { a, b }, out reason), Is.True);
+                Assert.That(VufSpriteClipBuilderWindow.CheckFrameAlignment(
+                    new[] { a, moved }, out reason), Is.False);
+                Assert.That(reason, Does.Contain("pivot/PPU drift"));
+                Assert.That(a.pivot.x, Is.EqualTo(4f).Within(.001f));
+            }
+            finally
+            {
+                if (a != null) UnityEngine.Object.DestroyImmediate(a);
+                if (b != null) UnityEngine.Object.DestroyImmediate(b);
+                if (moved != null) UnityEngine.Object.DestroyImmediate(moved);
+                UnityEngine.Object.DestroyImmediate(texture);
+            }
+        }
+
+        [Test]
+        public void SpriteFrameAlignmentRejectsNullAndMissingFrames()
+        {
+            string reason;
+            Assert.That(VufSpriteClipBuilderWindow.CheckFrameAlignment(
+                null, out reason), Is.False);
+            Assert.That(VufSpriteClipBuilderWindow.CheckFrameAlignment(
+                new Sprite[0], out reason), Is.False);
+            Assert.That(VufSpriteClipBuilderWindow.CheckFrameAlignment(
+                new Sprite[] { null, null }, out reason), Is.False);
+        }
+
+        [Test]
         public void VfxCandidateBuilderCreatesConfiguredUnityParticleSystemInMemory()
         {
             string[] presets = {
