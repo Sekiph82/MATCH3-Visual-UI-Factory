@@ -333,6 +333,107 @@ namespace Match3.VisualFactory.Editor
                 "Real physical device/owner/human rights flags remain FALSE.";
         }
 
+        [Serializable]
+        internal sealed class FrameEntry
+        {
+            public string path, sha256;
+            public int step, elapsed_milli;
+        }
+        [Serializable]
+        internal sealed class FrameSequenceReceipt
+        {
+            public string stage = "M09_EDITOR_TWEEN_SEQUENCE_NOT_OWNER_APPROVED";
+            public string profile_id, coral_draft_screen_id, state, locale;
+            public string synthetic_device, unsupported_video_reason =
+                "Not encoded as video: these are manually stepped Unity " +
+                "Editor candidates, not runtime gameplay or device FPS.";
+            public int steps;
+            public FrameEntry[] frames;
+            public bool gameplay_recorded, real_device_recorded;
+            public bool sound_or_haptic_recorded, owner_art_approved;
+            public bool production_parity_approved, release_allowed;
+        }
+
+        private void ExportFrameSequence()
+        {
+            if (candidate == null || tween == null)
+                throw new InvalidOperationException(
+                    "N/A: select a disposable modal/overlay with CanvasGroup tween");
+            string parent = EditorUtility.OpenFolderPanel(
+                "Choose EXISTING external parent for NEW M09 candidate frames",
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "");
+            if (String.IsNullOrEmpty(parent)) return;
+            string checkout = Path.GetFullPath(Directory.GetCurrentDirectory())
+                .TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            parent = Path.GetFullPath(parent);
+            if (!Directory.Exists(parent) ||
+                (parent + Path.DirectorySeparatorChar).StartsWith(
+                    checkout, StringComparison.OrdinalIgnoreCase))
+                throw new IOException("frame export parent must be external real directory");
+            for (var dir = new DirectoryInfo(parent); dir != null; dir = dir.Parent)
+                if ((dir.Attributes & FileAttributes.ReparsePoint) != 0)
+                    throw new IOException("linked export folders are forbidden");
+            // This folder is never temporary/auto-cleaned, so the owner has
+            // full control of exported review evidence. Zero overwrites.
+            string newFolder = Path.Combine(parent,
+                "VUF_M09_UNAPPROVED_" + DateTime.UtcNow.ToString("yyyyMMddTHHmmssfff"));
+            if (Directory.Exists(newFolder) || File.Exists(newFolder))
+                throw new IOException("frame sequence folder already exists");
+            var d = VufResponsiveGeometry.Presets[device];
+            int w = Mathf.Clamp(d.Width / 3, 160, 720);
+            int h = Mathf.Clamp(d.Height / 3, 160, 1280);
+            var receipt = new FrameSequenceReceipt {
+                profile_id = VufM09MatrixAudit.Profiles[profile],
+                coral_draft_screen_id = screens[screen].id,
+                state = VufReviewStateCatalog.States[state],
+                locale = VufReviewStateCatalog.Locales[locale],
+                synthetic_device = d.Name, steps = 8,
+                frames = new FrameEntry[8]
+            };
+            Directory.CreateDirectory(newFolder);
+            try
+            {
+                tween.SetReducedMotion(false);
+                tween.Show();
+                tween.Advance(tween.Duration);
+                tween.Hide();
+                for (int i = 0; i < receipt.steps; i++)
+                {
+                    if (i > 0) tween.Advance(tween.Duration / 7f);
+                    byte[] image = VufM09RenderCapture.CaptureCandidate(
+                        candidate, w, h, false);
+                    string name = "frame_" + i.ToString("D2") + ".png";
+                    string target = Path.Combine(newFolder, name);
+                    using (var output = new FileStream(target,
+                        FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                        output.Write(image, 0, image.Length);
+                    receipt.frames[i] = new FrameEntry {
+                        step = i,
+                        elapsed_milli = Mathf.RoundToInt(
+                            tween.Duration * i / 7f * 1000f),
+                        path = name, sha256 = Hash(image)
+                    };
+                }
+                string metadata = Path.Combine(newFolder,
+                    "M09_UNAPPROVED_FRAME_SEQUENCE.json");
+                using (var output = new FileStream(metadata,
+                    FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                using (var writer = new StreamWriter(output,
+                    new System.Text.UTF8Encoding(false)))
+                    writer.Write(JsonUtility.ToJson(receipt, true));
+                AddTrace("8 REAL Editor candidate tween frames exported. " +
+                    "NOT owner/gameplay/device approved, NO MP4 produced");
+                message = "Created NEW 8-frame PNG sequence and hash receipt: " +
+                    newFolder + " . Not a video or physical device recording.";
+            }
+            finally
+            {
+                tween.Show();
+                tween.Advance(tween.Duration);
+                tween.SetReducedMotion(reducedMotion);
+            }
+        }
+
         private void RunMatrixChunk()
         {
             if (screens == null) return;
@@ -432,6 +533,11 @@ namespace Match3.VisualFactory.Editor
                 {
                     try { ExportCaptured(); }
                     catch (Exception e) { message = "EXPORT BLOCKED: " + e.Message; }
+                }
+                if (GUILayout.Button("Export 8 REAL Editor tween PNG frames"))
+                {
+                    try { ExportFrameSequence(); }
+                    catch (Exception e) { message = "FRAMES BLOCKED: " + e.Message; }
                 }
             }
             if (captured != null)
