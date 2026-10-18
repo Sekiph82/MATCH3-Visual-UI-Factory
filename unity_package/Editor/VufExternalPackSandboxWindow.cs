@@ -27,8 +27,9 @@ namespace Match3.VisualFactory.Editor
         private TextAsset leftManifest;
         private TextAsset rightManifest;
         private InspectedPack left, right;
-        private int selected;
+        private int selected, localeIndex;
         private Vector2 scroll;
+        private static readonly string[] LocaleKeys = { "en", "tr" };
         private string result = "Not reviewed. Import TEST_ONLY pack COPIES under Assets/.";
         private static readonly string[] Profiles = {
             "Coral_Rescue", "Garage_Legends", "Dino_Islands",
@@ -40,6 +41,70 @@ namespace Match3.VisualFactory.Editor
         {
             var window = GetWindow<VufExternalPackSandboxWindow>("VUF Pack Sandbox");
             window.minSize = new Vector2(720f, 680f);
+            window.Show();
+        }
+
+        [Serializable] internal sealed class DraftTexts
+        {
+            public string title, action, offline, loading, disabled;
+        }
+        [Serializable] internal sealed class DraftLocale
+        {
+            public int schema_version;
+            public string profile_id, locale, stage;
+            public bool actual_gameplay_labels_verified, release_allowed;
+            public DraftTexts texts;
+        }
+
+        internal static string ReadDraftLocale(string json, string expectedProfile,
+            string expectedLocale)
+        {
+            // Missing locale is a clearly inert offline placeholder, never
+            // language/account fallback that activates a real Engine action.
+            if (String.IsNullOrEmpty(json))
+                return "[OFFLINE_DRAFT_FALLBACK / ACTION_DISABLED]";
+            if (json.Length > 64 * 1024)
+                throw new ArgumentException("candidate locale too large");
+            DraftLocale parsed;
+            try { parsed = JsonUtility.FromJson<DraftLocale>(json); }
+            catch (Exception ex)
+            { throw new ArgumentException("invalid draft locale JSON", ex); }
+            if (parsed == null || parsed.schema_version != 1 ||
+                parsed.profile_id != expectedProfile ||
+                parsed.locale != expectedLocale ||
+                (expectedLocale != "en" && expectedLocale != "tr") ||
+                parsed.stage != "DRAFT_NOT_LOCALIZATION_APPROVED" ||
+                parsed.actual_gameplay_labels_verified ||
+                parsed.release_allowed ||
+                parsed.texts == null ||
+                String.IsNullOrWhiteSpace(parsed.texts.title) ||
+                String.IsNullOrWhiteSpace(parsed.texts.action) ||
+                String.IsNullOrWhiteSpace(parsed.texts.offline) ||
+                String.IsNullOrWhiteSpace(parsed.texts.loading) ||
+                String.IsNullOrWhiteSpace(parsed.texts.disabled))
+                throw new ArgumentException("invalid draft language identity/authority");
+            return parsed.texts.title + " | " + parsed.texts.action +
+                " | " + parsed.texts.offline +
+                " (DRAFT, NO ENGINE ACTION, NOT TRANSLATION APPROVED)";
+        }
+
+        private static string LocalePreview(InspectedPack pack, string locale)
+        {
+            if (pack == null) return "[NO VERIFIED PACK / ACTION_DISABLED]";
+            string path = pack.Folder + "/locales/" + locale + ".json";
+            var imported = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+            return ReadDraftLocale(imported == null ? null : imported.text,
+                                   pack.Manifest.profile_id, locale);
+        }
+
+        internal static void OpenImportedManifest(string importedPath)
+        {
+            var window = GetWindow<VufExternalPackSandboxWindow>(
+                "VUF Pack Sandbox");
+            window.leftManifest =
+                AssetDatabase.LoadAssetAtPath<TextAsset>(importedPath);
+            window.rightManifest = null;
+            window.ValidateBoth();
             window.Show();
         }
 
@@ -267,6 +332,23 @@ namespace Match3.VisualFactory.Editor
                                right == null ? 0 : right.Manifest.assets.Length);
             selected = EditorGUILayout.IntSlider(
                 "A/B candidate index (no gameplay)", selected, 0, max - 1);
+            localeIndex = EditorGUILayout.Popup("Draft locale and offline fallback",
+                localeIndex, LocaleKeys);
+            try
+            {
+                EditorGUILayout.LabelField("Pack A draft",
+                    LocalePreview(left, LocaleKeys[localeIndex]), EditorStyles.wordWrappedLabel);
+                EditorGUILayout.LabelField("Pack B draft",
+                    LocalePreview(right, LocaleKeys[localeIndex]), EditorStyles.wordWrappedLabel);
+            }
+            catch (ArgumentException ex)
+            {
+                EditorGUILayout.HelpBox(
+                    "LOCALE REJECTED: " + ex.Message +
+                    " / NOT PRODUCTION TEXT", MessageType.Error);
+            }
+            if (GUILayout.Button("Open existing Unified Sprite & VFX manual Studio"))
+                VufUnifiedVisualStudioWindow.Open();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.BeginVertical();
