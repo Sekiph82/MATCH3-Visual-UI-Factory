@@ -11,6 +11,7 @@ from factory.asset_packaging.candidate_pack import (
     verify_pack,
 )
 from factory.image_processor.png_pipeline import decode_png
+from factory.asset_packaging.verify_offline_bundle import verify_exported_pack
 
 
 class M08CandidatePackTests(unittest.TestCase):
@@ -103,8 +104,16 @@ class M08CandidatePackTests(unittest.TestCase):
                 self.assertEqual(
                     hashlib.sha256((destination / rel).read_bytes()).hexdigest(),
                     digest)
+            independent = verify_exported_pack(destination)
+            self.assertEqual(independent["verified_images"], 58)
+            self.assertFalse(independent["release_allowed"])
             with self.assertRaises(CandidatePackError):
                 export_pack("Wonder_Pop", destination)
+            image_name = manifest["assets"][0]["path"]
+            image = destination / image_name
+            image.write_bytes(image.read_bytes()[:-2] + b"XX")
+            with self.assertRaises(CandidatePackError):
+                verify_exported_pack(destination)
 
     def test_illegal_theme_and_implicit_write_not_possible(self):
         with self.assertRaises(CandidatePackError):
