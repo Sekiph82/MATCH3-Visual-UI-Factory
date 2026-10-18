@@ -387,6 +387,8 @@ namespace Match3.VisualFactory.Editor
             public int frame_cursor, sprite_count, fx_frame_cursor, simulated_device_index;
             public int visual_priority;
             public long unity_editor_allocated_bytes, estimated_sprite_rgba_bytes;
+            public long estimated_fx_rgba_bytes;
+            public int preview_particle_count, fx_frame_count;
             public double last_editor_visual_step_ms;
             public long measured_editor_updates;
             public bool reduced_motion, muted, real_unity_spriterenderer_bound;
@@ -489,6 +491,10 @@ namespace Match3.VisualFactory.Editor
             string profile = VufVisualEventCatalog.Profiles[profileIndex];
             long bytes = sourceSheet == null ? 0L :
                 (long)sourceSheet.width * sourceSheet.height * 4L;
+            long fxBytes = fxAtlas == null ? 0L :
+                (long)fxAtlas.width * fxAtlas.height * 4L;
+            if (fxStill != null)
+                fxBytes += (long)fxStill.width * fxStill.height * 4L;
             var receipt = new ReviewReceipt {
                 stage = "CANDIDATE_ONLY_NOT_OWNER_APPROVED",
                 profile = profile, view_event = e.Name,
@@ -514,6 +520,9 @@ namespace Match3.VisualFactory.Editor
                     spritePlayback != null && spritePlayback.IsBound,
                 unity_editor_allocated_bytes = sampledEditorAlloc,
                 estimated_sprite_rgba_bytes = bytes,
+                estimated_fx_rgba_bytes = fxBytes,
+                preview_particle_count = particles == null ? 0 : particles.particleCount,
+                fx_frame_count = verifiedFx == null ? 0 : verifiedFx.frame_count,
                 last_editor_visual_step_ms = lastStepMs,
                 measured_editor_updates = frameTickCount,
                 actual_device_fps_verified = false,
@@ -677,6 +686,19 @@ namespace Match3.VisualFactory.Editor
                 lastStepMs.ToString("F4"));
             EditorGUILayout.LabelField("Editor allocated bytes (approx)",
                 sampledEditorAlloc.ToString());
+            EditorGUILayout.LabelField("Preview particle count",
+                particles == null ? "0 / no source" : particles.particleCount.ToString());
+            long sourceBytes = sourceSheet == null ? 0L :
+                (long)sourceSheet.width * sourceSheet.height * 4L;
+            long fxBytes = fxAtlas == null ? 0L :
+                (long)fxAtlas.width * fxAtlas.height * 4L;
+            EditorGUILayout.LabelField("Uncompressed sprite source bytes (estimate)",
+                sourceBytes.ToString());
+            EditorGUILayout.LabelField("Uncompressed FX sheet bytes (estimate)",
+                fxBytes.ToString());
+            EditorGUILayout.LabelField("Frame preview target/CPU", 
+                "FPS " + fps.ToString("F0") +
+                " / Editor last visual update " + lastStepMs.ToString("F4") + " ms");
             EditorGUILayout.LabelField("GPU draw calls / real device FPS",
                 "NOT VERIFIED / NOT RUN");
             EditorGUILayout.LabelField("Scene/Game state and score writes",
