@@ -585,6 +585,7 @@ namespace Match3.VisualFactory.Editor
 
             EditorGUILayout.LabelField("Actual imported COPY Sprite candidate",
                 EditorStyles.boldLabel);
+            EditorGUI.BeginChangeCheck();
             sourceSheet = (Texture2D)EditorGUILayout.ObjectField(
                 "Sprite (Multiple) PNG", sourceSheet, typeof(Texture2D), false);
             alternateSheet = (Texture2D)EditorGUILayout.ObjectField(
@@ -598,6 +599,13 @@ namespace Match3.VisualFactory.Editor
                 "Optional FX sheet", fxAtlas, typeof(Texture2D), false);
             fxStill = (Texture2D)EditorGUILayout.ObjectField(
                 "Optional reduced-motion still", fxStill, typeof(Texture2D), false);
+            if (EditorGUI.EndChangeCheck())
+            {
+                DestroyOnlyTemporary();
+                info = "Asset, clip timing, or FX input changed. " +
+                    "Revalidate imported COPY before testing any view event.";
+                lastCue = "NO AUDIO/HAPTIC EVER FIRED";
+            }
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load/revalidate imported COPY", GUILayout.Height(30f)))
                 LoadCandidate();
