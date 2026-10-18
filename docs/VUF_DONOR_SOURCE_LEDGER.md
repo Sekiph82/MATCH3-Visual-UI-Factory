@@ -468,3 +468,87 @@ licensing, real ENG-M12/LFX neutral consumer parity, mobile GPU/device and
 production player build acceptance remain OPEN. The unique whole-M08 Codex
 prompt is a native Google Doc:
 https://docs.google.com/document/d/19mAHGyJM3978LW9S5YBYCw_BnLTv8-kUu7w0M92tXEA/edit
+
+## 2026-10-18 | Existing M09-001/002/003/004/006/012 milestone source batch
+
+**Only canonical tracker:** root TASKS.md existing VUF-M09-001..017.
+These provenance notes are never task IDs or milestone approvals.
+
+**DONOR-FIRST source inspection performed before writing M09:**
+existing Unity VufQaStudioWindow, VufReadinessBoardWindow,
+VufScreenCatalog.LoadScreens (28 CORAL-ONLY contract IDs),
+VufScreenCatalog.LoadStyle (five DRAFT palettes),
+VufScreenShellBuilderWindow.BuildCandidateHierarchy (real local uGUI
+Canvas/Text/disabled Button and zero game actions),
+VufReviewStateCatalog.Apply (8 MOCK states/en-tr-stress),
+VufResponsiveGeometry.Analyze (5 synthetic device safe-area/anchors),
+VufTypographyAudit.Analyze (actual Unity text generation/contrast risk),
+VufInteractiveUiReviewWindow (temporary test-tap),
+VufUiTween (deterministic CanvasGroup reduced-motion primitive),
+M07 VufUnifiedVisualStudioWindow (real imported SpriteRenderer/ParticleSystem
+symbolic cue playback; existing frame stepping),
+M06 VufSceneLayerReviewWindow (layer/parallax),
+M08 VufExternalPackSandboxWindow (imported TEST_ONLY pack), and
+VufReadinessBoardWindow (release rights vs technical QA separation).
+Existing Python VF04 mathematically authored silhouette_kit, PNG CRC decoder
+and M08 candidate pack/independent bundle verification were also inspected.
+Existing BSD-3-Clause donor modules and preserved notices remain untouched.
+
+**MINIMAL_ADAPTER / SDK_REUSE original VUF code:**
+- VufM09MatrixAudit.cs: candidate matrix five DRAFT styles × 28 CORAL-only
+  draft screens × 8 MOCK states × 3 review locales × five synthetic phone/
+  tablet/landscape presets. A 16,800-row *source* inventory is not 16,800
+  actual rendered/screenshots; batches are 1..32 real transient Unity
+  uGUI candidate instantiations. Four nonCoral themes explicitly show
+  N_A_FOREIGN_GAME_USING_CORAL_DRAFT_CONTRACT. Policy-disabled
+  screens never get game business/online feature enablement.
+- VufM09RenderCapture.cs: original temporary Unity
+  Camera/RenderTexture/readPixels->EncodeToPNG drawing of a disposable
+  candidate Canvas, guarded to reject persistent/unknown source objects.
+  Capture metadata says actual EDITOR preview only, never an iOS/Android
+  screenshot or owner-accepted art. Canvas camera/render mode and temporary
+  render targets are restored/disposed. GUI actual capture NOT RUN.
+- VufM09OwnerVisualQaWindow.cs: manual owner Studio orchestrates existing
+  28-screen component builder, state, responsive geometry, font fit,
+  view-only test tap, VufUiTween single-step, A/B actual Editor PNG snapshot,
+  8 actual Editor-tween PNG frames (NO MP4), SHA-256 receipt and safe
+  create-only EXTERNAL output. Links directly to existing M07/M06/M08
+  render/FX/layer/import browsers, without new competing framework.
+  Mock level/seed/cue selectors DO NOT connect to Engine rules.
+  All release/device/rights/owner approval fields remain FALSE.
+- factory/qa/m09_review_inventory.py: read exact existing original Coral
+  schema+Style Bible bytes, enumerate immutable 16,800 SOURCE matrix,
+  N/A and policy gates with SHA pins.
+- factory/qa/m09_pixel_diff.py: reuse existing VUF PNG codec for original
+  source SHA pin, RGBA/alpha and semitransparent edge candidates, nearest
+  source 1x/2x/3x comparisons, frame-by-frame animation candidate diff and
+  source rights receipt fields. No legal/ownership approval inferred.
+- factory/qa/m09_accessibility_candidates.py: reuse six VF04 mathematically
+  distinct alpha shapes and five DRAFT color palette contrast checks.
+  No WCAG, font-fit, physical-touch or disability-use certificate.
+- Tools/vuf_m09_windows_viewer.py: optional Python stdlib Tkinter viewer
+  for original SHA-checked M08 TEST_ONLY pack source PNGs, A/B and 4x2 FX
+  source frame crop; NOT a live Unity Game view, real game FPS or video.
+  Source receipt export create-only/owner-only to outside Git.
+
+**REJECTED_REASON:** installing duplicate Tween/FX/UI engines or unsafe GUI
+capture packages would duplicate already adopted original Unity modules;
+third-party art licensing and "lookalike" original ownership cannot be
+determined by a candidate CRC/hash or generated schematic prototype.
+Production gameplay, Addressables, monetization, final Engine/LFX replay,
+physical iOS/Android/GPU and commissioned art remain separate gates.
+No copied donor source or original game assets were used in this batch.
+
+**CURRENT TEST STATUS:** Added authored (NOT RUN) eight+ new Unity
+EditMode matrix/render-capture contract tests, Python source inventory,
+RGBA/art provenance/scale/frame, palette/silhouette, Windows Tk viewer
+pure contract and cross-language source-parity tests. C# source braces and
+Unity .meta GUID path registration were checked only syntactically.
+Previous owner-local M08 Codex Python 416 PASS/9 Windows symlink SKIP,
+Unity 140/140 PASS applies ONLY to earlier
+`de5b8cc1b0938294d8c4aa1f5405240d29817d74`, NOT this new source.
+One M09 full-milestone Codex/Windows local QA source prompt is
+https://docs.google.com/document/d/1J_Spo9GLxfiMdBEqRK8xjoJ_aACGSS4NlhZv-thgiGA/edit
+under existing task VUF-M09-017. Owner real interactive GUI,
+actual screenshot/frame exports, original/licensed art rights and source
+fonts, physical device/GPU and final Engine/LFX remain OPEN.
