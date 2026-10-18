@@ -30,6 +30,7 @@ namespace Match3.VisualFactory.Editor
             "Tablet 3:4 SYNTHETIC"
         };
         private int profileIndex, eventIndex, speedIndex = 2, deviceIndex;
+        private int firstSpecialIndex, secondSpecialIndex;
         private bool reducedMotion, muteAudioHaptic = true, loop = true, pingPong;
         private bool showAlpha = true, showGuides = true;
         private float fps = 12f, previewZoom = 1f;
@@ -88,19 +89,22 @@ namespace Match3.VisualFactory.Editor
             var watch = System.Diagnostics.Stopwatch.StartNew();
             if (spritePlayback != null && spritePlayback.IsPlaying)
                 spritePlayback.Advance(delta, Speeds[speedIndex]);
-            if (fxPlaying && verifiedFx != null && !reducedMotion)
+            if (fxPlaying && !reducedMotion)
             {
                 float seconds = delta * Speeds[speedIndex];
-                fxElapsed += seconds;
-                var frameStep = 1d / verifiedFx.fps;
-                if (fxElapsed >= frameStep)
+                if (verifiedFx != null)
                 {
-                    int steps = (int)(fxElapsed / frameStep);
-                    fxElapsed -= steps * frameStep;
-                    displayedFxFrame = (displayedFxFrame + steps) %
-                                       verifiedFx.frame_count;
+                    fxElapsed += seconds;
+                    var frameStep = 1d / verifiedFx.fps;
+                    if (fxElapsed >= frameStep)
+                    {
+                        int steps = (int)(fxElapsed / frameStep);
+                        fxElapsed -= steps * frameStep;
+                        displayedFxFrame = (displayedFxFrame + steps) %
+                                           verifiedFx.frame_count;
+                    }
                 }
-                if (particles != null && !particles.Equals(null))
+                if (particles != null)
                     particles.Simulate(seconds, true, false, true);
             }
             watch.Stop();
@@ -219,10 +223,14 @@ namespace Match3.VisualFactory.Editor
             }
             try
             {
+                string key = VufVisualEventCatalog.ViewEventKey(
+                    VufVisualEventCatalog.Profiles[profileIndex], e.Name,
+                    e.Name == "special_trigger" || e.Name == "combo_chain" ?
+                        VufVisualEventCatalog.EngineSpecials[firstSpecialIndex] : null,
+                    e.Name == "combo_chain" ?
+                        VufVisualEventCatalog.EngineSpecials[secondSpecialIndex] : null);
                 bool accepted = spritePlayback.TryPresentViewEvent(
-                    VufVisualEventCatalog.EventKey(
-                        VufVisualEventCatalog.Profiles[profileIndex], e.Name),
-                    e.Channel, e.Priority, primaryFrames, fps, loop,
+                    key, e.Channel, e.Priority, primaryFrames, fps, loop,
                     pingPong, reducedMotion);
                 if (!accepted)
                 {
@@ -239,6 +247,10 @@ namespace Match3.VisualFactory.Editor
                 fxPlaying = false;
                 fxElapsed = 0;
                 displayedFxFrame = 0;
+                if (verifiedFx != null && !reducedMotion &&
+                    verifiedFx.preset_id != e.Preset)
+                    throw new ArgumentException("Imported FX preset is not " +
+                        "the current view event's verified preset.");
                 if (!reducedMotion && e.Preset != null)
                 {
                     var built = VufVfxLabWindow.BuildCandidateParticleSystem(
@@ -249,9 +261,9 @@ namespace Match3.VisualFactory.Editor
                     particles = built.GetComponent<ParticleSystem>();
                     particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                     particles.Simulate(0f, true, true, true);
-                    fxPlaying = verifiedFx != null;
+                    fxPlaying = particles != null;
                 }
-                info = e.Name + " view ONLY, channel=" + e.Channel +
+                info = key + " view ONLY, channel=" + e.Channel +
                     ", priority=" + e.Priority + ", duration guideline=" +
                     e.DurationMs + " ms (manual preview != runtime contract).";
             }
@@ -366,7 +378,12 @@ namespace Match3.VisualFactory.Editor
             var receipt = new ReviewReceipt {
                 stage = "CANDIDATE_ONLY_NOT_OWNER_APPROVED",
                 profile = profile, view_event = e.Name,
-                view_key = VufVisualEventCatalog.EventKey(profile, e.Name),
+                view_key = VufVisualEventCatalog.ViewEventKey(
+                    profile, e.Name,
+                    e.Name == "special_trigger" || e.Name == "combo_chain" ?
+                        VufVisualEventCatalog.EngineSpecials[firstSpecialIndex] : null,
+                    e.Name == "combo_chain" ?
+                        VufVisualEventCatalog.EngineSpecials[secondSpecialIndex] : null),
                 view_channel = e.Channel, visual_priority = e.Priority,
                 source_sprite_path = AssetDatabase.GetAssetPath(sourceSheet),
                 alternative_sprite_path = AssetDatabase.GetAssetPath(alternateSheet),
@@ -412,6 +429,20 @@ namespace Match3.VisualFactory.Editor
                 VufVisualEventCatalog.Profiles);
             eventIndex = EditorGUILayout.Popup("View event (14)", eventIndex,
                 EventLabels);
+            if (EventLabels[eventIndex] == "special_trigger" ||
+                EventLabels[eventIndex] == "combo_chain")
+            {
+                firstSpecialIndex = EditorGUILayout.Popup("Source-pinned Engine special",
+                    firstSpecialIndex, VufVisualEventCatalog.EngineSpecials);
+                if (EventLabels[eventIndex] == "combo_chain")
+                    secondSpecialIndex = EditorGUILayout.Popup(
+                        "Second source-pinned special", secondSpecialIndex,
+                        VufVisualEventCatalog.EngineSpecials);
+                EditorGUILayout.HelpBox(
+                    "5 Engine kinds and 15 canonical unordered pair keys only. " +
+                    "Final Engine release compatibility is NOT established.",
+                    MessageType.Info);
+            }
             deviceIndex = EditorGUILayout.Popup("Synthetic device ratio",
                 deviceIndex, Devices);
             speedIndex = EditorGUILayout.Popup("Playback speed", speedIndex,
