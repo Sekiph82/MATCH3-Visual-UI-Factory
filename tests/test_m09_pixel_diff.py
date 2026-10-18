@@ -6,7 +6,8 @@ import unittest
 
 from factory.image_processor.png_pipeline import encode_png, decode_png
 from factory.qa.m09_pixel_diff import (
-    compare, verify_receipt_source, PixelReviewError,
+    compare, compare_scaled_candidate, compare_frame_sequence,
+    verify_receipt_source, PixelReviewError,
 )
 
 
@@ -66,6 +67,29 @@ class M09PixelDiffTests(unittest.TestCase):
             compare(b, b, expected_sha=hashlib.sha256(a).hexdigest())
         result, _ = compare(a, b, expected_sha=hashlib.sha256(a).hexdigest())
         self.assertEqual(result["before_sha256"], hashlib.sha256(a).hexdigest())
+
+    def test_2x_3x_source_review_uses_explicit_resolution_not_false_device_pass(self):
+        a = png(8, 8, rgba=(255, 80, 70, 255))
+        for factor in (2, 3):
+            with self.subTest(factor=factor):
+                b = png(8 * factor, 8 * factor,
+                        rgba=(255, 80, 70, 255))
+                result = compare_scaled_candidate(a, b, factor)
+                self.assertEqual(result["mismatched_pixels_after_nearest"], 0)
+                self.assertFalse(result["real_device_resolution_sharpness_verified"])
+        with self.assertRaises(PixelReviewError):
+            compare_scaled_candidate(a, png(8, 8), 3)
+
+    def test_source_frame_sequence_reports_missing_or_changed_frames_without_replay_pass(self):
+        a = png(8, 8)
+        b = png(8, 8, rgba=(0, 0, 0, 255))
+        result = compare_frame_sequence([a, a, a], [a, b, a])
+        self.assertEqual(result["changed_frames"], 1)
+        self.assertEqual(result["frame_count"], 3)
+        self.assertFalse(result["real_unity_playback_proven"])
+        self.assertFalse(result["release_allowed"])
+        with self.assertRaises(PixelReviewError):
+            compare_frame_sequence([a, a], [a])
 
     def test_art_creator_fields_only_check_presence_not_actual_legal_approval(self):
         source = png()
