@@ -233,7 +233,7 @@ namespace Match3.VisualFactory.Editor
                 devices[i] = VufResponsiveGeometry.Presets[i].Name;
             deviceIndex = EditorGUILayout.Popup("Synthetic device", deviceIndex, devices);
             optionalOpaqueExternalLevel = (TextAsset)EditorGUILayout.ObjectField(
-                "Optional opaque LFX bytes (NOT PARSED)",
+                "Optional TextAsset bytes (NOT LFX PARSED)",
                 optionalOpaqueExternalLevel, typeof(TextAsset), false);
             reducedMotion = EditorGUILayout.Toggle(
                 "Reduced motion mock", reducedMotion);
@@ -255,7 +255,7 @@ namespace Match3.VisualFactory.Editor
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.LabelField("Source authority", NoAuthority);
-            EditorGUILayout.LabelField("Original LevelFactory source SHA",
+            EditorGUILayout.LabelField("Optional unverified external source SHA",
                 externalDigest + " (OPAQUE INPUT; schema NOT VERIFIED)");
             EditorGUILayout.LabelField("Route", routes[routeIndex]);
             EditorGUILayout.LabelField("Independent title UI taxonomy",
