@@ -213,6 +213,55 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void LowerPriorityOnSameVisualChannelCannotInterruptOrChangeSprites()
+        {
+            Assert.That(preview.TryPresentViewEvent(
+                "coral_rescue.anim.tile_match", "board_visual", 45,
+                original, 4f, true, false), Is.True);
+            preview.Advance(.25f);
+            Assert.That(renderer.sprite, Is.SameAs(original[1]));
+            Sprite before = renderer.sprite;
+            Assert.That(preview.TryPresentViewEvent(
+                "coral_rescue.anim.tile_spawn", "board_visual", 10,
+                alternate, 4f, true, false), Is.False);
+            Assert.That(renderer.sprite, Is.SameAs(before));
+            Assert.That(preview.VisualPriority, Is.EqualTo(45));
+            Assert.That(preview.ViewChannel, Is.EqualTo("board_visual"));
+            Assert.That(preview.ViewEventKey, Is.EqualTo("coral_rescue.anim.tile_match"));
+            Assert.That(preview.ControlsGameplayOrRewards, Is.False);
+            Assert.That(preview.TryPresentViewEvent(
+                "coral_rescue.anim.combo_chain", "board_visual", 70,
+                alternate, 4f, true, false), Is.True);
+            Assert.That(renderer.sprite, Is.SameAs(alternate[0]));
+            Assert.That(preview.VisualPriority, Is.EqualTo(70));
+            preview.Advance(.25f);
+            Assert.That(renderer.sprite, Is.SameAs(alternate[1]));
+        }
+
+        [Test]
+        public void InvalidViewEventMetadataFailsBeforeChangingCurrentPlayback()
+        {
+            preview.Bind(original, 4f, true, false);
+            Sprite stable = renderer.sprite;
+            Assert.Throws<ArgumentException>(() => preview.TryPresentViewEvent(
+                "engine.score.write", "gameplay", 100,
+                alternate, 4f, true, false));
+            Assert.Throws<ArgumentException>(() => preview.TryPresentViewEvent(
+                "../private", "board_visual", 40,
+                alternate, 4f, true, false));
+            Assert.Throws<ArgumentException>(() => preview.TryPresentViewEvent(
+                "coral_rescue.anim.tile_match", "board_visual", 101,
+                alternate, 4f, true, false));
+            Assert.Throws<ArgumentOutOfRangeException>(() => preview.TryPresentViewEvent(
+                "coral_rescue.anim.tile_match", "board_visual", 40,
+                alternate, float.NaN, true, false));
+            Assert.That(renderer.sprite, Is.SameAs(stable));
+            Assert.That(preview.IsBound, Is.True);
+            Assert.That(preview.ViewEventKey, Is.Null);
+            Assert.That(preview.VisualPriority, Is.EqualTo(0));
+        }
+
+        [Test]
         public void ClearAndDisableRestoreThePreExistingSpriteWithoutFileWrites()
         {
             preview.Bind(original, 4f, true, false);
