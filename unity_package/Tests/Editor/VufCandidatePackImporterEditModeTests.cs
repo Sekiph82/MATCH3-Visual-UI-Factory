@@ -89,7 +89,8 @@ namespace Match3.VisualFactory.Tests
                 "../secrets.json", "image/../../pass.png", "/etc/private.png",
                 "https://example.org/p.png", "C:\\Secrets\\a.png",
                 "%2e%2e/secret.png", ".hidden.json", "face.psd",
-                "A//double.png", "bad file.png"
+                "A//double.png", "bad file.png", "private_credentials.json",
+                "secrets/passwords.json", "backups/owner_picture.png"
             })
                 Assert.That(VufCandidatePackImporterWindow.SafePath(unsafePath),
                     Is.False, "bad path " + unsafePath);
