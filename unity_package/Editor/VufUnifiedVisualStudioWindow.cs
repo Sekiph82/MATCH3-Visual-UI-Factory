@@ -143,6 +143,35 @@ namespace Match3.VisualFactory.Editor
             return found.ToArray();
         }
 
+        // The existing FX sheet validator intentionally checks geometry and
+        // receipt SHAPE, but not disk bytes. This Studio checks imported COPY
+        // PNG hashes as well, without changing source TextureImporter.
+        private void VerifyImportedFxReceipts()
+        {
+            string manifestPath = AssetDatabase.GetAssetPath(fxManifest);
+            string atlasPath = AssetDatabase.GetAssetPath(fxAtlas);
+            string stillPath = AssetDatabase.GetAssetPath(fxStill);
+            if (String.IsNullOrEmpty(manifestPath) ||
+                !manifestPath.StartsWith("Assets/", StringComparison.Ordinal) ||
+                !manifestPath.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
+                String.IsNullOrEmpty(atlasPath) ||
+                !atlasPath.StartsWith("Assets/", StringComparison.Ordinal) ||
+                !atlasPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                String.IsNullOrEmpty(stillPath) ||
+                !stillPath.StartsWith("Assets/", StringComparison.Ordinal) ||
+                !stillPath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                !String.Equals(Path.GetFileName(atlasPath),
+                    verifiedFx.atlas_path, StringComparison.Ordinal) ||
+                !String.Equals(Path.GetFileName(stillPath),
+                    verifiedFx.reduced_motion_path, StringComparison.Ordinal) ||
+                !String.Equals(SourceDigest(fxAtlas),
+                    verifiedFx.atlas_sha256, StringComparison.Ordinal) ||
+                !String.Equals(SourceDigest(fxStill),
+                    verifiedFx.reduced_motion_sha256, StringComparison.Ordinal))
+                throw new ArgumentException(
+                    "FX imported-copy atlas/still path or SHA-256 mismatch");
+        }
+
         private void DestroyOnlyTemporary()
         {
             fxPlaying = false;
@@ -179,6 +208,7 @@ namespace Match3.VisualFactory.Editor
                     verifiedFx = VufFxSheetPreviewWindow.Parse(
                         fxManifest.text, fxAtlas.width, fxAtlas.height,
                         fxStill.width, fxStill.height);
+                    VerifyImportedFxReceipts();
                 }
                 built = new GameObject("VUF_TEMP_UnifiedView_DONT_SAVE",
                     typeof(SpriteRenderer), typeof(VufSpritePlaybackPreview));
@@ -334,6 +364,18 @@ namespace Match3.VisualFactory.Editor
                 float y = dst.y + h * (1f - sprite.pivot.y / rect.height);
                 EditorGUI.DrawRect(new Rect(x - 1f, dst.y, 2f, h), Color.yellow);
                 EditorGUI.DrawRect(new Rect(dst.x, y - 1f, w, 2f), Color.yellow);
+                // Synthetic guide is NOT the OS safe inset on a real device.
+                float gx = outer.width * .07f, gy = outer.height * .065f;
+                var line = new Color(.2f, 1f, .65f, .85f);
+                EditorGUI.DrawRect(new Rect(outer.x + gx, outer.y + gy,
+                    outer.width - gx * 2f, 2f), line);
+                EditorGUI.DrawRect(new Rect(outer.x + gx,
+                    outer.y + outer.height - gy - 2f,
+                    outer.width - gx * 2f, 2f), line);
+                EditorGUI.DrawRect(new Rect(outer.x + gx, outer.y + gy,
+                    2f, outer.height - gy * 2f), line);
+                EditorGUI.DrawRect(new Rect(outer.x + outer.width - gx - 2f,
+                    outer.y + gy, 2f, outer.height - gy * 2f), line);
             }
         }
 
