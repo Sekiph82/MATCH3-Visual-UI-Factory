@@ -136,8 +136,8 @@ namespace Match3.VisualFactory.Editor
             }
             // No new numerical/UV/slicing algorithm. Existing frame geometry is
             // never changed. Explicit alphabetical order is deterministic.
-            found.Sort((a, b) => String.Compare(a.name, b.name,
-                                                StringComparison.Ordinal));
+            found.Sort((a, b) =>
+                VufSpriteClipBuilderWindow.NaturalSpriteNameOrder(a.name, b.name));
             if (found.Count < 2 || found.Count > 4096)
                 throw new ArgumentException("Expected 2..4096 unpacked imported sprites");
             return found.ToArray();
