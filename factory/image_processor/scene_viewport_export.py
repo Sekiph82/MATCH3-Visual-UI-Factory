@@ -138,11 +138,11 @@ def render_viewport(manifest: dict, images: dict[str, bytes], profile: str,
         for dy in range(out_h):
             # Center-aligned deterministic nearest-neighbor image cover.
             sy = min(src_h - 1, max(0, (
-                (2 * dy + 1 - out_h) * cover_den * src_h //
+                (2 * dy + 1 - out_h) * cover_den //
                 (2 * cover_num) + src_h // 2)))
             for dx in range(out_w):
                 sx = min(src_w - 1, max(0, (
-                    (2 * (dx - shift) + 1 - out_w) * cover_den * src_w //
+                    (2 * (dx - shift) + 1 - out_w) * cover_den //
                     (2 * cover_num) + src_w // 2)))
                 source_offset = (sy * src_w + sx) * 4
                 dest_offset = (dy * out_w + dx) * 4
