@@ -112,6 +112,20 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void PhoneTabletLandscapeReviewPixelsPreserveSyntheticDeviceAspect()
+        {
+            foreach (var device in VufResponsiveGeometry.Presets)
+            {
+                Vector2Int size = VufM09OwnerVisualQaWindow.ReviewSize(device);
+                Assert.That(size.x, Is.InRange(160, 720));
+                Assert.That(size.y, Is.InRange(160, 1280));
+                Assert.That((float)size.x / size.y,
+                    Is.EqualTo((float)device.Width / device.Height)
+                    .Within(.004f), device.Name);
+            }
+        }
+
+        [Test]
         public void MechanicalPassCanNeverSignOffHumanOrRealHardwareEvidence()
         {
             var row = VufM09MatrixAudit.Inspect(0);
