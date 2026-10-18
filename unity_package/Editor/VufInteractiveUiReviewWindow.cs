@@ -20,6 +20,7 @@ namespace Match3.VisualFactory.Editor
         private GameObject disposable;
         private Button manualButton;
         private int themeIndex, screenIndex = 26, stateIndex, localeIndex, deviceIndex;
+        private bool reducedMotionPreview = true;
         private string message = "Not loaded. Choose a screen and build a disposable preview.";
         private Vector2 scroll;
         private static readonly string[] Profiles = {
@@ -163,6 +164,23 @@ namespace Match3.VisualFactory.Editor
                             " H=" + node.Bounds.height.ToString("F1") +
                             " (simulated px, not device evidence)");
                 }
+                foreach (RectTransform rect in
+                    disposable.GetComponentsInChildren<RectTransform>(true))
+                {
+                    if (rect == null || rect == disposable.transform) continue;
+                    if (rect.GetComponent<Button>() == null &&
+                        rect.GetComponent<VufSafeAreaFitter>() == null &&
+                        rect.GetComponent<CanvasGroup>() == null) continue;
+                    audit.Add("Z/ANCHOR: " + rect.name +
+                        " sibling=" + rect.GetSiblingIndex() +
+                        " min=(" + rect.anchorMin.x.ToString("F2") +
+                        "," + rect.anchorMin.y.ToString("F2") + ")" +
+                        " max=(" + rect.anchorMax.x.ToString("F2") +
+                        "," + rect.anchorMax.y.ToString("F2") + ")" +
+                        " raycast=" + (rect.GetComponent<Graphic>() != null ?
+                            rect.GetComponent<Graphic>().raycastTarget.ToString() :
+                            "no Graphic"));
+                }
                 var cg = disposable.GetComponentInChildren<CanvasGroup>(true);
                 audit.Add("Tween/transition: " + (cg == null ?
                     "no CanvasGroup on this page" :
@@ -227,6 +245,30 @@ namespace Match3.VisualFactory.Editor
                     manualButton.onClick.Invoke();
                     message = "VIEW ACTION ONLY: local log updated.";
                 }
+            reducedMotionPreview = EditorGUILayout.Toggle(
+                "Reduced-motion MOCK transition", reducedMotionPreview);
+            using (new EditorGUI.DisabledScope(disposable == null))
+            {
+                if (GUILayout.Button("Test candidate CanvasGroup transition (view only)"))
+                {
+                    var tween = disposable.GetComponentInChildren<VufUiTween>(true);
+                    if (tween != null)
+                    {
+                        tween.SetReducedMotion(reducedMotionPreview);
+                        tween.Hide();
+                        tween.Advance(.5f);
+                        tween.Show();
+                        tween.Advance(.5f);
+                        var cg = tween.GetComponent<CanvasGroup>();
+                        message = "Pure preview tween / CanvasGroup alpha=" +
+                            cg.alpha.ToString("F2") +
+                            " / no Engine event dispatched.";
+                    }
+                    else
+                        message = "No modal transition on this screen. " +
+                            "Choose modal/overlay/ceremony page.";
+                }
+            }
             EditorGUILayout.LabelField("Bound real Engine actions", "ZERO");
             EditorGUILayout.LabelField("Persistent scene/prefab writes", "ZERO");
             scroll = EditorGUILayout.BeginScrollView(scroll);
