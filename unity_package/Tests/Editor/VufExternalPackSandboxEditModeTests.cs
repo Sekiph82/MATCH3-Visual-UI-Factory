@@ -133,6 +133,49 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void DraftEnglishTurkishAndMissingOfflineLocaleRemainNonGameActions()
+        {
+            var item = new VufExternalPackSandboxWindow.DraftLocale {
+                schema_version = 1,
+                profile_id = "Wonder_Pop", locale = "tr",
+                stage = "DRAFT_NOT_LOCALIZATION_APPROVED",
+                release_allowed = false,
+                actual_gameplay_labels_verified = false,
+                texts = new VufExternalPackSandboxWindow.DraftTexts {
+                    title = "Aday gorsel", action = "BAGLI DEGIL",
+                    offline = "Cevrimdisi", loading = "Yukleniyor",
+                    disabled = "Devre disi"
+                }
+            };
+            string json = UnityEngine.JsonUtility.ToJson(item);
+            Assert.That(VufExternalPackSandboxWindow.ReadDraftLocale(
+                json, "Wonder_Pop", "tr"), Does.Contain("NOT TRANSLATION APPROVED"));
+            Assert.That(VufExternalPackSandboxWindow.ReadDraftLocale(
+                null, "Wonder_Pop", "tr"), Does.Contain("ACTION_DISABLED"));
+        }
+
+        [Test]
+        public void LocaleCannotForgeReadyToShipIdentityOrWrongGameNamespace()
+        {
+            var item = new VufExternalPackSandboxWindow.DraftLocale {
+                schema_version = 1, profile_id = "Coral_Rescue",
+                locale = "en", stage = "DRAFT_NOT_LOCALIZATION_APPROVED",
+                texts = new VufExternalPackSandboxWindow.DraftTexts {
+                    title = "Candidate", action = "NOT CONNECTED",
+                    offline = "Offline", loading = "Loading", disabled = "Disabled"
+                }
+            };
+            string json = UnityEngine.JsonUtility.ToJson(item);
+            Assert.Throws<ArgumentException>(() =>
+                VufExternalPackSandboxWindow.ReadDraftLocale(
+                    json, "Wonder_Pop", "en"));
+            item.release_allowed = true;
+            Assert.Throws<ArgumentException>(() =>
+                VufExternalPackSandboxWindow.ReadDraftLocale(
+                    UnityEngine.JsonUtility.ToJson(item), "Coral_Rescue", "en"));
+        }
+
+        [Test]
         public void AllFiveExternalProfileNamespacesUseSameNonApprovedRules()
         {
             foreach (string profile in new [] {
