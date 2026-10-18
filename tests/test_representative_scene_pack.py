@@ -105,7 +105,7 @@ class RepresentativeScenePackTests(unittest.TestCase):
             render_scene_layer(PROFILES[0], "gameplay", "HUD")
 
     def test_invalid_seed_scale_fail_closed(self):
-        for bad in (0, -1, 3, True, "2"):
+        for bad in (0, -1, 4, True, "2"):
             with self.subTest(scale=bad), self.assertRaises(ScenePackError):
                 render_scene_layer(PROFILES[0], "gameplay", "backdrop", scale=bad)
         for bad in (-1, 10000, 0.2, True):
