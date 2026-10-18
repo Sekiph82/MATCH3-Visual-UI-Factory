@@ -239,3 +239,53 @@ set `includeInBuild=false` to prevent accidental player inclusion.
 Preserve original texture importers/assets untouched. Four real
 EditMode and three Python source-only regression methods authored;
 actual Unity Editor execution and mobile atlas QA still OPEN.
+
+## 2026-10-18 | VUF-M06-003 responsive candidate preview pipeline
+
+**Canonical task:** existing `VUF-M06-003` in root `TASKS.md`. This is
+source provenance, NOT a task or milestone tracker. Baseline inspection:
+VUF `main` SHA `da0413e0cf546317ee6ead2504095add0299c5aa`.
+Existing local modules were inspected before authoring, and their declared
+candidate-only policy was preserved.
+
+**INTERNAL_REUSE** (VUF in-repository source, not third-party copied assets):
+
+- `factory/image_processor/png_pipeline.py` (Git blob
+  `f31dfefca03902a19ae227055f92067e06d6b2d4`): existing
+  `encode_png/decode_png` CRC-checked PNG bytes, no new codec/provider.
+- `factory/image_processor/representative_scene_pack.py`: existing
+  `build_representative_pack`, 19 scene identifiers, 3-layer source
+  manifest SHA/stage/ownership checks. Added 3× candidate layer scale to
+  existing `SCALES` with no replacement scene-renderer rewrite.
+- `unity_package/Editor/VufSceneLayerReviewWindow.cs`: existing read-only
+  five-theme human Editor preview; narrowly allows true 3× 540×960 PNG
+  manifest dimensions. It does NOT certify an actual Unity Editor run.
+- `unity_package/Runtime/VufParallaxCanvasController.cs` (blob
+  `0c9ce2eebe8454d47fb49a1db49bf35803d14acd`):
+  existing view-only three-RectTransform parallax factors and reset, no
+  Engine callbacks, no game-state or rewards authority.
+
+**MINIMAL_ADAPTER / ORIGINAL_VUF_CODE**:
+`factory/image_processor/scene_viewport_export.py` composes independent
+SHA-verified layered PNGs into visual **review-only** portrait 9:16,
+tall-phone 6:13 and tablet 3:4 cropped previews; nearest-neighbor image
+cover preserves proportions; optional guide border is synthetic, never a
+verified OS safe area or runnable UI. Output is in-memory by default or in
+a NEW owner-chosen external folder; no source originals or existing files
+are overwritten. Reused existing `scene_pack`/PNG codec and source/style
+sha records; did not copy third-party code or visual assets.
+
+**REJECTED_REASON:** installing another image rendering/Unity tween/atlas
+framework would duplicate the existing VUF PNG and Unity view-only
+components, add licensing and import complexity, and cannot furnish
+human art-rights or device acceptance.
+
+**Test status:** 9 Python source regression/negative methods authored in
+`tests/test_scene_viewport_export.py`, one extra actual Unity EditMode
+source test in `VufSceneLayerReviewEditModeTests.cs`, and existing Python
+invalid-scale fixture corrected for newly permitted 3×. THESE NEW TESTS
+HAVE NOT RUN IN THE OWNER WINDOWS/UNITY ENVIRONMENT. The previous
+M05 Codex 361 Python PASS + 85 Unity EditMode PASS applies ONLY to
+`cd9f9bfd6750ffeee850e700ac1c3691358b1f2b`, **not** this
+source change. Test/GUI/physical-device, final art, rights and owner
+approval remain separately open in VUF-M06-007 and M09.
