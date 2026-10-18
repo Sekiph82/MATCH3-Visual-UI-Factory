@@ -11,10 +11,10 @@ save/purchase APIs, internet connection or original artwork rights.
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import re
-from dataclasses import dataclass
 
 PROFILES = ("Coral_Rescue", "Garage_Legends", "Dino_Islands",
             "The_Fractured_Realms", "Wonder_Pop")
@@ -105,7 +105,7 @@ def build_slice(profile: str, *, mock_level: int = 11,
         "mock_level": mock_level, "mock_seed": mock_seed,
         "visual_review_routes": steps,
         "coral_extra_screen_sample_only": profile == "Coral_Rescue",
-        "source_level": dict(REVIEW_LEVEL),
+        "source_level": copy.deepcopy(REVIEW_LEVEL),
         "frozen_reference": gameplay_authority,
         "frozen_reference_sha256": fixed_sha,
         "real_engine_replay_verified": False,
@@ -137,6 +137,9 @@ def verify_slice(value: dict) -> None:
                   "physical_gpu_performance_verified", "release_allowed"):
         if value.get(field) is not False:
             raise NeutralSliceError("forged real gameplay/device/owner acceptance")
+    if (not isinstance(value.get("theme_revision"), str) or
+            not re.fullmatch(r"[a-zA-Z0-9_-]{1,40}", value["theme_revision"])):
+        raise NeutralSliceError("invalid theme revision")
     profile = value["profile_id"]
     expected = list(BASE_ROUTE) + (list(CORAL_EXTRA) if profile == "Coral_Rescue" else [])
     steps = value.get("visual_review_routes")
