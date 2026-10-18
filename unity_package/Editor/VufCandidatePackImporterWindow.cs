@@ -237,7 +237,7 @@ namespace Match3.VisualFactory.Editor
                 importedManifest == null ? MessageType.Info : MessageType.Warning);
             if (!String.IsNullOrEmpty(importedManifest) &&
                 GUILayout.Button("Open read-only External Visual Pack Sandbox"))
-                VufExternalPackSandboxWindow.Open();
+                VufExternalPackSandboxWindow.OpenImportedManifest(importedManifest);
         }
     }
 }
