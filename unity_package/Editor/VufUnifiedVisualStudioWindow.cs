@@ -331,7 +331,7 @@ namespace Match3.VisualFactory.Editor
             GUI.DrawTextureWithTexCoords(outer, fxAtlas, uv, true);
         }
 
-        private void DrawSprite(Rect outer)
+        private void DrawSprite(Rect outer, Sprite comparisonFrame = null)
         {
             EditorGUI.DrawRect(outer, new Color(.10f, .12f, .16f));
             if (showAlpha)
@@ -344,7 +344,8 @@ namespace Match3.VisualFactory.Editor
                                                new Color(.42f, .44f, .48f));
             }
             if (spritePlayback == null || tempSpriteObject == null) return;
-            var sprite = tempSpriteObject.GetComponent<SpriteRenderer>().sprite;
+            var sprite = comparisonFrame != null ? comparisonFrame :
+                tempSpriteObject.GetComponent<SpriteRenderer>().sprite;
             if (sprite == null) return;
             // Imported Sprite texture rect may not be readable for packed
             // rotated assets, which are excluded at asset intake above.
@@ -679,6 +680,26 @@ namespace Match3.VisualFactory.Editor
             EditorGUI.DrawRect(right, new Color(.055f, .07f, .10f, 1f));
             DrawFx(rightViewport);
             EditorGUILayout.EndHorizontal();
+            if (alternateFrames != null && primaryFrames != null &&
+                spritePlayback != null && spritePlayback.IsBound)
+            {
+                int frame = spritePlayback.CurrentFrameIndex;
+                int next = Mathf.Clamp(frame, 0, alternateFrames.Length - 1);
+                EditorGUILayout.LabelField(
+                    "A/B Imported Atlas Source: currently bound vs alternative",
+                    EditorStyles.boldLabel);
+                EditorGUILayout.BeginHorizontal();
+                Rect a = GUILayoutUtility.GetRect(300f, 160f,
+                    GUILayout.ExpandWidth(true));
+                Rect b = GUILayoutUtility.GetRect(300f, 160f,
+                    GUILayout.ExpandWidth(true));
+                DrawSprite(a);
+                DrawSprite(b, alternateFrames[next]);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.LabelField("Left=current SpriteRenderer, " +
+                    "Right=alternative imported candidate frame " + next +
+                    " (preview only, not source parity approval)");
+            }
             if (showGuides)
                 EditorGUILayout.HelpBox(
                     "SYNTHETIC SAFE-AREA GUIDE ONLY: device=" + Devices[deviceIndex] +
