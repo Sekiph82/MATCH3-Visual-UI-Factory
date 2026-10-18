@@ -372,6 +372,17 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void UnifiedStudioAndOriginalSpriteBuilderUseNaturalFrameNumberOrder()
+        {
+            Assert.That(VufSpriteClipBuilderWindow.NaturalSpriteNameOrder(
+                "effect2", "effect10"), Is.LessThan(0));
+            Assert.That(VufSpriteClipBuilderWindow.NaturalSpriteNameOrder(
+                "frame10", "frame2"), Is.GreaterThan(0));
+            Assert.That(VufSpriteClipBuilderWindow.NaturalSpriteNameOrder(
+                "frame2", "frame2"), Is.EqualTo(0));
+        }
+
+        [Test]
         public void InvalidSpriteFrameSequenceRejected()
         {
             Assert.Throws<ArgumentOutOfRangeException>(
