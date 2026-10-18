@@ -109,7 +109,35 @@ namespace Match3.VisualFactory.Editor
                         c != '_' && c != '-' && c != '.')
                         return false;
             }
-            return true;
+            // Source export's expected folders ONLY. Do not import an
+            // arbitrary user JSON, secret or vendor asset hidden in a forged
+            // candidate receipt, even if an attacker supplied its SHA.
+            if (path == "visual_manifest.json" ||
+                path == "sprite_atlas/atlas_manifest.json" ||
+                path == "sprite_atlas/atlas.png" ||
+                path == "locales/en.json" || path == "locales/tr.json" ||
+                path == "receipts/scene_sources.json" ||
+                path == "receipts/sprite_sources.json")
+                return true;
+            if (path.StartsWith("scenes/", StringComparison.Ordinal) &&
+                path.EndsWith(".png", StringComparison.Ordinal) &&
+                path.Split('/').Length == 2) return true;
+            if (path.StartsWith("sprites/sample_", StringComparison.Ordinal) &&
+                path.EndsWith(".png", StringComparison.Ordinal) &&
+                path.Split('/').Length == 2) return true;
+            if (path.StartsWith("fx/", StringComparison.Ordinal) &&
+                path.Split('/').Length == 3)
+            {
+                string name = path.Split('/')[1];
+                bool known = name == "bubblerise" || name == "matchburst" ||
+                    name == "starsparkle" || name == "softdrift" ||
+                    name == "portalpulse";
+                string file = path.Split('/')[2];
+                return known && (file == "fx_sheet.png" ||
+                    file == "reduced_motion.png" ||
+                    file == "fx_manifest.json");
+            }
+            return false;
         }
 
         private static string ShaFile(string filename)
