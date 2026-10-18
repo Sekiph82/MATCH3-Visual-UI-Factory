@@ -51,7 +51,9 @@ class UnifiedVisualCatalogSourceTests(unittest.TestCase):
         self.assertEqual(len(PROFILES), 5)
         for name in PAIR_ORDER:
             self.assertIn(f'"{name}"', self.catalog)
-        self.assertIn("pair", self.catalog.lower())
+        self.assertIn("secondSpecial", self.catalog)
+        self.assertIn("Math.Min(first, second)", self.catalog)
+        self.assertIn("Math.Max(first, second)", self.catalog)
         self.assertEqual(len({pair_key(a, b) for a in PAIR_ORDER
                               for b in PAIR_ORDER}), 15)
 
