@@ -39,6 +39,22 @@ class SceneViewportExportTests(unittest.TestCase):
                 self.assertFalse(receipt["owner_visual_approval"])
                 self.assertFalse(receipt["release_allowed"])
 
+    def test_five_themes_are_independent_and_can_be_reviewed_in_one_aspect(self):
+        digests = set()
+        for profile in ("Coral_Rescue", "Garage_Legends", "Dino_Islands",
+                        "The_Fractured_Realms", "Wonder_Pop"):
+            with self.subTest(profile=profile):
+                result, png = self.render(
+                    profile=profile, scene="world_map", aspect="portrait")
+                self.assertEqual(result["profile_id"], profile)
+                self.assertFalse(result["owner_visual_approval"])
+                self.assertNotIn(result["png_sha256"], digests)
+                digests.add(result["png_sha256"])
+                w, h, rgba = decode_png(png)
+                self.assertEqual((w, h), (180, 320))
+                self.assertTrue(all(a == 255 for a in rgba[3::4]))
+        self.assertEqual(len(digests), 5)
+
     def test_original_source_cover_geometry_does_not_stretch_aspect(self):
         self.assertEqual(_target_size(180, 320, "portrait"), (180, 320))
         self.assertEqual(_target_size(180, 320, "tall_phone"), (180, 390))
