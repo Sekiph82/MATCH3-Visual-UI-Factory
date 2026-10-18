@@ -100,6 +100,18 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void ThreeXEnvironmentLayerDimensionsAreAcceptedAsSourceCandidates()
+        {
+            var m = Candidate();
+            foreach (var scene in m.scenes)
+                foreach (var layer in scene.layers)
+                    layer.dimensions = new[] { 540, 960 };
+            var accepted = VufSceneLayerReviewWindow.ValidateJson(Json(m));
+            Assert.That(accepted.scenes[0].layers[0].dimensions[0], Is.EqualTo(540));
+            Assert.That(accepted.release_allowed, Is.False);
+        }
+
+        [Test]
         public void OwnerApprovalAndReleaseSpoofingFailClosed()
         {
             var m = Candidate();
