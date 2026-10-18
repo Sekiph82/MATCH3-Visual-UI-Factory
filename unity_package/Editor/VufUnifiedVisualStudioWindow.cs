@@ -352,6 +352,76 @@ namespace Match3.VisualFactory.Editor
             public string audio_haptic_cue_log, missing_evidence;
         }
 
+        // Synthetic aspect framing only. No platform notch, actual device
+        // dimensions, display pixel density, canvas/layout or GPU inference.
+        internal static Rect SyntheticViewport(Rect available, int index)
+        {
+            if (index < 0 || index >= 3 || available.width <= 0f ||
+                available.height <= 0f)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            float aspect = index == 0 ? 9f / 16f :
+                           index == 1 ? 6f / 13f : 3f / 4f;
+            float width = Mathf.Min(available.width, available.height * aspect);
+            float height = width / aspect;
+            return new Rect(available.center.x - width * .5f,
+                            available.center.y - height * .5f, width, height);
+        }
+
+        private static bool CanExportOwnerReviewReceipt(string filepath)
+        {
+            if (String.IsNullOrWhiteSpace(filepath) ||
+                !Path.IsPathRooted(filepath) ||
+                !filepath.EndsWith(".json", StringComparison.OrdinalIgnoreCase) ||
+                File.Exists(filepath) || Directory.Exists(filepath))
+                return false;
+            string full = Path.GetFullPath(filepath);
+            string checkout = Path.GetFullPath(Directory.GetCurrentDirectory())
+                .TrimEnd(Path.DirectorySeparatorChar) +
+                Path.DirectorySeparatorChar;
+            if (full.StartsWith(checkout, StringComparison.OrdinalIgnoreCase))
+                return false;
+            string folder = Path.GetDirectoryName(full);
+            if (String.IsNullOrEmpty(folder) || !Directory.Exists(folder))
+                return false;
+            // No following reparse points through the chosen export ancestry.
+            for (var parent = new DirectoryInfo(folder); parent != null;
+                 parent = parent.Parent)
+            {
+                if ((parent.Attributes & FileAttributes.ReparsePoint) != 0)
+                    return false;
+            }
+            return true;
+        }
+
+        private void ExportOwnerReviewReceipt()
+        {
+            string path = EditorUtility.SaveFilePanel(
+                "Create NEW unapproved VUF M07 review receipt OUTSIDE checkout",
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "VUF_M07_OWNER_REVIEW_UNAPPROVED", "json");
+            if (String.IsNullOrEmpty(path)) return;
+            if (!CanExportOwnerReviewReceipt(path))
+            {
+                info = "Receipt export refused: choose NEW .json outside " +
+                       "Unity checkout; no existing file may be overwritten.";
+                return;
+            }
+            try
+            {
+                // CreateNew is race-safe against an existing owner file.
+                using (var outFile = new FileStream(path, FileMode.CreateNew,
+                    FileAccess.Write, FileShare.None))
+                using (var writer = new StreamWriter(outFile, new UTF8Encoding(false)))
+                    writer.Write(ReceiptJson());
+                info = "Saved candidate receipt only: " + path +
+                    ". No art/owner/device PASS certified.";
+            }
+            catch (Exception error)
+            {
+                info = "Receipt export blocked: " + error.Message;
+            }
+        }
+
         private static string SourceDigest(UnityEngine.Object asset)
         {
             if (asset == null) return "NOT_SELECTED";
@@ -539,10 +609,14 @@ namespace Match3.VisualFactory.Editor
                     verifiedFx.frame_count - 1);
 
             EditorGUILayout.BeginHorizontal();
-            Rect left = GUILayoutUtility.GetRect(300f, 290f, GUILayout.ExpandWidth(true));
-            DrawSprite(left);
-            Rect right = GUILayoutUtility.GetRect(300f, 290f, GUILayout.ExpandWidth(true));
-            DrawFx(right);
+            Rect left = GUILayoutUtility.GetRect(300f, 310f, GUILayout.ExpandWidth(true));
+            Rect leftViewport = SyntheticViewport(left, deviceIndex);
+            EditorGUI.DrawRect(left, new Color(.055f, .07f, .10f, 1f));
+            DrawSprite(leftViewport);
+            Rect right = GUILayoutUtility.GetRect(300f, 310f, GUILayout.ExpandWidth(true));
+            Rect rightViewport = SyntheticViewport(right, deviceIndex);
+            EditorGUI.DrawRect(right, new Color(.055f, .07f, .10f, 1f));
+            DrawFx(rightViewport);
             EditorGUILayout.EndHorizontal();
             if (showGuides)
                 EditorGUILayout.HelpBox(
@@ -569,6 +643,8 @@ namespace Match3.VisualFactory.Editor
                 info = "Copied review receipt JSON to clipboard. " +
                        "All owner/device/Engine/rights PASS fields are FALSE.";
             }
+            if (GUILayout.Button("Export UNAPPROVED receipt as NEW file (outside repo)"))
+                ExportOwnerReviewReceipt();
             EditorGUILayout.EndScrollView();
         }
     }
