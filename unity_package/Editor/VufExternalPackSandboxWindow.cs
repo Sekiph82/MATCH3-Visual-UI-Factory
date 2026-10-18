@@ -27,7 +27,10 @@ namespace Match3.VisualFactory.Editor
         private TextAsset leftManifest;
         private TextAsset rightManifest;
         private InspectedPack left, right;
-        private int selected, localeIndex;
+        private int selected, localeIndex, viewEventIndex;
+        private bool stageRightPack;
+        private GameObject stagedTemporary;
+        private Sprite stagedOwnedSprite;
         private Vector2 scroll;
         private static readonly string[] LocaleKeys = { "en", "tr" };
         private string result = "Not reviewed. Import TEST_ONLY pack COPIES under Assets/.";
@@ -249,8 +252,42 @@ namespace Match3.VisualFactory.Editor
             return pack;
         }
 
+        private void OnDisable() { DestroyOnlyMyStage(); }
+
+        private void DestroyOnlyMyStage()
+        {
+            VufExternalPackViewStage.Dispose(stagedTemporary, stagedOwnedSprite);
+            stagedTemporary = null;
+            stagedOwnedSprite = null;
+        }
+
+        private void StageVerifiedSelection()
+        {
+            DestroyOnlyMyStage();
+            InspectedPack pack = stageRightPack ? right : left;
+            if (pack == null) pack = left ?? right;
+            if (pack == null) throw new ArgumentException("verify a pack first");
+            var item = pack.Manifest.assets[
+                Mathf.Clamp(selected, 0, pack.Manifest.assets.Length - 1)];
+            string assetPath = pack.AssetPaths[item.path];
+            // Recheck bytes at time of stage; source may have changed since
+            // the owner last pressed Validate (fail-closed, no stale hash).
+            if (DiskDigest(assetPath) != item.sha256)
+                throw new ArgumentException("verified source bytes changed since inspect");
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
+            if (texture == null) throw new ArgumentException("imported image is unavailable");
+            stagedTemporary = VufExternalPackViewStage.Create(
+                texture, pack.Manifest.profile_id, item.asset_id,
+                VufVisualEventCatalog.Events[viewEventIndex].Name,
+                out stagedOwnedSprite);
+            Selection.activeGameObject = stagedTemporary;
+            result = "Actual temporary SpriteRenderer source staged. " +
+                "VIEW ONLY, no Engine/LFX/gameplay callbacks, save or rights.";
+        }
+
         private void ValidateBoth()
         {
+            DestroyOnlyMyStage();
             // Drop stale acceptance before every new source/switch.
             left = null; right = null;
             try
@@ -320,6 +357,7 @@ namespace Match3.VisualFactory.Editor
                 "Candidate pack B JSON", rightManifest, typeof(TextAsset), false);
             if (EditorGUI.EndChangeCheck())
             {
+                DestroyOnlyMyStage();
                 left = null; right = null;
                 result = "Pack input changed: reload/hash-check before preview.";
             }
@@ -349,6 +387,26 @@ namespace Match3.VisualFactory.Editor
             }
             if (GUILayout.Button("Open existing Unified Sprite & VFX manual Studio"))
                 VufUnifiedVisualStudioWindow.Open();
+            stageRightPack = EditorGUILayout.Toggle(
+                "Stage pack B instead of pack A", stageRightPack);
+            var viewEvents = new string[VufVisualEventCatalog.Events.Length];
+            for (int i = 0; i < viewEvents.Length; i++)
+                viewEvents[i] = VufVisualEventCatalog.Events[i].Name;
+            viewEventIndex = EditorGUILayout.Popup(
+                "Presentation-only view-event label", viewEventIndex, viewEvents);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Stage verified PNG as TEMP real SpriteRenderer"))
+            {
+                try { StageVerifiedSelection(); }
+                catch (Exception ex)
+                {
+                    DestroyOnlyMyStage();
+                    result = "STAGE REFUSED: " + ex.Message;
+                }
+            }
+            if (GUILayout.Button("Remove only staged TEMP"))
+                DestroyOnlyMyStage();
+            EditorGUILayout.EndHorizontal();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.BeginVertical();
