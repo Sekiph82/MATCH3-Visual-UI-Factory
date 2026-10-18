@@ -469,6 +469,7 @@ namespace Match3.VisualFactory.Editor
                 return;
             }
             scroll = EditorGUILayout.BeginScrollView(scroll);
+            EditorGUI.BeginChangeCheck();
             profile = EditorGUILayout.Popup("Draft visual profile", profile,
                 VufM09MatrixAudit.Profiles);
             string[] names = new string[screens.Length];
@@ -484,6 +485,14 @@ namespace Match3.VisualFactory.Editor
             for (int i = 0; i < devices.Length; i++)
                 devices[i] = VufResponsiveGeometry.Presets[i].Name;
             device = EditorGUILayout.Popup("Synthetic device safe-area", device, devices);
+            if (EditorGUI.EndChangeCheck())
+            {
+                DisposeOnlyMine();
+                matrixCell = null;
+                trace.Clear();
+                message = "Source/theme/screen/state/locale/device changed; " +
+                    "previous screenshot and temporary UI invalidated. BUILD again.";
+            }
             levelMock = EditorGUILayout.IntSlider("Manual mock level (NO gameplay)",
                 levelMock, 1, 100);
             seedMock = EditorGUILayout.IntSlider("Manual mock seed (NO Engine RNG)",
