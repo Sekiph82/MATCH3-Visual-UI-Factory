@@ -229,6 +229,12 @@ namespace Match3.VisualFactory.Editor
                         VufVisualEventCatalog.EngineSpecials[firstSpecialIndex] : null,
                     e.Name == "combo_chain" ?
                         VufVisualEventCatalog.EngineSpecials[secondSpecialIndex] : null);
+                // Reject an unrelated imported FX first. Event arbitration
+                // must not change even one Sprite before all view inputs pass.
+                if (verifiedFx != null && !reducedMotion &&
+                    verifiedFx.preset_id != e.Preset)
+                    throw new ArgumentException("Imported FX preset is not " +
+                        "the current view event's verified preset.");
                 bool accepted = spritePlayback.TryPresentViewEvent(
                     key, e.Channel, e.Priority, primaryFrames, fps, loop,
                     pingPong, reducedMotion);
@@ -247,10 +253,6 @@ namespace Match3.VisualFactory.Editor
                 fxPlaying = false;
                 fxElapsed = 0;
                 displayedFxFrame = 0;
-                if (verifiedFx != null && !reducedMotion &&
-                    verifiedFx.preset_id != e.Preset)
-                    throw new ArgumentException("Imported FX preset is not " +
-                        "the current view event's verified preset.");
                 if (!reducedMotion && e.Preset != null)
                 {
                     var built = VufVfxLabWindow.BuildCandidateParticleSystem(
