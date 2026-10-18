@@ -79,6 +79,8 @@ def validate_structure() -> dict:
         "Editor/VufVisualEventCatalog.cs",
         "Editor/VufUnifiedVisualStudioWindow.cs",
         "Tests/Editor/VufUnifiedVisualStudioEditModeTests.cs",
+        "Editor/VufExternalPackSandboxWindow.cs",
+        "Tests/Editor/VufExternalPackSandboxEditModeTests.cs",
         "Tests/Editor/VufPreviewCompatibilityEditModeTests.cs",
         "Tests/Editor/VufShellLayoutBridgeEditModeTests.cs",
         "Editor/VufReviewStateCatalog.cs",
