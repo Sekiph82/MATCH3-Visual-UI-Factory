@@ -19,6 +19,9 @@ namespace Match3.VisualFactory.Editor
         private static readonly string[] SpeedLabels = { "0.25×", "0.5×", "1×", "2×" };
         private int previewSpeedIndex = 2;
         private bool showPivotGuide = true;
+        private bool showAlphaCheckerboard = true;
+        private float previewZoom = 1f;
+        private Texture2D alternateAtlas;
         private bool loop = true;
         private bool pingPong;
         private bool reducedMotion;
@@ -94,7 +97,14 @@ namespace Match3.VisualFactory.Editor
                 previewSpeedIndex, SpeedLabels);
             showPivotGuide = EditorGUILayout.Toggle("Show source pivot crosshair",
                 showPivotGuide);
-            if (EditorGUI.EndChangeCheck() && temporaryPlayback != null)
+            bool changedPlayback = EditorGUI.EndChangeCheck();
+            showAlphaCheckerboard = EditorGUILayout.Toggle(
+                "Check transparent edge pixels", showAlphaCheckerboard);
+            previewZoom = EditorGUILayout.Slider("Preview-only zoom",
+                previewZoom, .25f, 3f);
+            if (temporaryScenePreview != null)
+                temporaryScenePreview.transform.localScale = Vector3.one * previewZoom;
+            if (changedPlayback && temporaryPlayback != null)
                 RebindTemporaryScenePreview();
 
             if (source == null)
@@ -153,7 +163,17 @@ namespace Match3.VisualFactory.Editor
             Rect target = GUILayoutUtility.GetRect(250, 400, 165, 400,
                 GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             EditorGUI.DrawRect(target, new Color(.09f, .13f, .16f));
-            DrawUnpackedSprite(current, target, showPivotGuide);
+            DrawUnpackedSprite(current, target, showPivotGuide,
+                previewZoom, showAlphaCheckerboard);
+            alternateAtlas = (Texture2D)EditorGUILayout.ObjectField(
+                "Optional alternative atlas (read only)",
+                alternateAtlas, typeof(Texture2D), false);
+            using (new EditorGUI.DisabledScope(temporaryPlayback == null ||
+                alternateAtlas == null))
+            {
+                if (GUILayout.Button("Preview safe in-memory atlas swap"))
+                    TrySwapTemporaryAtlas();
+            }
             if (GUILayout.Button(temporaryScenePreview == null ?
                     "Create TEMPORARY real SpriteRenderer preview in Scene" :
                     "Remove TEMPORARY real SpriteRenderer preview"))
@@ -177,16 +197,31 @@ namespace Match3.VisualFactory.Editor
             EditorGUILayout.EndScrollView();
         }
 
-        private static void DrawUnpackedSprite(Sprite sprite, Rect target, bool drawPivotGuide)
+        private static void DrawUnpackedSprite(Sprite sprite, Rect target,
+            bool drawPivotGuide, float zoom, bool alphaCheckerboard)
         {
             if (sprite == null || sprite.texture == null)
                 return;
             Rect pixel = sprite.textureRect;
             Texture tex = sprite.texture;
             float aspect = pixel.width / Mathf.Max(1f, pixel.height);
-            float h = Mathf.Min(target.height - 12f, (target.width - 12f) / aspect);
+            float h = Mathf.Min(target.height - 12f, (target.width - 12f) / aspect) * zoom;
             float w = h * aspect;
-            Rect drawRect = new Rect(target.center.x - w / 2f, target.center.y - h / 2f, w, h);
+            GUI.BeginGroup(target); // clips intentionally zoomed Sprite edges
+            if (alphaCheckerboard)
+            {
+                const float square = 18f;
+                int cols = Mathf.CeilToInt(target.width / square);
+                int rows = Mathf.CeilToInt(target.height / square);
+                for (int row = 0; row < rows; ++row)
+                    for (int col = 0; col < cols; ++col)
+                        EditorGUI.DrawRect(new Rect(col * square, row * square,
+                            square, square), (row + col) % 2 == 0 ?
+                            new Color(.27f, .28f, .31f, 1f) :
+                            new Color(.46f, .47f, .51f, 1f));
+            }
+            Rect drawRect = new Rect((target.width - w) / 2f,
+                (target.height - h) / 2f, w, h);
             Rect uv = new Rect(pixel.x / tex.width, pixel.y / tex.height,
                 pixel.width / tex.width, pixel.height / tex.height);
             GUI.DrawTextureWithTexCoords(drawRect, tex, uv, true);
@@ -203,6 +238,7 @@ namespace Match3.VisualFactory.Editor
                 EditorGUI.DrawRect(new Rect(drawRect.x, py - .5f,
                     drawRect.width, 1f), tint);
             }
+            GUI.EndGroup();
         }
 
         private void ReloadSprites()
@@ -239,6 +275,7 @@ namespace Match3.VisualFactory.Editor
                     "VUF_TEMP_RealSpritePreview_DONT_SAVE",
                     typeof(SpriteRenderer), typeof(VufSpritePlaybackPreview));
                 created.hideFlags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+                created.transform.localScale = Vector3.one * previewZoom;
                 var renderer = created.GetComponent<SpriteRenderer>();
                 renderer.sortingOrder = 999;
                 var playback = created.GetComponent<VufSpritePlaybackPreview>();
@@ -257,6 +294,37 @@ namespace Match3.VisualFactory.Editor
                 temporaryScenePreview = null;
                 temporaryPlayback = null;
                 previewIssue = "Scene preview could not be created: " + e.Message;
+            }
+        }
+
+        private void TrySwapTemporaryAtlas()
+        {
+            if (temporaryPlayback == null || alternateAtlas == null)
+                return;
+            try
+            {
+                string path = AssetDatabase.GetAssetPath(alternateAtlas);
+                if (String.IsNullOrEmpty(path) ||
+                    !path.StartsWith("Assets/", StringComparison.Ordinal) ||
+                    !path.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                    throw new ArgumentException("Alternate must be an imported Assets PNG copy");
+                var replacements = new List<Sprite>();
+                foreach (UnityEngine.Object asset in AssetDatabase.LoadAllAssetsAtPath(path))
+                {
+                    Sprite frame = asset as Sprite;
+                    if (frame != null && !frame.packed) replacements.Add(frame);
+                }
+                replacements.Sort((a, b) => NaturalSpriteNameOrder(a.name, b.name));
+                temporaryPlayback.SwapCandidateAtlas(replacements.ToArray());
+                previewIssue = "Actual temporary Scene SpriteRenderer now uses " +
+                    "alternative imported sprites; immutable Sprite geometry " +
+                    "was checked. No TextureImporter or project asset changed.";
+            }
+            catch (Exception error)
+            {
+                // Runtime swap is transactional. Invalid alternatives leave
+                // the previous atlas and renderer unchanged.
+                previewIssue = "Candidate atlas swap REFUSED: " + error.Message;
             }
         }
 
