@@ -552,3 +552,57 @@ https://docs.google.com/document/d/1J_Spo9GLxfiMdBEqRK8xjoJ_aACGSS4NlhZv-thgiGA/
 under existing task VUF-M09-017. Owner real interactive GUI,
 actual screenshot/frame exports, original/licensed art rights and source
 fonts, physical device/GPU and final Engine/LFX remain OPEN.
+
+## 2026-10-18 | M10 source batch: 5-theme manual candidate routes and guarded pack budgets
+
+**Canonical authority:** existing root TASKS.md M10-001..007 only. No new VUF
+task IDs; actual Engine/LFX cross-repo releases remain an OPEN dependency.
+
+**DONOR-FIRST / SOURCE-READ:** before M10 source authoring, read existing
+VufScreenCatalog/Coral schema 28 draft IDs, actual disabled-button
+VufScreenShellBuilderWindow, VufReviewStateCatalog, VufResponsiveGeometry,
+VufTypographyAudit, VufUiTween, M07 VisualEventCatalog/Sprite/VFX manual
+playback, M08 External Pack Sandbox/VisualAssetManifest and M09 QA real
+Editor RenderTexture/Candidate geometry. Reused M08 actual SHA-indexed VF04
+offline bundle validator and existing VUF PNG codec without new art or
+external code. Existing BSD-3-Clause Unity UI Extensions licence preserved.
+Read-only connected GitHub Engine main observed SHA
+`e84d65ab712dddc534cbdb3a30cfe2d7930cea8a` with
+ENG-M11 11/14 accepted and ENG-M12 gated; LFX main observed
+`dad072e519276334bd1438fadf7be58f741d5579` with M08 preview and
+ENG-M24 actual replay dependency not accepted. Neither source HEAD is a
+shipping ABI or independent WIN replay proof.
+
+**INTERNAL_REUSE / ORIGINAL_VUF_ADAPTER:** added
+`factory/integration/m10_neutral_slice.py` and three Python M10 test
+modules, `factory/integration/m10_pack_budget.py`, and Unity Editor
+`VufM10VerticalSliceStudio.cs` + 8 NUnit and GUIDs. Routes are candidate
+presentations only (nine per title, Coral additional three reef/aquarium/region
+draft source pages). Source has disabled Buttons and transient uGUI; level and
+seed are MOCK, no board solver, game score, purchases, save/rewards or
+difficulty. Other four themes use borrowed Coral source screen keys explicitly
+N/A as game-approved title UI. Source-bound opaque LFX data may have SHA
+verified but not falsely parsed as a final level schema or claimed WIN.
+Immutable source pseudo-reference hash can demonstrate only that switching
+draft visual theme revision does not mutate *that synthetic reference*.
+It does NOT prove identical gameplay for real Engine sessions.
+Budget analyzer hashes actual M08 exported source PNG, decodes source
+dimensions and estimates theoretical RGBA32 memory. It cannot replace
+real BuildPipeline/player binary or physical mobile GPU/frame budget.
+
+**REJECTED_REASON:** do not invent a future Engine Neutral Replay API,
+pick an arbitrary prototype LevelFactory level ID or game rule resolver,
+fork entire external game/engine repositories, or copy donor screenshots
+as original licensed game art. Need exact accepted real ENG-M12/ENG-M24
+neutral consumer, genuine LFX representative level/seed events, Unity
+PlayMode and owner rights before production vertical slices. Do not
+claim M10 milestone complete based on Editor TEST_ONLY preview.
+
+**VALIDATION:** new Python/C# M10 source and NUnit/Python regression tests
+AUTHORED, NOT RUN on this new source SHA; read-only GitHub presence and
+C# basic balanced-delimiter scan only. Previous full M09 Codex actual
+Python 450 PASS/9 Windows symlink SKIP; Unity 149/149 EditMode PASS
+on `1c8d99b248bd3462fce80e78ac30760c8b9d55a2` is historical.
+Existing M10-007 full-milestone one-shot Codex prompt (technical tests and
+explicit upstream real-gate audit):
+https://docs.google.com/document/d/1zCp8w4u7OJyiyca-I4IWwKYKB4jB0T_1w-hY6iDuJa0/edit
