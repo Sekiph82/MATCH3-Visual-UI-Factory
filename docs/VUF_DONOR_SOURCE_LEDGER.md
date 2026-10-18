@@ -352,3 +352,24 @@ and cannot validate this source. The manual owner GUI, real player/device/GPU,
 actual Engine view-channel event parity, stable provider art/licence,
 and final M07 milestone signoff remain **OPEN** in M07-006/009/013/014 and M09.
 
+
+## 2026-10-18 | VUF-M07-005/006/009/013 | unified Editor Sprite/VFX manual review Studio
+
+**Canonical work authority:** existing root TASKS.md VUF-M07-001..014. **No new lifecycle task** was opened. These notes preserve source provenance only.
+
+**PRE-CODE donor-first review:** inspected actual in-repo implementations and blob SHA: 
+- VufSpritePlaybackPreview.cs (Runtime view-only SpriteRenderer; original blob d4e6e6374ea434c3505b693c99019bb286f36812);
+- VufVfxLabWindow.cs (five Unity ParticleSystem presets; blob 4a78a8d131cd310dde34b80145e095e229eda4d9);
+- VufFxSheetPreviewWindow.cs (bounded geometry/manifest parser, procedural sheet manual frames; blob 698aba2ee6d6e81958561b7316b9716a009b6542);
+- VufSpriteClipBuilderWindow.cs (existing imported-sprite parsing and genuine AnimationClip export; blob 5aa133aa4b9313e80c3de30c438e6c983f7a2849);
+- VufUiTween.cs (VUF reduced-motion CanvasGroup primitive; blob c86d73f1eb024539a00460c5258864c046e3bd44);
+- Python view_event_timeline.py (actual 5 theme x 14 source-pinned symbolic view event/priority/FX receipt ontology), special_skin_map.py (Engine SpecialActivationKind 5 names + 15 pair keys, only verified to pinned inspected Engine source).
+- Already adopted Unity UI Extensions BSD-3-Clause donor components and all existing licence notices remain intact; no external vendor code or new art copied.
+
+**INTERNAL_REUSE/SDK_REUSE:** New Editor-side files VufVisualEventCatalog.cs and VufUnifiedVisualStudioWindow.cs reuse Unity public EditorWindow/AssetDatabase read operations, Unity SpriteRenderer/ParticleSystem/Profiler, the existing VF-05/06 FX sheet parser, five particle presets, and the existing M07 runtime playback. They provide a coherent *manual candidate-only owner review* workspace with theme/event/special/FX selection, temporary nonpersistent Scene SpriteRenderer and particle preview, parallel Sprite/FX frame scrub, 0.25/0.5/1/2x, reduced-motion/muted LOG-ONLY cues, source-validated Sprite/FX PNG metadata/SHA, atlas geometry-preserving A/B comparison, viewport aspect/synthetic safe border and approximate editor-only resource diagnostics. A review receipt can be copied or exported only as a NEW JSON file outside the Unity checkout; it has hardcoded FALSE for actual device/GPU owner/right/final Engine release approval, score/save/rewards/monetization authority. Source and importer GUIDs are left untouched; existing source/prefab/scene files are not created by the studio. Added 3 immutable Unity .meta GUID and required them in Tools/validate_repo_structure.py.
+
+**REJECTED_REASON:** adding DOTween, a fresh separate VFX framework, copying Unity reference-only internals or donor art would duplicate existing installed/locally licensed VUF rendering code and would not supply real Engine/game/owner/device acceptance. No external redistribution or paid CI dependency was created.
+
+**SOURCE TESTS AUTHORED, NOT ACTUALLY EXECUTED**: six Unity EditMode methods in VufUnifiedVisualStudioEditModeTests.cs validate 5x14 semantics, 5 upstream special/15 unordered combo visual keys, strict negative spoof checks, cue log-only/mute and three synthetic phone/tablet framing constraints. Five additional Python source consistency tests in tests/test_m07_unified_visual_catalog.py compare the new Unity declarative source catalog with Python view_event_timeline.py event/channel/priority/duration/FX preset data and fail on source drift, unapproved source rights or forbidden game mutations. The previously authored 11 real SpriteRenderer Unity tests are retained. Source braces, GitHub file/metadata presence and fixed TASKS IDs were inspected but **REAL WIN UNITY TESTS/GUI OWNER ACCEPTANCE NOT RUN**. The prior M05 Python 361/9 SKIP + Unity 85/85 results are from SHA cd9f9bfd6750ffeee850e700ac1c3691358b1f2b and cannot validate M07 changes.
+
+**Single M07 Codex source+Unity test gate**: Existing TASKS.md task VUF-M07-014; the unique full-milestone executable prompt is at https://docs.google.com/document/d/1WyQbMfpP696GvSZ2B1PeSatvLuc2xnENN8_0hGhSypk/edit. No new task IDs, no separate lifecycle tracker.
