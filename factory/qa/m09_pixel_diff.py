@@ -99,7 +99,9 @@ def verify_receipt_source(source: bytes, *, declared_sha: str,
     """Strict receipt SHAPE + source byte identity, not a legal licence grant."""
     if not isinstance(provenance, dict):
         raise PixelReviewError("source rights provenance missing")
-    if not SHA.fullmatch(declared_sha) or hashlib.sha256(source).hexdigest() != declared_sha:
+    if (not isinstance(declared_sha, str) or
+            not SHA.fullmatch(declared_sha) or
+            hashlib.sha256(source).hexdigest() != declared_sha):
         raise PixelReviewError("original source SHA conflict")
     _rgba(source)
     allowed = {"profile_id", "asset_id", "source_filename", "creator",
