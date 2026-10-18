@@ -213,6 +213,21 @@ namespace Match3.VisualFactory.Editor
             ClearCaptured();
         }
 
+        // Preserve aspect of the selected synthetic source device, never
+        // independently clamp axes (which stretches landscape comparisons).
+        internal static Vector2Int ReviewSize(VufResponsiveGeometry.Device source)
+        {
+            if (source.Width < 160 || source.Height < 160)
+                throw new ArgumentException("invalid synthetic device dimensions");
+            float factor = Mathf.Min(1f / 3f, Mathf.Min(
+                720f / source.Width, 1280f / source.Height));
+            int width = Mathf.RoundToInt(source.Width * factor);
+            int height = Mathf.RoundToInt(source.Height * factor);
+            if (width < 160 || height < 160)
+                throw new ArgumentException("synthetic device preview undersized");
+            return new Vector2Int(width, height);
+        }
+
         private void Render()
         {
             ClearCaptured();
@@ -223,8 +238,8 @@ namespace Match3.VisualFactory.Editor
             }
             var profileDevice = VufResponsiveGeometry.Presets[device];
             double start = EditorApplication.timeSinceStartup;
-            int w = Mathf.Clamp(profileDevice.Width / 3, 160, 720);
-            int h = Mathf.Clamp(profileDevice.Height / 3, 160, 1280);
+            Vector2Int resolution = ReviewSize(profileDevice);
+            int w = resolution.x, h = resolution.y;
             try
             {
                 byte[] png = VufM09RenderCapture.CaptureCandidate(
@@ -380,8 +395,8 @@ namespace Match3.VisualFactory.Editor
             if (Directory.Exists(newFolder) || File.Exists(newFolder))
                 throw new IOException("frame sequence folder already exists");
             var d = VufResponsiveGeometry.Presets[device];
-            int w = Mathf.Clamp(d.Width / 3, 160, 720);
-            int h = Mathf.Clamp(d.Height / 3, 160, 1280);
+            Vector2Int resolution = ReviewSize(d);
+            int w = resolution.x, h = resolution.y;
             var receipt = new FrameSequenceReceipt {
                 profile_id = VufM09MatrixAudit.Profiles[profile],
                 coral_draft_screen_id = screens[screen].id,
