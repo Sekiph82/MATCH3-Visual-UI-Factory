@@ -26,7 +26,7 @@ from factory.image_processor.png_pipeline import encode_png, decode_png, ImageEr
 from factory.visual_director.silhouette_kit import PROFILES, _style, _rgb
 
 BASE_SIZE = (180, 320)
-SCALES = (1, 2)
+SCALES = (1, 2, 3)
 COMMON_SCENES = ("world_map", "chapter_map", "gameplay")
 CORAL_EXTRA = ("reef_restoration", "marine_collection", "my_aquarium", "new_region")
 LAYER_ORDER = ("backdrop", "distant_environment", "near_decoration")
@@ -50,7 +50,7 @@ def _validate(profile: str, scene: str, scale: int, seed: int) -> None:
     if scene not in _scenes(profile):
         raise ScenePackError("unknown or cross-theme environment scene")
     if type(scale) is not int or scale not in SCALES:
-        raise ScenePackError("only source preview 1x/2x scale supported")
+        raise ScenePackError("only source preview 1x/2x/3x scale supported")
     if type(seed) is not int or not 0 <= seed <= 9999:
         raise ScenePackError("seed must be an integer in 0..9999")
 
@@ -189,7 +189,7 @@ def render_scene_layer(profile: str, scene: str, layer: str,
 
 
 def build_representative_pack(scale: int = 1, seed: int = 0) -> tuple[dict, dict[str, bytes]]:
-    """19 scene previews (5×3 + 4 Coral); each uses THREE independent PNGs."""
+    """19 scene candidates (5×3 + 4 Coral), each THREE independent 1x/2x/3x PNGs."""
     if type(scale) is not int or scale not in SCALES:
         raise ScenePackError("invalid pack scale")
     if type(seed) is not int or not 0 <= seed <= 9999:
