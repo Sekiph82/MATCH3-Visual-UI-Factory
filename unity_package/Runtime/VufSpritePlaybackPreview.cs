@@ -30,6 +30,9 @@ namespace Match3.VisualFactory
         private bool playing;
         private bool interrupted;
         private bool bound;
+        private string viewChannel;
+        private int visualPriority;
+        private string viewEventKey;
 
         public bool IsBound => bound;
         public bool IsPlaying => bound && playing;
@@ -37,6 +40,9 @@ namespace Match3.VisualFactory
         public bool ControlsGameplayOrRewards => false;
         public int CurrentFrameIndex => bound ? sequence[cursor] : -1;
         public int SequenceLength => bound ? sequence.Length : 0;
+        public string ViewChannel => bound ? viewChannel : null;
+        public string ViewEventKey => bound ? viewEventKey : null;
+        public int VisualPriority => bound ? visualPriority : 0;
         public double ElapsedFraction => bound ? elapsed * fps : 0d;
 
         // Single shared frame order for Editor clip authoring and Runtime
@@ -97,7 +103,53 @@ namespace Match3.VisualFactory
             elapsed = 0;
             cursor = 0;
             bound = true;
+            viewChannel = null;
+            viewEventKey = null;
+            visualPriority = 0;
             target.sprite = frames[0];
+        }
+
+        // A view-only event competition primitive for VUF Studio testing.
+        // Only the SAME visual channel preempts an actively playing effect
+        // based on priority; the source Engine remains sole game authority.
+        // No events or callbacks are dispatched to Engine/score/reward/save.
+        private static bool ValidViewChannel(string channel) =>
+            channel == "ui" || channel == "board_visual" ||
+            channel == "results_visual" || channel == "rewards_visual" ||
+            channel == "character_visual" || channel == "environment_visual";
+
+        private static bool ValidViewEventKey(string key)
+        {
+            if (String.IsNullOrEmpty(key) || key.Length > 128) return false;
+            foreach (char c in key)
+                if (!(c >= 'a' && c <= 'z') &&
+                    !(c >= '0' && c <= '9') && c != '_' && c != '.')
+                    return false;
+            return true;
+        }
+
+        public bool TryPresentViewEvent(string eventKey, string channel,
+            int priority, Sprite[] candidate, float framesPerSecond,
+            bool loop, bool pingPong, bool reduceMotion = false)
+        {
+            // Fail closed BEFORE preemption or a SpriteRenderer assignment.
+            if (!ValidViewEventKey(eventKey) || !ValidViewChannel(channel) ||
+                priority < 0 || priority > 100)
+                throw new ArgumentException("invalid symbolic view event policy");
+            ValidateFrames(candidate);
+            if (!ValidNumber(framesPerSecond) ||
+                framesPerSecond < 1f || framesPerSecond > 60f)
+                throw new ArgumentOutOfRangeException(nameof(framesPerSecond));
+            if (bound && playing && !interrupted &&
+                String.Equals(channel, viewChannel, StringComparison.Ordinal) &&
+                priority < visualPriority)
+                return false; // lower view priority cannot interrupt
+            Bind(candidate, framesPerSecond, loop, pingPong, reduceMotion);
+            viewChannel = channel;
+            viewEventKey = eventKey;
+            visualPriority = priority;
+            Play();
+            return true;
         }
 
         public void Play()
@@ -239,6 +291,9 @@ namespace Match3.VisualFactory
             cursor = 0;
             playing = false;
             interrupted = false;
+            viewChannel = null;
+            viewEventKey = null;
+            visualPriority = 0;
             bound = false;
         }
 
