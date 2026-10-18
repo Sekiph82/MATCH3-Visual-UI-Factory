@@ -129,3 +129,64 @@ def verify_receipt_source(source: bytes, *, declared_sha: str,
         "image_use_authorized_for_release": False,
         "release_allowed": False,
     }
+
+
+def compare_scaled_candidate(base_png: bytes, candidate_png: bytes,
+                             scale: int) -> dict:
+    """1x vs 2x/3x nearest-centre SOURCE raster check, not GPU sharpness QA."""
+    if type(scale) is not int or scale not in (2, 3):
+        raise PixelReviewError("only source 2x/3x relative to 1x is supported")
+    w, h, base = _rgba(base_png)
+    other_w, other_h, higher = _rgba(candidate_png)
+    if other_w != w * scale or other_h != h * scale:
+        raise PixelReviewError("source scale/sprite trimming does not match")
+    reduced = bytearray(len(base))
+    for y in range(h):
+        for x in range(w):
+            hi = (((y * scale + scale // 2) * other_w) +
+                  (x * scale + scale // 2)) * 4
+            lo = (y * w + x) * 4
+            reduced[lo:lo + 4] = higher[hi:hi + 4]
+    downsampled = encode_png(w, h, bytes(reduced))
+    comparison, _ = compare(base_png, downsampled)
+    return {
+        "stage": "SCALED_PIXEL_SOURCE_CANDIDATE_ONLY",
+        "scale": scale,
+        "source_1x_sha256": hashlib.sha256(base_png).hexdigest(),
+        "source_scaled_sha256": hashlib.sha256(candidate_png).hexdigest(),
+        "source_downsampled_sha256": hashlib.sha256(downsampled).hexdigest(),
+        "mismatched_pixels_after_nearest": comparison["mismatched_pixels"],
+        "alpha_changed_pixels_after_nearest": comparison["alpha_changed_pixels"],
+        "real_device_resolution_sharpness_verified": False,
+        "owner_art_approved": False,
+        "release_allowed": False,
+    }
+
+
+def compare_frame_sequence(before_frames: list[bytes],
+                           after_frames: list[bytes]) -> dict:
+    """Frame-by-frame source diff; reject missing frames or stale assets."""
+    if (not isinstance(before_frames, list) or
+            not isinstance(after_frames, list) or
+            not 2 <= len(before_frames) <= 64 or
+            len(before_frames) != len(after_frames)):
+        raise PixelReviewError("candidate animation clip frame-count mismatch")
+    entries = []
+    for i, (a, b) in enumerate(zip(before_frames, after_frames)):
+        value, _ = compare(a, b)
+        entries.append({
+            "frame": i,
+            "changed_rgba_pixels": value["mismatched_pixels"],
+            "alpha_changed_pixels": value["alpha_changed_pixels"],
+            "original_sha256": value["before_sha256"],
+            "candidate_sha256": value["after_sha256"],
+        })
+    return {
+        "stage": "SOURCE_ANIMATION_FRAMES_NOT_REAL_ENGINE_REPLAY",
+        "frames": entries,
+        "frame_count": len(entries),
+        "changed_frames": sum(e["changed_rgba_pixels"] > 0 for e in entries),
+        "real_unity_playback_proven": False,
+        "owner_art_approved": False,
+        "release_allowed": False,
+    }
