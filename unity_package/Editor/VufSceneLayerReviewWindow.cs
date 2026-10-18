@@ -137,7 +137,8 @@ namespace Match3.VisualFactory.Editor
                             layer.draw_order != i ||
                             layer.parallax_factor_milli != ParallaxMilli[i] ||
                             layer.dimensions == null || layer.dimensions.Length != 2 ||
-                            (layer.dimensions[0] != 180 && layer.dimensions[0] != 360) ||
+                            (layer.dimensions[0] != 180 && layer.dimensions[0] != 360 &&
+                             layer.dimensions[0] != 540) ||
                             layer.dimensions[1] != layer.dimensions[0] * 320 / 180 ||
                             !IsSha(layer.png_sha256) ||
                             !IsSha(layer.style_source_sha256) ||
