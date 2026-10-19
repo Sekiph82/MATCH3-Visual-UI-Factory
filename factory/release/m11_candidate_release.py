@@ -256,6 +256,8 @@ def export_review_candidate(source_dir: Path, destination_dir: Path,
                             engine_sha: str, lfx_sha: str) -> dict:
     source = _checked_external(source_dir, exists=True)
     target = _checked_external(destination_dir, exists=False)
+    if target.resolve(strict=False).is_relative_to(source.resolve(strict=True)):
+        raise M11ReleaseError("cannot nest release output into its source")
     manifest = plan(source, engine_sha, lfx_sha)
     target.mkdir()
     try:
@@ -289,6 +291,12 @@ def import_new_copy(release_dir: Path, new_slot_dir: Path,
         if prior["profile_id"] != proof["profile_id"]:
             raise M11ReleaseError("cannot rollback across game profiles")
     slot = _checked_external(new_slot_dir, exists=False)
+    if slot.resolve(strict=False).is_relative_to(incoming.resolve(strict=True)):
+        raise M11ReleaseError("cannot nest consumer slot inside inspected release")
+    if rollback_from is not None:
+        old_dir = _checked_external(rollback_from, exists=True)
+        if slot.resolve(strict=False).is_relative_to(old_dir.resolve(strict=True)):
+            raise M11ReleaseError("cannot nest rollback copy inside previous slot")
     slot.mkdir()
     manifest = strict_json((incoming / MANIFEST_FILE).read_bytes())
     for record in manifest["artifacts"]:
