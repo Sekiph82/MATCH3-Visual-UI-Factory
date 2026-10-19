@@ -241,6 +241,38 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void CrossFactoryEditorScreenshotRefusesPersistentOrUnboundedSource()
+        {
+            var ordinary=new GameObject("Owner_Game_Scene",typeof(Canvas));
+            try
+            {
+                Assert.Throws<ArgumentException>(() =>
+                    VufThreeFactoryGridCapture.CaptureSourcePreview(
+                        ordinary,720,960));
+                Assert.Throws<ArgumentException>(() =>
+                    VufThreeFactoryGridCapture.CaptureSourcePreview(
+                        null,720,960));
+                Assert.Throws<ArgumentException>(() =>
+                    VufThreeFactoryGridCapture.CaptureSourcePreview(
+                        ordinary,100000,300));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(ordinary); }
+            var board=VufCrossFactoryContractWindow.BuildRealDraftBoard(Parse());
+            try
+            {
+                Assert.Throws<ArgumentException>(() =>
+                    VufThreeFactoryGridCapture.CaptureSourcePreview(
+                        board,20000,960));
+                Assert.Throws<ArgumentException>(() =>
+                    VufThreeFactoryGridCapture.CaptureSourcePreview(
+                        board,200,4096));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(board); }
+            // Actual GPU RenderTexture PNG is intentionally NOT performed
+            // by a -nographics batchmode test: requires real owner GUI.
+        }
+
+        [Test]
         public void ActualUnityGridIsOnlyTemporaryRealDraftIdentifiers()
         {
             var level = Parse();
