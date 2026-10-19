@@ -79,6 +79,12 @@ namespace Match3.VisualFactory.Editor
                 throw new ArgumentException("M07 source-pinned cue not found");
             var view=GetWindow<VufUnifiedVisualStudioWindow>(
                 "VUF Unified Visual QA");
+            // Owner's previously imported sprites may belong to an entirely
+            // different theme. Never carry those into an Engine-derived cue
+            // and accidentally depict cross-title art as approved.
+            view.DestroyOnlyTemporary();
+            view.sourceSheet=null; view.alternateSheet=null;
+            view.fxManifest=null; view.fxAtlas=null; view.fxStill=null;
             view.profileIndex=p;
             view.eventIndex=e;
             view.info="REAL Engine presentation receipt projected to M07 "+cue+
