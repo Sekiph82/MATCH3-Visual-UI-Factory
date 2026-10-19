@@ -373,7 +373,8 @@ namespace Match3.VisualFactory.Editor
                 if (sprite!=null) DestroyImmediate(sprite);
             ownedArtSprites.Clear();
             VufCrossFactoryImportedArt.ApplyExplicitSourceBindings(
-                canvas,current,verifiedArt,manualArt,ownedArtSprites);
+                canvas,current,verifiedArt,manualArt,ownedArtSprites,
+                selectedLayer);
             HighlightCurrentEvent();
             status = "REAL imported TEST_ONLY PNG applied to disposable LFX " +
                 "preview for "+source+" -> "+target+". "+
