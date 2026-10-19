@@ -66,6 +66,12 @@ namespace Match3.VisualFactory.Editor
 
             string receiptPath = Path.Combine(physical,
                 "candidate_pack_receipt.json");
+            var receiptInfo = new FileInfo(receiptPath);
+            if (!receiptInfo.Exists || receiptInfo.Length < 1 ||
+                receiptInfo.Length > 512*1024)
+                throw new ArgumentException("original M08 integrity receipt missing");
+            // Refuse reparse points BEFORE reading the receipt contents.
+            RawHash(receiptPath);
             var receipt = VufCandidatePackImporterWindow.ValidateReceipt(
                 File.ReadAllText(receiptPath));
             if (receipt.profile_id != expectedProfile)
@@ -180,7 +186,14 @@ namespace Match3.VisualFactory.Editor
                 for (int i=0;i<cells.Length;i++)
                 {
                     var c=cells[i];
-                    var identifier=c.contentId ?? c.obstacleId;
+                    // Explicit owner mapping takes visual priority:
+                    // special overlay, obstacle, then base content. No
+                    // fabricated art IDs or inferred real game mechanics.
+                    string identifier =
+                        c.specialId!=null && selected.ContainsKey(c.specialId)
+                            ? c.specialId :
+                        c.obstacleId!=null && selected.ContainsKey(c.obstacleId)
+                            ? c.obstacleId : c.contentId;
                     var image=grid.GetChild(i).GetComponent<Image>();
                     if (image==null) throw new ArgumentException("source cell Image missing");
                     image.sprite=null;
