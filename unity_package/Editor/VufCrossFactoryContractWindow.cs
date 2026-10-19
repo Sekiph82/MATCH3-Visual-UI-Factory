@@ -54,6 +54,7 @@ namespace Match3.VisualFactory.Editor
         private Level current;
         private List<Cue> cues;
         private int currentStep = -1;
+        private int selectedLayer;
         private GameObject canvas;
         // Art must be an owner-explicit mapping of original LFX IDs to M08
         // imported TEST_ONLY sprite assets. Never guess a title/asset licence.
@@ -210,9 +211,12 @@ namespace Match3.VisualFactory.Editor
             return result;
         }
 
-        internal static GameObject BuildRealDraftBoard(Level level)
+        internal static GameObject BuildRealDraftBoard(Level level,
+            int sourceLayer = 0)
         {
             if (level == null) throw new ArgumentNullException(nameof(level));
+            if (sourceLayer < 0 || sourceLayer >= level.layers)
+                throw new ArgumentOutOfRangeException(nameof(sourceLayer));
             GameObject host = null;
             try
             {
@@ -238,7 +242,7 @@ namespace Match3.VisualFactory.Editor
                 layout.spacing = new Vector2(2,2);
                 layout.cellSize = new Vector2(520f / level.width - 2,
                     520f / level.height - 2);
-                var firstLayer = level.cells.Where(c => c.layer == 0)
+                var firstLayer = level.cells.Where(c => c.layer == sourceLayer)
                     .OrderBy(c=>c.row).ThenBy(c=>c.column).ToArray();
                 foreach (var c in firstLayer)
                 {
@@ -297,7 +301,7 @@ namespace Match3.VisualFactory.Editor
                 current=ParseLevel(File.ReadAllText(levelPath),canonical);
                 cues=String.IsNullOrEmpty(eventsPath) ? new List<Cue>() :
                     ParseEvents(File.ReadAllBytes(eventsPath),current);
-                canvas=BuildRealDraftBoard(current);
+                canvas=BuildRealDraftBoard(current,selectedLayer);
                 Selection.activeGameObject=canvas;
                 status="ACTUAL LFX validated geometry loaded ("+
                     current.width+"x"+current.height+"x"+current.layers+
@@ -316,7 +320,7 @@ namespace Match3.VisualFactory.Editor
             if (canvas == null || current == null) return;
             var grid = canvas.transform.Find("Real_LFXV1_Source_Grid");
             if (grid == null) return;
-            var map = current.cells.Where(c => c.layer == 0)
+            var map = current.cells.Where(c => c.layer == selectedLayer)
                 .OrderBy(c => c.row).ThenBy(c => c.column).ToArray();
             for (int i=0;i<map.Length && i<grid.childCount;i++)
             {
@@ -325,7 +329,7 @@ namespace Match3.VisualFactory.Editor
                 if (image == null) continue;
                 bool selected = currentStep>=0 && cues!=null &&
                     cues[currentStep].Cells.Any(p =>
-                        p.z==0 && p.y==c.row && p.x==c.column);
+                        p.z==selectedLayer && p.y==c.row && p.x==c.column);
                 image.color = selected ? new Color(.94f,.69f,.16f,1f) :
                     !c.active ? new Color(.10f,.11f,.12f,.3f) :
                     !String.IsNullOrEmpty(c.obstacleId) ?
@@ -409,6 +413,18 @@ namespace Match3.VisualFactory.Editor
             EditorGUILayout.LabelField("Source SHA256",current.sourceDraftSha256);
             EditorGUILayout.LabelField("Board geometry",current.width+"×"+
                 current.height+"×"+current.layers);
+            int requestedLayer=EditorGUILayout.IntSlider(
+                "Actual LFX source layer (view-only)", selectedLayer,
+                0,current.layers-1);
+            if (requestedLayer!=selectedLayer)
+            {
+                ClearPreview();
+                selectedLayer=requestedLayer;
+                canvas=BuildRealDraftBoard(current,selectedLayer);
+                HighlightCurrentEvent();
+                status="Viewing actual LFX SOURCE layer "+selectedLayer+
+                    ", no Engine board simulation.";
+            }
             EditorGUILayout.LabelField("Goals","DRAFT target definitions, NOT achievements");
             foreach(var goal in current.goals)
                 EditorGUILayout.LabelField(goal.goalId+": "+goal.targetId+
