@@ -117,7 +117,7 @@ namespace Match3.VisualFactory.Tests
             string id = Convert.ToBase64String(Encoding.UTF8.GetBytes("e1"));
             string key = Convert.ToBase64String(Encoding.UTF8.GetBytes("board.one"));
             byte[] valid = Wire("1|"+id+"|1|"+key+"|1|0:0:0\n",1);
-            valid[valid.Length-1] = (byte)'0';
+            valid[valid.Length-1] = (byte)(valid[valid.Length-1] == (byte)'0' ? '1' : '0');
             Assert.Throws<FormatException>(() =>
                 VufCrossFactoryContractWindow.ParseEvents(valid,Parse()));
             Assert.Throws<FormatException>(() =>
