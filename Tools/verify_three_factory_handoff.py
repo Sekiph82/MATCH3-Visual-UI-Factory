@@ -113,7 +113,7 @@ def main(argv=None) -> int:
                         hasattr(directory,"is_junction") and directory.is_junction()):
                     raise CrossFactoryError("linked plan folder rejected")
             serialized=(json.dumps(plan,indent=2,sort_keys=True,
-                                   ensure_ascii=False)+"\\n").encode("utf-8")
+                                   ensure_ascii=False)+"\n").encode("utf-8")
             with output.open("xb") as file:
                 file.write(serialized)
             result["newUnapprovedVisualPlan"]=str(output)
