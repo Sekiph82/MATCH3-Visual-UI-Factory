@@ -55,6 +55,13 @@ namespace Match3.VisualFactory.Editor
         private List<Cue> cues;
         private int currentStep = -1;
         private int selectedLayer;
+        // M07 owner's manual review pacing, NOT real Engine timestamps.
+        private static readonly float[] ReviewSpeeds={.25f,.5f,1f,2f};
+        private static readonly string[] ReviewSpeedLabels={
+            "0.25x","0.5x","1x","2x"};
+        private int reviewSpeedIndex=2;
+        private bool reviewAutoplay, reducedMotion=true;
+        private double nextReviewStepAt;
         private GameObject canvas;
         // Art must be an owner-explicit mapping of original LFX IDs to M08
         // imported TEST_ONLY sprite assets. Never guess a title/asset licence.
@@ -73,7 +80,49 @@ namespace Match3.VisualFactory.Editor
             w.minSize = new Vector2(650, 720);
             w.Show();
         }
-        private void OnDisable() { ClearPreview(); }
+        private void OnEnable()
+        {
+            EditorApplication.update += TickOwnerReview;
+        }
+        private void OnDisable()
+        {
+            EditorApplication.update -= TickOwnerReview;
+            reviewAutoplay=false;
+            ClearPreview();
+        }
+        internal static int SuggestedReviewDelayMs(string viewCue)
+        {
+            if (String.IsNullOrEmpty(viewCue)) return 250; // Swap N/A
+            foreach (var row in VufVisualEventCatalog.Events)
+                if (row.Name==viewCue) return Mathf.Clamp(row.DurationMs,80,4000);
+            throw new ArgumentException("unknown source-pinned M07 visual cue");
+        }
+        private void TickOwnerReview()
+        {
+            if (!reviewAutoplay || current==null || cues==null ||
+                cues.Count==0 || reducedMotion) return;
+            double now=EditorApplication.timeSinceStartup;
+            if (now<nextReviewStepAt) return;
+            if (currentStep>=cues.Count-1)
+            {
+                reviewAutoplay=false;
+                return;
+            }
+            currentStep++;
+            HighlightCurrentEvent();
+            nextReviewStepAt=now+
+                SuggestedReviewDelayMs(cues[currentStep].VufEvent)/
+                1000d/ReviewSpeeds[reviewSpeedIndex];
+            Repaint();
+        }
+        private void StepOnly(int direction)
+        {
+            reviewAutoplay=false;
+            if (cues==null || cues.Count==0) return;
+            currentStep=Mathf.Clamp(currentStep+direction,0,cues.Count-1);
+            HighlightCurrentEvent();
+            Repaint();
+        }
         private void ClearPreview()
         {
             if (canvas != null) DestroyImmediate(canvas);
@@ -286,7 +335,8 @@ namespace Match3.VisualFactory.Editor
         private void Load()
         {
             ClearPreview();
-            current=null; cues=null; currentStep=-1;
+            current=null; cues=null; currentStep=-1; selectedLayer=0;
+            reviewAutoplay=false;
             // A different source LevelDraft can reuse names with other art,
             // therefore every owner-picked mapping is invalidated on reload.
             manualArt.Clear();
@@ -404,6 +454,7 @@ namespace Match3.VisualFactory.Editor
                 Load();
             if(GUILayout.Button("Destroy only this temporary grid"))
             {
+                reviewAutoplay=false;
                 ClearPreview(); current=null; cues=null; currentStep=-1;
             }
             EditorGUILayout.HelpBox(status, MessageType.Info);
@@ -432,11 +483,34 @@ namespace Match3.VisualFactory.Editor
                     " × "+goal.targetCount);
             if(cues != null && cues.Count>0)
             {
-                if(GUILayout.Button("STEP actual typed Engine presentation event"))
+                EditorGUILayout.LabelField("Timeline: "+cues.Count+
+                    " actual Engine typed presentation records");
+                reviewSpeedIndex=EditorGUILayout.Popup(
+                    "M07 approximate preview speed",reviewSpeedIndex,
+                    ReviewSpeedLabels);
+                reducedMotion=EditorGUILayout.Toggle(
+                    "Reduced-motion: manual only",reducedMotion);
+                EditorGUILayout.BeginHorizontal();
+                if(GUILayout.Button("PREVIOUS event (read only)"))
+                    StepOnly(-1);
+                if(GUILayout.Button("NEXT event (read only)"))
+                    StepOnly(1);
+                if(GUILayout.Button("RESET highlight"))
                 {
-                    currentStep=(currentStep+1)%cues.Count;
+                    reviewAutoplay=false;
+                    currentStep=-1;
                     HighlightCurrentEvent();
-                    Repaint();
+                }
+                EditorGUILayout.EndHorizontal();
+                using(new EditorGUI.DisabledScope(reducedMotion))
+                {
+                    if(GUILayout.Button(reviewAutoplay ?
+                        "PAUSE approximate preview" :
+                        "PLAY coordinate highlights only (not Engine timing)"))
+                    {
+                        reviewAutoplay=!reviewAutoplay;
+                        nextReviewStepAt=EditorApplication.timeSinceStartup;
+                    }
                 }
                 if(currentStep>=0)
                 {
