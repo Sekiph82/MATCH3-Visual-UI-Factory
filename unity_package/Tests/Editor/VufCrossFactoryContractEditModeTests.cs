@@ -191,6 +191,41 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void MultipleActualLfxLayersCanBeReviewedWithoutSimulatingBoardMoves()
+        {
+            var model=Source();
+            model.layers=2;
+            var second=new List<VufCrossFactoryContractWindow.Cell>();
+            foreach (var c in model.cells)
+                second.Add(new VufCrossFactoryContractWindow.Cell {
+                    layer=1,row=c.row,column=c.column,active=c.active,
+                    contentId=c.contentId,obstacleId=c.obstacleId,
+                    specialId=c.specialId,locked=c.locked,
+                    obstacleDurability=c.obstacleDurability,
+                    lockDurability=c.lockDurability
+                });
+            var both=new List<VufCrossFactoryContractWindow.Cell>(model.cells);
+            both.AddRange(second);
+            model.cells=both.ToArray();
+            var validated=VufCrossFactoryContractWindow.ParseLevel(
+                JsonUtility.ToJson(model),Canonical);
+            Assert.That(validated.layers, Is.EqualTo(2));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                VufCrossFactoryContractWindow.BuildRealDraftBoard(validated,2));
+            var sourcePreview=VufCrossFactoryContractWindow.BuildRealDraftBoard(
+                validated,1);
+            try
+            {
+                var labels=sourcePreview.GetComponentsInChildren<Text>(true);
+                Assert.That(labels.Length, Is.EqualTo(4));
+                Assert.That(labels[0].text, Is.EqualTo("gem.猫"));
+                Assert.That(sourcePreview.hideFlags & HideFlags.DontSaveInBuild,
+                    Is.Not.EqualTo(HideFlags.None));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(sourcePreview); }
+        }
+
+        [Test]
         public void ActualUnityGridIsOnlyTemporaryRealDraftIdentifiers()
         {
             var level = Parse();
