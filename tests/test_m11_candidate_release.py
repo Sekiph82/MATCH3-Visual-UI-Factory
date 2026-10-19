@@ -131,6 +131,16 @@ class M11RealCandidateTests(unittest.TestCase):
         with self.assertRaises(M11ReleaseError):
             plan(self.source, "BAD", LFX)
 
+    def test_nested_output_under_source_is_rejected_without_creating_files(self):
+        nested = self.source / "illegal_nested"
+        with self.assertRaises(M11ReleaseError):
+            export_review_candidate(self.source, nested, ENG, LFX)
+        self.assertFalse(nested.exists())
+        bad_slot = self.release / "illegal_new_slot"
+        with self.assertRaises(M11ReleaseError):
+            import_new_copy(self.release, bad_slot)
+        self.assertFalse(bad_slot.exists())
+
     def test_independent_audit_never_self_signs_rights_or_no_cost_certification(self):
         result = release_audit(self.release)
         self.assertTrue(result["reproducible_source_identity_verified"])
