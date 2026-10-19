@@ -55,6 +55,14 @@ namespace Match3.VisualFactory.Editor
         private List<Cue> cues;
         private int currentStep = -1;
         private GameObject canvas;
+        // Art must be an owner-explicit mapping of original LFX IDs to M08
+        // imported TEST_ONLY sprite assets. Never guess a title/asset licence.
+        private TextAsset importedM08Manifest;
+        private VufCrossFactoryImportedArt.VerifiedPack verifiedArt;
+        private readonly Dictionary<string,string> manualArt =
+            new Dictionary<string,string>(StringComparer.Ordinal);
+        private readonly List<Sprite> ownedArtSprites = new List<Sprite>();
+        private int chosenSourceId, chosenCandidateAsset;
         private Vector2 scroll;
 
         [MenuItem("Tools/MATCH3/Three Factory Real Data and Visual Events")]
@@ -69,6 +77,9 @@ namespace Match3.VisualFactory.Editor
         {
             if (canvas != null) DestroyImmediate(canvas);
             canvas = null;
+            foreach (var sprite in ownedArtSprites)
+                if (sprite != null) DestroyImmediate(sprite);
+            ownedArtSprites.Clear();
         }
 
         private static string Sha(byte[] bytes)
@@ -272,6 +283,10 @@ namespace Match3.VisualFactory.Editor
         {
             ClearPreview();
             current=null; cues=null; currentStep=-1;
+            // A different source LevelDraft can reuse names with other art,
+            // therefore every owner-picked mapping is invalidated on reload.
+            manualArt.Clear();
+            verifiedArt = null;
             try
             {
                 if (String.IsNullOrEmpty(draftPath) ||
@@ -317,6 +332,48 @@ namespace Match3.VisualFactory.Editor
                         new Color(.45f,.28f,.19f,1f) :
                         new Color(.16f,.42f,.66f,1f);
             }
+        }
+
+        private void VerifyImportedArt()
+        {
+            if (current == null)
+                throw new InvalidOperationException("load actual LevelDraft first");
+            verifiedArt = VufCrossFactoryImportedArt.VerifyImportedM08Pack(
+                importedM08Manifest, current.gameProfileId);
+            manualArt.Clear();
+            status = "M08 Editor-only prototype pack/receipt SHA CHECKED ("+
+                verifiedArt.ById.Count+" images). Select EXACT LFX content ID " +
+                "and an existing candidate sprite to bind. Art rights NOT APPROVED.";
+        }
+
+        private void BindAndReviewArt()
+        {
+            if (current == null || verifiedArt == null || canvas == null)
+                throw new InvalidOperationException("load real LFX and verify M08 imported pack");
+            string[] names = current.cells.Where(c=>c.active)
+                .SelectMany(c=>new[]{c.contentId,c.obstacleId,c.specialId})
+                .Where(id=>!String.IsNullOrEmpty(id)).Distinct()
+                .OrderBy(id=>id,StringComparer.Ordinal).ToArray();
+            string[] candidates = verifiedArt.ById.Values
+                .Where(asset=>asset.path.StartsWith("sprites/",StringComparison.Ordinal))
+                .Select(asset=>asset.asset_id)
+                .OrderBy(id=>id,StringComparer.Ordinal).ToArray();
+            if (names.Length==0 || candidates.Length==0)
+                throw new InvalidOperationException("no eligible LFX cell or sprite candidates");
+            string source=names[Mathf.Clamp(chosenSourceId,0,names.Length-1)];
+            string target=candidates[Mathf.Clamp(chosenCandidateAsset,0,candidates.Length-1)];
+            VufCrossFactoryImportedArt.ValidateOwnerMapping(current,verifiedArt,
+                source,target);
+            manualArt[source]=target;
+            foreach (var sprite in ownedArtSprites)
+                if (sprite!=null) DestroyImmediate(sprite);
+            ownedArtSprites.Clear();
+            VufCrossFactoryImportedArt.ApplyExplicitSourceBindings(
+                canvas,current,verifiedArt,manualArt,ownedArtSprites);
+            HighlightCurrentEvent();
+            status = "REAL imported TEST_ONLY PNG applied to disposable LFX " +
+                "preview for "+source+" -> "+target+". "+
+                "Not original game art/owner licensed/production or gameplay.";
         }
 
         private void OnGUI()
@@ -374,6 +431,64 @@ namespace Match3.VisualFactory.Editor
                     EditorGUILayout.LabelField("Actual event coordinates",
                         String.Join(",",cue.Cells.Select(c=>c.z+":"+c.y+":"+c.x)
                             .ToArray()));
+                }
+            }
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Actual LFX IDs + explicit M08 prototype art",
+                EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(
+                "Only owner-selected, previously imported Assets/Editor/" +
+                "VUF_ReviewImports M08 TEST_ONLY pack is allowed. The full " +
+                "original receipt and every source hash are checked again. " +
+                "No automatic binding from LFX contentId to an unrelated " +
+                "VUF sprite. Real art ownership/visual quality remain OPEN.",
+                MessageType.Warning);
+            EditorGUI.BeginChangeCheck();
+            importedM08Manifest=(TextAsset)EditorGUILayout.ObjectField(
+                "Existing M08 imported manifest",importedM08Manifest,
+                typeof(TextAsset),false);
+            if (EditorGUI.EndChangeCheck())
+            {
+                verifiedArt=null;
+                manualArt.Clear();
+                ClearPreview();
+                // Invalidate temporary preview, never partially display a
+                // new unverified pack with an older LFX source.
+                status="M08 visual input changed; verify pack and reload LFX.";
+                current=null; cues=null; currentStep=-1;
+            }
+            if(GUILayout.Button("Verify imported full M08 TEST_ONLY source SHA"))
+            {
+                try { VerifyImportedArt(); }
+                catch(Exception e) { verifiedArt=null; manualArt.Clear();
+                    status="IMPORT REFUSED: "+e.Message; }
+            }
+            if(verifiedArt!=null && current!=null)
+            {
+                string[] sourceIds=current.cells.Where(c=>c.active)
+                    .SelectMany(c=>new[]{c.contentId,c.obstacleId,c.specialId})
+                    .Where(id=>!String.IsNullOrEmpty(id)).Distinct()
+                    .OrderBy(id=>id,StringComparer.Ordinal).ToArray();
+                string[] artIds=verifiedArt.ById.Values
+                    .Where(asset=>asset.path.StartsWith("sprites/",StringComparison.Ordinal))
+                    .Select(asset=>asset.asset_id)
+                    .OrderBy(id=>id,StringComparer.Ordinal).ToArray();
+                if (sourceIds.Length>0 && artIds.Length>0)
+                {
+                    chosenSourceId=EditorGUILayout.Popup(
+                        "Actual LFX cell ID",Mathf.Clamp(chosenSourceId,0,sourceIds.Length-1),
+                        sourceIds);
+                    chosenCandidateAsset=EditorGUILayout.Popup(
+                        "M08 mathematical SPRITE candidate",
+                        Mathf.Clamp(chosenCandidateAsset,0,artIds.Length-1),artIds);
+                    if(GUILayout.Button("Bind EXACT selected ID to disposable PNG"))
+                    {
+                        try { BindAndReviewArt(); }
+                        catch(Exception e) { status="CANDIDATE BIND REFUSED: "+e.Message; }
+                    }
+                    EditorGUILayout.LabelField(
+                        "Owner-explicit TEST_ONLY bindings",
+                        manualArt.Count.ToString()+"; ZERO game/runtime/rights approval");
                 }
             }
             if(GUILayout.Button("Open existing M07 Sprite/VFX assets inspector"))
