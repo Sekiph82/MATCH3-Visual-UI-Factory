@@ -67,6 +67,27 @@ namespace Match3.VisualFactory.Editor
             view.Show();
         }
 
+        // Cross-factory, view-only navigation: selects the ORIGINAL M07
+        // existing FX review preset for one REAL Engine M3P1 event projection.
+        // No auto-playing unlicensed art, Engine callbacks or game mutation.
+        internal static void OpenForExternalViewCue(string profile, string cue)
+        {
+            VufVisualEventCatalog.EventKey(profile, cue);
+            int p = Array.IndexOf(VufVisualEventCatalog.Profiles,profile);
+            int e = Array.IndexOf(EventLabels,cue);
+            if (p < 0 || e < 0)
+                throw new ArgumentException("M07 source-pinned cue not found");
+            var view=GetWindow<VufUnifiedVisualStudioWindow>(
+                "VUF Unified Visual QA");
+            view.profileIndex=p;
+            view.eventIndex=e;
+            view.info="REAL Engine presentation receipt projected to M07 "+cue+
+                " / PREVIEW ONLY. Choose imported art manually; "+
+                "no automatic gameplay event has been dispatched.";
+            view.Show();
+            view.Repaint();
+        }
+
         private void OnEnable()
         {
             lastTick = EditorApplication.timeSinceStartup;
