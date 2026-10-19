@@ -17,6 +17,9 @@ import hashlib
 import json
 from pathlib import Path
 
+from factory.asset_packaging.candidate_pack import ROOT as VUF_REPO_ROOT
+from factory.integration.three_factory_visual_plan import compile_view_plan
+
 from factory.integration.cross_factory_contract import (
     CrossFactoryError, bind_readonly, read_lfxv1, read_m3p1,
 )
@@ -64,14 +67,57 @@ def main(argv=None) -> int:
     parser.add_argument("--lfx-view", type=Path, required=True)
     parser.add_argument("--engine-events", type=Path, required=True)
     parser.add_argument("--vuf-test-pack", type=Path)
+    parser.add_argument("--explicit-test-art-map", type=Path,
+                        help="existing UTF8 JSON LFX content ID -> M08 asset_id mapping")
+    parser.add_argument("--new-view-plan", type=Path,
+                        help="NEW external non-shipping visual plan JSON; create only")
     args = parser.parse_args(argv)
     try:
         paths=(args.lfx_canonical,args.lfx_view,args.engine_events)
         if any(not p.is_file() or p.is_symlink() or
                p.stat().st_size > 2_000_000 for p in paths):
             raise CrossFactoryError("missing/linked/oversized source file")
-        result=evaluate(*(p.read_bytes() for p in paths),
-                        optional_vuf_pack=args.vuf_test_pack)
+        inputs=tuple(p.read_bytes() for p in paths)
+        result=evaluate(*inputs,optional_vuf_pack=args.vuf_test_pack)
+        if args.explicit_test_art_map is not None or args.new_view_plan is not None:
+            if args.new_view_plan is None:
+                raise CrossFactoryError(
+                    "explicit mapping requires an explicit NEW external output")
+            mapping={}
+            if args.explicit_test_art_map is not None:
+                artfile=args.explicit_test_art_map
+                if (not artfile.is_file() or artfile.is_symlink() or
+                        artfile.stat().st_size>64*1024):
+                    raise CrossFactoryError("missing/linked/oversized art mapping")
+                def unique(items):
+                    data={}
+                    for key,value in items:
+                        if key in data:
+                            raise CrossFactoryError("duplicate art binding ID")
+                        data[key]=value
+                    return data
+                mapping=json.loads(artfile.read_text("utf-8"),
+                                   object_pairs_hook=unique)
+            plan=compile_view_plan(canonical_lfx=inputs[0],lfxv1=inputs[1],
+                                   m3p1=inputs[2],
+                                   vuf_pack=args.vuf_test_pack,
+                                   explicit_content_map=mapping)
+            output=args.new_view_plan
+            if (not output.is_absolute() or output.suffix.lower()!=".json" or
+                    output.exists() or output.is_symlink() or
+                    not output.parent.is_dir() or
+                    output.resolve(strict=False).is_relative_to(VUF_REPO_ROOT)):
+                raise CrossFactoryError("plan must be NEW external JSON")
+            for directory in (output.parent,*output.parent.parents):
+                if directory.is_symlink() or (
+                        hasattr(directory,"is_junction") and directory.is_junction()):
+                    raise CrossFactoryError("linked plan folder rejected")
+            serialized=(json.dumps(plan,indent=2,sort_keys=True,
+                                   ensure_ascii=False)+"\\n").encode("utf-8")
+            with output.open("xb") as file:
+                file.write(serialized)
+            result["newUnapprovedVisualPlan"]=str(output)
+            result["explicitTestArtBindingCount"]=plan["explicitArtBindingCount"]
     except (CrossFactoryError, ValueError, OSError) as exc:
         parser.exit(2, "THREE_FACTORY_INTEGRATION_REJECTED: "+str(exc)+"\n")
     print(json.dumps(result, indent=2, sort_keys=True))
