@@ -448,6 +448,15 @@ namespace Match3.VisualFactory.Editor
                     EditorGUILayout.LabelField("Actual event coordinates",
                         String.Join(",",cue.Cells.Select(c=>c.z+":"+c.y+":"+c.x)
                             .ToArray()));
+                    if(cue.VufEvent!=null &&
+                        GUILayout.Button("Inspect this real Engine cue in M07 Sprite/VFX Studio"))
+                    {
+                        try { VufUnifiedVisualStudioWindow.OpenForExternalViewCue(
+                            current.gameProfileId,cue.VufEvent); }
+                        catch(Exception ex) {
+                            status="M07 visual cue navigation refused: "+ex.Message;
+                        }
+                    }
                 }
             }
             EditorGUILayout.Space();
