@@ -226,6 +226,21 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void M07OwnerPreviewPacingNeverInventsEngineEventTime()
+        {
+            Assert.That(
+                VufCrossFactoryContractWindow.SuggestedReviewDelayMs("tile_match"),
+                Is.EqualTo(420));
+            Assert.That(
+                VufCrossFactoryContractWindow.SuggestedReviewDelayMs(null),
+                Is.EqualTo(250),
+                "Swap has no approved animation key, but manual highlight can pause");
+            Assert.Throws<ArgumentException>(() =>
+                VufCrossFactoryContractWindow.SuggestedReviewDelayMs(
+                    "unverified_game_reward"));
+        }
+
+        [Test]
         public void ActualUnityGridIsOnlyTemporaryRealDraftIdentifiers()
         {
             var level = Parse();
