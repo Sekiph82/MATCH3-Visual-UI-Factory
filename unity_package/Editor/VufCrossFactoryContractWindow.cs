@@ -55,7 +55,6 @@ namespace Match3.VisualFactory.Editor
         private List<Cue> cues;
         private int currentStep = -1;
         private GameObject canvas;
-        private Image[] gridImages;
         private Vector2 scroll;
 
         [MenuItem("Tools/MATCH3/Three Factory Real Data and Visual Events")]
@@ -297,6 +296,29 @@ namespace Match3.VisualFactory.Editor
             }
         }
 
+        private void HighlightCurrentEvent()
+        {
+            if (canvas == null || current == null) return;
+            var grid = canvas.transform.Find("Real_LFXV1_Source_Grid");
+            if (grid == null) return;
+            var map = current.cells.Where(c => c.layer == 0)
+                .OrderBy(c => c.row).ThenBy(c => c.column).ToArray();
+            for (int i=0;i<map.Length && i<grid.childCount;i++)
+            {
+                var c=map[i];
+                var image=grid.GetChild(i).GetComponent<Image>();
+                if (image == null) continue;
+                bool selected = currentStep>=0 && cues!=null &&
+                    cues[currentStep].Cells.Any(p =>
+                        p.z==0 && p.y==c.row && p.x==c.column);
+                image.color = selected ? new Color(.94f,.69f,.16f,1f) :
+                    !c.active ? new Color(.10f,.11f,.12f,.3f) :
+                    !String.IsNullOrEmpty(c.obstacleId) ?
+                        new Color(.45f,.28f,.19f,1f) :
+                        new Color(.16f,.42f,.66f,1f);
+            }
+        }
+
         private void OnGUI()
         {
             EditorGUILayout.LabelField("THREE FACTORIES | Real data, no fake WIN",
@@ -339,6 +361,7 @@ namespace Match3.VisualFactory.Editor
                 if(GUILayout.Button("STEP actual typed Engine presentation event"))
                 {
                     currentStep=(currentStep+1)%cues.Count;
+                    HighlightCurrentEvent();
                     Repaint();
                 }
                 if(currentStep>=0)
