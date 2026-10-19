@@ -606,3 +606,70 @@ on `1c8d99b248bd3462fce80e78ac30760c8b9d55a2` is historical.
 Existing M10-007 full-milestone one-shot Codex prompt (technical tests and
 explicit upstream real-gate audit):
 https://docs.google.com/document/d/1zCp8w4u7OJyiyca-I4IWwKYKB4jB0T_1w-hY6iDuJa0/edit
+
+## 2026-10-19 | M11-001..006 entire milestone candidate source batch
+
+**SINGLE canonical tracker** remains root TASKS.md (137 contiguous IDs).
+No new VUF task IDs or parallel tracker files. No final v1 shipping freeze
+or human legal/owner approval is inferred by M11 source implementation.
+
+**Pre-code inspected actual original VUF code:**
+`factory/asset_packaging/candidate_pack.py` (M08 mathematical
+TEST_ONLY export and VF04 real atlas, typed Unity array/source receipts);
+`factory/asset_packaging/verify_offline_bundle.py` (independent actual
+source PNG/locale/vFX/VF04 pack bytes audit);
+`unity_package/Editor/VufCandidatePackImporterWindow.cs` (explicit
+NEW Unity Editor-only source copy, all SHA, deny secret/raw assets);
+`VufExternalPackSandboxWindow.cs` (view-only imported TEST_ONLY SHA/A-B),
+`VufReadinessBoardWindow.cs` (legal/owner/source quality gates),
+and M09/M10 mock screen/win/replay owner Studio. Existing source
+package `com.match3.visual-factory` remains pre-v1 0.1.0.
+
+**MINIMAL_ADAPTER / SOURCE-ONLY review v1**
+- `factory/release/m11_candidate_release.py`: original deterministic
+M08 source path export is REUSED; creates canonical SHA256 content-identity
+M11 manifest with observed (NOT ACCEPTED) precise Git 40-hex
+Engine/LFX provenance, 100%-source artifact raw SHA whitelist, no extra
+files, symlinks/junctions/secrets/tests/Editor/reference art, MAX byte
+budget. Export and consumer review import are NEW external dirs ONLY,
+never overwrite previous candidate or original artwork. A rollback
+creates a *NEW verified copy of old reviewed source*, never changes
+running game's active revision or deletes current consumer. Full M08
+receipt and VF04 source hash revalidated; independent legal/owner/Engine
+ABI/player/phone statuses remain explicitly FALSE.
+- `factory/release/m11_game_handoff.py`: produces a G01/G02/G09/G11
+four-consumer original-ID review contract, with title/profile mapping
+explicitly UNCONFIRMED in this VUF repo (no guess of which game maps
+to each ID), all original creator/font/licence and Engine/LFX owner
+release signoffs FALSE, create-only JSON outside source checkout.
+- `unity_package/Editor/VufM11CandidateReleaseReviewWindow.cs`:
+read-only Unity window showing externally supplied observed Git pins
+and recalculating all original referenced file SHA. It is NOT a
+Python canonical content-ID/full M08 receipt audit or a replacement
+for the existing Unity M08 Editor-only importer/rights board.
+- `docs/M11_RELEASE_CANDIDATE_AND_HANDOFF.md` explains operator
+review-only workflow, exact four game target IDs and every gated
+acceptance separately; **no game v1 release called or executed**.
+
+**REJECTED_REASON**: do not fabricate accepted released Engine M12/
+LevelFactory M24 neutral replay, owner art/font licensed originals,
+signed independent legal review, game-specific title mappings or
+production rollout/rollback authority. No new external paid SDK or
+cloud service; donor original source license notices untouched.
+
+**Source QA authored, NOT EXECUTED ON NEW SHA**:
+11 Python source/real external candidate export, import, rollback,
+path, PIN, corruption and rights negative test methods in
+`tests/test_m11_candidate_release.py`; 4 handoff/Python→Unity parity
+tests in `tests/test_m11_handoff_and_parity.py`; 5 real Unity EditMode
+source NUnit tests in
+`unity_package/Tests/Editor/VufM11CandidateReleaseEditModeTests.cs`
+with stable .meta GUID/structure requirements. The only verified
+owner-local M10 reference remains Python 454 PASS/9 Windows
+symlink SKIP, Unity 157/157 EditMode PASS at GitHub SHA
+`23b087d1d91cd26921994c5b19d42dadea98be6d`.
+M11 tests, actual Unity GUI, production package scanning, owner
+creative original art/rights, full Engine LFX game parity, physical
+devices and signed M11 handoff are **NOT RUN / OPEN**.
+One M11-006 full-milestone Codex prompt created in Drive 01_PROMPTS:
+https://docs.google.com/document/d/1mTXbEaLazWHhaF-j58nFB31Z6meB3oBcNWT_ScS8e0g/edit
