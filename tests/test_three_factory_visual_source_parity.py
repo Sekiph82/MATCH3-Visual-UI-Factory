@@ -17,6 +17,7 @@ class ThreeFactorySourceParityTests(unittest.TestCase):
         cls.m08=(ED/"VufCandidatePackImporterWindow.cs").read_text("utf-8")
         cls.m07=(ED/"VufUnifiedVisualStudioWindow.cs").read_text("utf-8")
         cls.codec=(RT/"VisualAssetManifest.cs").read_text("utf-8")
+        cls.capture=(ED/"VufThreeFactoryGridCapture.cs").read_text("utf-8")
 
     def test_real_lfx_and_actual_engine_events_use_existing_reusable_preview(self):
         for part in ("ParseLevel(", "ParseEvents(", "BuildRealDraftBoard(",
@@ -59,6 +60,26 @@ class ThreeFactorySourceParityTests(unittest.TestCase):
         self.assertNotIn("Addressables.Load",self.art)
         self.assertNotIn("SubmitScore(",self.studio)
         self.assertNotIn("SetPlayerData(",self.studio)
+
+    def test_real_editor_grid_capture_keeps_owner_release_and_device_flags_false(self):
+        for part in ("VufThreeFactoryGridCapture.CaptureSourcePreview",
+                     "FileMode.CreateNew", "screenshotSha256",
+                     "actualPlayableGameScreenshot",
+                     "ownerAestheticApproved",
+                     "physicalDeviceGpuVerified",
+                     "releaseAllowed", "NOT an iPhone/Android"):
+            with self.subTest(part=part):
+                self.assertIn(part,self.studio)
+        for part in ("VUF_THREE_FACTORY_REAL_DRAFT_TEMP",
+                     "HideFlags.DontSaveInEditor",
+                     "Real_LFXV1_Source_Grid",
+                     "RenderTexture", "EncodeToPNG",
+                     "canvas.worldCamera=oldCamera",
+                     "RenderTexture.active=oldActive"):
+            with self.subTest(part=part):
+                self.assertIn(part,self.capture)
+        self.assertIn("Editor/VufThreeFactoryGridCapture.cs",
+            (ROOT/"Tools"/"validate_repo_structure.py").read_text("utf-8"))
 
     def test_theme_focused_m07_studio_drops_old_imported_sprites(self):
         self.assertIn("OpenForExternalViewCue",self.m07)
