@@ -63,6 +63,9 @@ namespace Match3.VisualFactory.Editor
         private bool reviewAutoplay, reducedMotion=true;
         private double nextReviewStepAt;
         private GameObject canvas;
+        private Texture2D latestSourceCapture;
+        private byte[] latestSourcePng;
+        private string actualEventWireSha="NOT_ATTACHED";
         // Art must be an owner-explicit mapping of original LFX IDs to M08
         // imported TEST_ONLY sprite assets. Never guess a title/asset licence.
         private TextAsset importedM08Manifest;
@@ -125,11 +128,103 @@ namespace Match3.VisualFactory.Editor
         }
         private void ClearPreview()
         {
+            ClearRenderedPreview();
             if (canvas != null) DestroyImmediate(canvas);
             canvas = null;
             foreach (var sprite in ownedArtSprites)
                 if (sprite != null) DestroyImmediate(sprite);
             ownedArtSprites.Clear();
+        }
+
+        private void ClearRenderedPreview()
+        {
+            if (latestSourceCapture!=null)
+                DestroyImmediate(latestSourceCapture);
+            latestSourceCapture=null;
+            latestSourcePng=null;
+        }
+        [Serializable]
+        private sealed class SourceReviewReceipt
+        {
+            public int schemaVersion=1, reviewLayer, width, height;
+            public string stage="THREE_FACTORY_REAL_SOURCE_EDITOR_PNG_UNAPPROVED";
+            public string profileId, levelId, originalLevelDraftSha256;
+            public string engineM3p1SourceSha256;
+            public string candidateImportedManifestSha256;
+            public string screenshotSha256;
+            public int viewEventCount, currentViewEventIndex;
+            public bool realUnityEditorPixelsCaptured;
+            public bool actualPlayableGameScreenshot, sourceAuthenticated;
+            public bool engineSettledReplayVerified, levelFactoryM24Approved;
+            public bool originalArtRightsApproved, ownerAestheticApproved;
+            public bool physicalDeviceGpuVerified, releaseAllowed;
+        }
+        private void CaptureInEditor()
+        {
+            ClearRenderedPreview();
+            if (canvas==null || current==null)
+                throw new InvalidOperationException(
+                    "load actual LFX and TEMP uGUI board first");
+            byte[] bytes=VufThreeFactoryGridCapture.CaptureSourcePreview(
+                canvas,720,960);
+            var texture=new Texture2D(2,2,TextureFormat.RGBA32,false);
+            if (!texture.LoadImage(bytes,false))
+            {
+                DestroyImmediate(texture);
+                throw new IOException("Unity Editor did not return actual PNG");
+            }
+            latestSourcePng=bytes;
+            latestSourceCapture=texture;
+            status="ACTUAL Unity Editor source-grid screenshot in memory: "+
+                bytes.Length+" bytes / NO real mobile/gameplay/owner approval.";
+        }
+        private void SaveNewEditorReview()
+        {
+            if (current==null || latestSourcePng==null || latestSourceCapture==null)
+                throw new InvalidOperationException("capture current actual Unity source preview first");
+            string file=EditorUtility.SaveFilePanel(
+                "NEW M3P1/LFXV1 Editor-only screenshot and JSON SHA receipt",
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "VUF_THREE_FACTORY_SOURCE_UNAPPROVED","png");
+            if (String.IsNullOrEmpty(file)) return;
+            string path=Path.GetFullPath(file);
+            string receipt=Path.ChangeExtension(path,".json");
+            string project=Path.GetFullPath(Directory.GetCurrentDirectory())
+                .TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar;
+            if (!path.EndsWith(".png",StringComparison.OrdinalIgnoreCase) ||
+                path.StartsWith(project,StringComparison.OrdinalIgnoreCase) ||
+                File.Exists(path) || File.Exists(receipt) ||
+                Directory.Exists(path) || Directory.Exists(receipt))
+                throw new IOException("review must create a NEW external PNG + JSON pair");
+            for (var dir=new DirectoryInfo(Path.GetDirectoryName(path));
+                dir!=null;dir=dir.Parent)
+                if (!dir.Exists || (dir.Attributes & FileAttributes.ReparsePoint)!=0)
+                    throw new IOException("linked or missing export directory");
+            var report=new SourceReviewReceipt {
+                profileId=current.gameProfileId,
+                levelId=current.levelId,
+                originalLevelDraftSha256=current.sourceDraftSha256,
+                engineM3p1SourceSha256=actualEventWireSha,
+                candidateImportedManifestSha256=verifiedArt==null ?
+                    "NOT_VERIFIED" : Sha(importedM08Manifest.bytes),
+                screenshotSha256=Sha(latestSourcePng),
+                reviewLayer=selectedLayer,
+                width=latestSourceCapture.width,
+                height=latestSourceCapture.height,
+                viewEventCount=cues==null ? 0 : cues.Count,
+                currentViewEventIndex=currentStep,
+                realUnityEditorPixelsCaptured=true
+            };
+            string metadata=JsonUtility.ToJson(report,true);
+            using(var stream=new FileStream(path,FileMode.CreateNew,
+                FileAccess.Write,FileShare.None))
+                stream.Write(latestSourcePng,0,latestSourcePng.Length);
+            using(var stream=new FileStream(receipt,FileMode.CreateNew,
+                FileAccess.Write,FileShare.None))
+            using(var writer=new StreamWriter(stream,new UTF8Encoding(false)))
+                writer.Write(metadata);
+            status="Exported NEW actual Editor source screenshot and SHA receipt: "+
+                path+" / all production/rights/device/gameplay flags FALSE.";
         }
 
         private static string Sha(byte[] bytes)
@@ -336,7 +431,7 @@ namespace Match3.VisualFactory.Editor
         {
             ClearPreview();
             current=null; cues=null; currentStep=-1; selectedLayer=0;
-            reviewAutoplay=false;
+            reviewAutoplay=false; actualEventWireSha="NOT_ATTACHED";
             // A different source LevelDraft can reuse names with other art,
             // therefore every owner-picked mapping is invalidated on reload.
             manualArt.Clear();
@@ -349,8 +444,12 @@ namespace Match3.VisualFactory.Editor
                     throw new IOException("Select canonical LFX source + envelope");
                 byte[] canonical=File.ReadAllBytes(draftPath);
                 current=ParseLevel(File.ReadAllText(levelPath),canonical);
-                cues=String.IsNullOrEmpty(eventsPath) ? new List<Cue>() :
-                    ParseEvents(File.ReadAllBytes(eventsPath),current);
+                byte[] verifiedEvents=String.IsNullOrEmpty(eventsPath) ?
+                    null : File.ReadAllBytes(eventsPath);
+                cues=verifiedEvents==null ? new List<Cue>() :
+                    ParseEvents(verifiedEvents,current);
+                actualEventWireSha=verifiedEvents==null ?
+                    "NOT_ATTACHED" : Sha(verifiedEvents);
                 canvas=BuildRealDraftBoard(current,selectedLayer);
                 Selection.activeGameObject=canvas;
                 status="ACTUAL LFX validated geometry loaded ("+
@@ -367,6 +466,7 @@ namespace Match3.VisualFactory.Editor
 
         private void HighlightCurrentEvent()
         {
+            ClearRenderedPreview();
             if (canvas == null || current == null) return;
             var grid = canvas.transform.Find("Real_LFXV1_Source_Grid");
             if (grid == null) return;
@@ -589,6 +689,29 @@ namespace Match3.VisualFactory.Editor
                     EditorGUILayout.LabelField(
                         "Owner-explicit TEST_ONLY bindings",
                         manualArt.Count.ToString()+"; ZERO game/runtime/rights approval");
+                }
+            }
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Source-only actual Unity Editor screenshot",
+                EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(
+                "Capture shows a temporary LFX draft grid / real typed Engine " +
+                "event coordinate highlight, possibly M08 mathematical TEST_ONLY " +
+                "sprite art. This is NOT an iPhone/Android/real-game screenshot.",
+                MessageType.Info);
+            if(GUILayout.Button("RENDER actual disposable Unity Editor PNG"))
+            {
+                try { CaptureInEditor(); }
+                catch(Exception ex) { status="EDITOR GPU CAPTURE NOT RUN: "+ex.Message; }
+            }
+            if(latestSourceCapture!=null)
+            {
+                GUILayout.Label(latestSourceCapture,
+                    GUILayout.Width(270),GUILayout.Height(360));
+                if(GUILayout.Button("Export NEW Editor PNG and SHA review receipt"))
+                {
+                    try { SaveNewEditorReview(); }
+                    catch(Exception ex) { status="EDITOR PNG EXPORT REFUSED: "+ex.Message; }
                 }
             }
             if(GUILayout.Button("Open existing M07 Sprite/VFX assets inspector"))
