@@ -104,6 +104,12 @@ def read_lfxv1(data: bytes, expected_profile: str | None = None) -> dict:
         positions.add(position)
         if type(c["active"]) is not bool or type(c["locked"]) is not bool:
             raise CrossFactoryError("invalid cell activity")
+        # Unity JsonUtility may write empty optional strings where the
+        # source LevelDraftJson canonical serializer writes JSON null.
+        # Normalize only the three nullable identifiers, never bools/counts.
+        for optional in ("contentId", "obstacleId", "specialId"):
+            if c[optional] == "":
+                c[optional] = None
         if any(c[k] is not None and
                (not isinstance(c[k],str) or not 1 <= len(c[k]) <= 128)
                for k in ("contentId","obstacleId","specialId")):
