@@ -13,7 +13,6 @@ import hashlib
 import json
 import os
 import re
-import shutil
 import stat
 from pathlib import Path
 
@@ -129,13 +128,13 @@ def _source_inventory(source: Path) -> tuple[dict, dict]:
 def plan(source_dir: Path, engine_sha: str, lfx_sha: str) -> dict:
     """Deterministic plan; observed Git SHAs NEVER assert ABI/acceptance."""
     source = _checked_external(source_dir, exists=True)
-    if (not isinstance(engine_sha, str) or not HEX.fullmatch(engine_sha) or
-            not isinstance(lfx_sha, str) or not HEX.fullmatch(lfx_sha)):
-        raise M11ReleaseError("require independently observed full 40? source IDs")
-    # Git revision is 40 hexadecimal characters, while assets use SHA256.
-    # No source in the VUF candidate manifest may override this unapproved gate.
-    if len(engine_sha) != 40 or len(lfx_sha) != 40:
-        raise M11ReleaseError("Engine/LFX must be exact Git SHA1 identifiers")
+    # Git revisions are 40 hex characters, source/asset SHA256 has 64.
+    # Observed Git IDs NEVER mean accepted final ABI / gameplay authority.
+    if (not isinstance(engine_sha, str) or
+            not re.fullmatch(r"[0-9a-f]{40}", engine_sha) or
+            not isinstance(lfx_sha, str) or
+            not re.fullmatch(r"[0-9a-f]{40}", lfx_sha)):
+        raise M11ReleaseError("exact observed 40-character Git SHAs required")
     proof, hashes = _source_inventory(source)
     body = {
         "schema_version": SCHEMA,
