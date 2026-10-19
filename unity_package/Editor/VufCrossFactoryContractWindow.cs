@@ -68,7 +68,7 @@ namespace Match3.VisualFactory.Editor
         private void ClearPreview()
         {
             if (canvas != null) DestroyImmediate(canvas);
-            canvas = null; gridImages = null;
+            canvas = null;
         }
 
         private static string Sha(byte[] bytes)
