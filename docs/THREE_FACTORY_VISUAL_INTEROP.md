@@ -102,3 +102,28 @@ independent Game Center/Play Games, licensed owner original art/fonts,
 runtime Sprite/FX, actual player build/phone GPU, physical device and
 owner legal/art/GUI signoff. Review-only images and source checks do not
 complete those milestones or change game saves or difficulty.
+
+## Latest owner-visible source-grid Editor screenshot
+
+VufThreeFactoryGridCapture.cs adds a STRICTLY NONPERSISTENT Unity
+Camera/RenderTexture/PNG capture gate for exactly the original temporary
+LFXV1 grid object, preserving canvas render settings and destroying
+temporary GPU objects. It deliberately does NOT bypass the older M09
+Coral-screen CandidateMarker capture gate.
+
+In Three Factory Real Data and Visual Events, click RENDER actual
+disposable Unity Editor PNG after loading a source board and optional
+verified art/event. An in-memory actual Editor image appears. The owner
+can click Export NEW Editor PNG and SHA review receipt to create a
+**new external PNG + JSON only**; it records original LevelDraft source
+SHA, optional typed Engine M3P1 receipt SHA, inspected M08 imported
+manifest SHA, source layer and selected event index, with explicit
+REAL Unity Editor pixels TRUE but production art/owner/gameplay/WIN/
+physical GPU/device/shipping flags FALSE. Rebuilding a level, switching
+layers, stepping events or changing art invalidates the captured image.
+No tests may claim a screenshot was captured in -nographics batchmode.
+
+Related new test counts: 10 + 6 + 5 = 21 authored Python contract/
+plan/source-parity checks; 10 Unity Editor source NUnit methods.
+Full owner-local Python/Unity regression and actual GUI capture on
+latest SHA remain NOT RUN. Existing 137 task IDs remain frozen.
