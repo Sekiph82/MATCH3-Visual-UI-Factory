@@ -149,10 +149,11 @@ namespace Match3.VisualFactory.Editor
         internal static void ApplyExplicitSourceBindings(
             GameObject board, VufCrossFactoryContractWindow.Level level,
             VerifiedPack pack, Dictionary<string,string> selected,
-            List<Sprite> ownerSprites)
+            List<Sprite> ownerSprites, int sourceLayer = 0)
         {
             if (board == null || level == null || pack == null ||
                 selected == null || ownerSprites == null ||
+                sourceLayer < 0 || sourceLayer >= level.layers ||
                 selected.Count > 1024 ||
                 (board.hideFlags & HideFlags.DontSaveInEditor) == 0)
                 throw new ArgumentException("not a temporary inspected draft grid");
@@ -162,7 +163,7 @@ namespace Match3.VisualFactory.Editor
             // setting even one Image, so partial art state is not accepted.
             foreach (var kv in selected)
                 ValidateOwnerMapping(level,pack,kv.Key,kv.Value);
-            var cells = level.cells.Where(c => c.layer == 0)
+            var cells = level.cells.Where(c => c.layer == sourceLayer)
                 .OrderBy(c => c.row).ThenBy(c => c.column).ToArray();
             if (grid.childCount != cells.Length)
                 throw new ArgumentException("grid is not the original LFX draft");
