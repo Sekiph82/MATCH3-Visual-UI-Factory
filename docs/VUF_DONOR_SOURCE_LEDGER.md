@@ -673,3 +673,48 @@ creative original art/rights, full Engine LFX game parity, physical
 devices and signed M11 handoff are **NOT RUN / OPEN**.
 One M11-006 full-milestone Codex prompt created in Drive 01_PROMPTS:
 https://docs.google.com/document/d/1mTXbEaLazWHhaF-j58nFB31Z6meB3oBcNWT_ScS8e0g/edit
+
+## 2026-10-19 | 3-repo real-data visual interop source batch under existing M10
+
+**Source inspections BEFORE adapting:** actual Engine PresentationVisualContracts
+typed PresentationEvent (seven Kind ordinals, eventId, sequence, intensity,
+sorted BoardPosition records), LevelFactory strict LevelDraft v1 original
+cells/activeMask/obstacle/goal/seed serializer/parser SHA, original VUF
+M07 source-pinned 14 visual cue allowlist, M08 full TEST_ONLY candidate receipt
+and Editor-only importer, M09 real temporary uGUI audit, M10 synthetic
+review routes. No third-party donor fork or added paid plugin.
+
+**Actual committed original adapters:** Engine M3P1 (source SHA-256 integrity,
+NOT origin signature) from live PRESENTATION callback records only;
+LFX LFXV1 derived from real LevelDraftJson.Parse + actual source pair;
+VUF cross_factory_contract.py independent wire/geometry/profile/hash deny
++ three_factory_visual_plan.py bounded deterministic view-only cells/goals,
+exact source event cues and optional explicit TEST_ONLY art mapping;
+Tools/verify_three_factory_handoff.py create-only external JSON plan;
+Unity Three Factory Real Data and Visual Events temporary Canvas original
+LFX board per-layer event coordinate review, M07 manual approximate timing
+and M08 imported source SHA art binding. New owner M08 imported copies now
+retain candidate_pack_receipt.json, older copies must be reimported to
+provide trustworthy full-source art receipts.
+
+**Art provenance/authority:** only selected candidate sources already
+SHA-verified under Assets/Editor/VUF_ReviewImports and rights REVIEW_PENDING
+can be bound by explicit ORIGINAL LFX contentId/obstacleId/specialId. No
+guessed "blue tile" association, no original licensed production art,
+no Player build Asset/Addressable, no actual game score/save changes.
+M07 event focus clears prior imported art to avoid stale/cross-theme leakage.
+Actual Engine Swap is N/A rather than invented M07 effect. Final Engine
+ENG-M12, LevelFactory ENG-M24 neutral replay, five playable level packs,
+PlayMode true event-vs-board snapshots, device GPU and owner art/legal
+signature remain OPEN.
+
+**QA STATE: SOURCE AUTHORED, NOT EXECUTED on new 3 repo SHAs.** VUF Python
+tests test_cross_factory_contract.py (10), three_factory_visual_plan (6),
+three_factory_visual_source_parity (4), actual Unity
+VufCrossFactoryContractEditModeTests (9) and structural .meta checks
+are provided. Engine and LFX new contract NUnit tests must be genuinely
+compiled and run in owner Windows environment before any acceptance.
+Previously verified VUF full Python 478 PASS/9 Win symlink SKIP and Unity
+162/162 PASS were tied to old SHA fc730578, not this new batch.
+Single whole integration Codex QA prompt:
+https://docs.google.com/document/d/1vj3LOFdJVoXw6KmB1eBtrQc5jWRRbDBSojcBpdv6yuU/edit
