@@ -97,6 +97,7 @@ def validate_structure() -> dict:
         "Tests/Editor/VufM11CandidateReleaseEditModeTests.cs",
         "Editor/VufCrossFactoryContractWindow.cs",
         "Editor/VufCrossFactoryImportedArt.cs",
+        "Editor/VufThreeFactoryGridCapture.cs",
         "Tests/Editor/VufCrossFactoryContractEditModeTests.cs",
         "Tests/Editor/VufPreviewCompatibilityEditModeTests.cs",
         "Tests/Editor/VufShellLayoutBridgeEditModeTests.cs",
