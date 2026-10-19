@@ -225,6 +225,20 @@ namespace Match3.VisualFactory.Editor
                 if (ShaFile(to) != entry.sha256)
                     throw new IOException("copied candidate hash changed: " + entry.path);
             }
+            // Preserve the original M08 integrity receipt next to this
+            // editor-only copy. The three-factory Visual Studio RECHECKS it
+            // and every file SHA before mapping any LevelDraft cell to art.
+            // The existing importer previously copied only file_entries
+            // (receipt is excluded there), so old imports intentionally
+            // need a new owner-initiated imported copy.
+            string receiptCopy = Path.Combine(target, "candidate_pack_receipt.json");
+            using (var input = new FileStream(receiptFilename,
+                FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var output = new FileStream(receiptCopy,
+                FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                input.CopyTo(output);
+            if (ShaFile(receiptCopy) != receiptSHA)
+                throw new IOException("copied original M08 receipt SHA differs");
             AssetDatabase.Refresh();
             string relative = "Assets/Editor/VUF_ReviewImports/" +
                 Path.GetFileName(target) + "/visual_manifest.json";
