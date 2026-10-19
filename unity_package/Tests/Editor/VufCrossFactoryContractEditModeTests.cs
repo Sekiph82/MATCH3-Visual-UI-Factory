@@ -1,11 +1,13 @@
 // Real LFXV1 and Engine M3P1 boundary source tests; no live replay claims.
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using Match3.VisualFactory.Editor;
+using Match3.VisualFactory;
 
 namespace Match3.VisualFactory.Tests
 {
@@ -123,6 +125,69 @@ namespace Match3.VisualFactory.Tests
             Assert.Throws<FormatException>(() =>
                 VufCrossFactoryContractWindow.ParseEvents(
                     Wire("1|"+id+"|1|"+key+"|1|0:8:0\n",1),Parse()));
+        }
+
+        [Test]
+        public void ExplicitPrototypeArtMayBindOnlyExactLfxSourceCellIds()
+        {
+            var draft=Parse();
+            var asset=new VisualAssetManifest.Asset {
+                asset_id="Coral_Rescue.sample.tile_01",
+                path="sprites/sample_tile_01.png",
+                rights="REVIEW_PENDING",state="CANDIDATE",
+                source_receipt="MATHEMATICAL_PLACEHOLDER_NOT_FINAL",
+                sha256=new string('a',64)
+            };
+            var verified=new VufCrossFactoryImportedArt.VerifiedPack {
+                Manifest=new VisualAssetManifest {
+                    profile_id="Coral_Rescue",stage="TEST_ONLY",
+                    assets=new[] {asset}
+                },
+                ImportedFolder="Assets/Editor/VUF_ReviewImports/unapproved",
+                ById=new Dictionary<string,VisualAssetManifest.Asset> {
+                    {asset.asset_id,asset}
+                }
+            };
+            Assert.DoesNotThrow(() =>
+                VufCrossFactoryImportedArt.ValidateOwnerMapping(
+                    draft,verified,"gem.猫",asset.asset_id));
+            Assert.Throws<ArgumentException>(() =>
+                VufCrossFactoryImportedArt.ValidateOwnerMapping(
+                    draft,verified,"gem.invented",asset.asset_id));
+            Assert.Throws<ArgumentException>(() =>
+                VufCrossFactoryImportedArt.ValidateOwnerMapping(
+                    draft,verified,"gem.猫","Coral_Rescue.sample.fake"));
+            verified.Manifest.profile_id="Dino_Islands";
+            Assert.Throws<ArgumentException>(() =>
+                VufCrossFactoryImportedArt.ValidateOwnerMapping(
+                    draft,verified,"gem.猫",asset.asset_id));
+        }
+
+        [Test]
+        public void SourceArtMappingFailsBeforeAnyUnverifiedSpriteIsLoaded()
+        {
+            var draft=Parse();
+            var board=VufCrossFactoryContractWindow.BuildRealDraftBoard(draft);
+            var owned=new List<Sprite>();
+            try
+            {
+                Assert.Throws<ArgumentException>(() =>
+                    VufCrossFactoryImportedArt.ApplyExplicitSourceBindings(
+                        board,draft,null,
+                        new Dictionary<string,string>(),owned));
+                Assert.Throws<ArgumentException>(() =>
+                    VufCrossFactoryImportedArt.ApplyExplicitSourceBindings(
+                        board,draft,
+                        new VufCrossFactoryImportedArt.VerifiedPack {
+                            Manifest=new VisualAssetManifest {
+                                profile_id="Coral_Rescue" },
+                            ById=new Dictionary<string,VisualAssetManifest.Asset>()
+                        },
+                        new Dictionary<string,string> {
+                            {"invented.source","Coral_Rescue.sample.fake"} },owned));
+                Assert.That(owned.Count, Is.Zero);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(board); }
         }
 
         [Test]
