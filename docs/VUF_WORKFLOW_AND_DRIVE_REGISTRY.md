@@ -2,6 +2,20 @@
 
 > This is a WORKFLOW/FILE NAVIGATION document, NOT a second task tracker. Root `TASKS.md` is the sole task authority (137 frozen VUF-MXX-NNN IDs). All retrospective audit files listed below were created on 2026-10-20 and are NOT backdated historic approvals.
 
+## 2026-10-20 | Current M02 source checkpoint
+
+Forward M02 audit criteria filed before new source code:
+https://docs.google.com/document/d/1nCrHF5gfk6rVgreEWA6D4TqTERR5wQOBgTt9Ij0LL_c/edit
+
+Current GitHub M02 source/development log:
+https://docs.google.com/document/d/1wjjAzcDpJ0wbt5ZVhlaXuKKgWcKeYKXl7EWQqtnf51U/edit
+
+New independent M02 assets: five written SOURCE draft Style Bibles, versioned original-art source requirements, source/style identity compiler, native Editor swatch/contrast/device-token Studio and 15 Python + 6 Unity newly authored (not executed) regression tests. No licensed art approval or real device signoff. The original 137 tasks retain 84 marked complete and 53 open.
+
+Codex safe owner-local sync prompt:
+https://docs.google.com/document/d/1ci5INfPNLQaFoiAVVXetbJ7bp7u4C6RoC8Kcr6hd808/edit
+Local HEAD/origin/main equality is still UNVERIFIED pending real Codex run.
+
 ## Source of truth and roles
 
 - Owner: priorities, creator/original-art/licence signoff, real GUI, device and final release approvals.
