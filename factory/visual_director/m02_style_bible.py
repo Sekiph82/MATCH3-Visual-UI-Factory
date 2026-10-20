@@ -88,6 +88,8 @@ def _check_tokens(common: dict):
             "SYSTEM_FALLBACK_ONLY_UNTIL_CREATOR_PROOF"
             or type(common["min_touch_dp"]) is not int or
             common["min_touch_dp"] < 44 or common["min_touch_dp"] > 72
+            or type(common["min_body_contrast_ratio"]) not in (int, float)
+            or type(common["min_large_text_contrast_ratio"]) not in (int, float)
             or common["min_body_contrast_ratio"] < 4.5
             or common["min_large_text_contrast_ratio"] < 3):
         raise StyleBibleError("design accessibility, stage or font provenance spoof")
@@ -110,7 +112,8 @@ def _check_tokens(common: dict):
                 ("columns_phone", "columns_tablet", "gutter_dp",
                  "outer_margin_phone_dp", "outer_margin_tablet_dp"))
     grid = common["grid"]
-    if (grid["columns_phone"] != 4 or grid["columns_tablet"] != 8 or
+    if (any(type(v) is not int for v in grid.values()) or
+            grid["columns_phone"] != 4 or grid["columns_tablet"] != 8 or
             grid["gutter_dp"] < 12 or grid["outer_margin_phone_dp"] < 12 or
             grid["outer_margin_tablet_dp"] < 24):
         raise StyleBibleError("invalid safe-area grid")
@@ -203,7 +206,9 @@ def compile_bibles(style_source: bytes | None = None,
     _check_keys(styles, ("schema_version", "status", "common", "profiles"))
     if (styles["schema_version"] != 1 or type(styles["schema_version"]) is not int or
             styles["status"] != "DRAFT_NOT_OWNER_APPROVED" or
-            styles["common"].get("minimum_touch_target_dp", 0) < 44 or
+            not isinstance(styles["common"], dict) or
+            type(styles["common"].get("minimum_touch_target_dp")) is not int or
+            styles["common"]["minimum_touch_target_dp"] < 44 or
             styles["common"].get("tile_silhouettes") != list(SHAPES) or
             styles["common"].get("reduced_motion") is not True or
             styles["common"].get("no_flattened_interactive_ui") is not True):
