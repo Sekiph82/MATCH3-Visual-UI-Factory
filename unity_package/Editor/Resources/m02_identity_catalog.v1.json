@@ -1,0 +1,370 @@
+{
+  "common": {
+    "schema_version": 1,
+    "stage": "DRAFT_IDENTITY_CONTRACT_OWNER_ART_NOT_PROVIDED",
+    "reference_style_document": "factory/visual_director/style_profiles.v1.json",
+    "font_license_status": "SYSTEM_FALLBACK_ONLY_UNTIL_CREATOR_PROOF",
+    "min_touch_dp": 44,
+    "min_body_contrast_ratio": 4.5,
+    "min_large_text_contrast_ratio": 3,
+    "typography_dp": {
+      "hero": 40,
+      "page_title": 30,
+      "section": 24,
+      "body": 17,
+      "caption": 14,
+      "button": 17
+    },
+    "spacing_dp": [
+      4,
+      8,
+      12,
+      16,
+      24,
+      32,
+      48
+    ],
+    "corner_radius_dp": {
+      "card": 18,
+      "modal": 24,
+      "button": 16,
+      "pill": 999
+    },
+    "grid": {
+      "columns_phone": 4,
+      "columns_tablet": 8,
+      "gutter_dp": 16,
+      "outer_margin_phone_dp": 16,
+      "outer_margin_tablet_dp": 32
+    },
+    "screen_modes": [
+      {
+        "id": "compact_phone",
+        "width_dp": 320,
+        "height_dp": 568,
+        "min_safe_top_dp": 0,
+        "min_safe_bottom_dp": 0
+      },
+      {
+        "id": "tall_phone",
+        "width_dp": 393,
+        "height_dp": 852,
+        "min_safe_top_dp": 24,
+        "min_safe_bottom_dp": 24
+      },
+      {
+        "id": "large_phone",
+        "width_dp": 430,
+        "height_dp": 932,
+        "min_safe_top_dp": 24,
+        "min_safe_bottom_dp": 24
+      },
+      {
+        "id": "portrait_tablet",
+        "width_dp": 768,
+        "height_dp": 1024,
+        "min_safe_top_dp": 24,
+        "min_safe_bottom_dp": 16
+      }
+    ],
+    "responsive_rules": [
+      "Never crop interaction labels into scenery assets",
+      "Use semantic text nodes; RTL mirroring is not claimed",
+      "EN/TR and stress copy wrap, never bake gameplay labels into images",
+      "All 8 draft UI states have distinguishable text + shape",
+      "Respect notched phone and portrait tablet safe area",
+      "All interactive controls >=44dp; clear disabled reason",
+      "Reduced motion preserves state meaning without temporal effects"
+    ],
+    "owner_auth": {
+      "all_approved": false,
+      "original_art_received": false,
+      "font_rights_verified": false,
+      "device_visual_qa_verified": false,
+      "engine_lfx_gameplay_verified": false,
+      "production_release_allowed": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "Coral_Rescue",
+      "bible_title": "Reef Renaissance",
+      "creative_direction": "Ocean restoration, buoyant silhouettes, turquoise depth and tactile coral growth.",
+      "surface_material": "soft_shell",
+      "mascot_role": "dolphin_guide",
+      "world_restoration_identity": "restored_reef",
+      "particle_language": "bubble",
+      "lighting_finish": "Three-dimensional ceramic shell highlights, feathered cyan caustics, layered reef silhouettes",
+      "symbol_silhouettes": [
+        "heart_bubble",
+        "fin",
+        "spiral_shell",
+        "branching_coral",
+        "reef_arch"
+      ],
+      "original_reference_requirements": [
+        "mascot_dolphin_reference",
+        "reef_fish_companion",
+        "coral_growth_families",
+        "restoration_background_layers",
+        "ocean_ui_icons",
+        "reef_tile_symbols"
+      ],
+      "required_character_poses": [
+        "idle",
+        "greet",
+        "celebrate",
+        "concerned",
+        "action"
+      ],
+      "master_sheet_slots": [
+        "original_character_turnaround",
+        "original_silhouette_swatch",
+        "component_palette_board",
+        "world_depth_map",
+        "icon_geometry_board"
+      ],
+      "forbidden_visual_patterns": [
+        "Never trace marine-licence imagery or reuse POVU-owned character sheets as game-original art without verified permission.",
+        "Avoid intrusive urgency, microcopy baked into reef backgrounds, and opaque coral-over-hud overlays."
+      ],
+      "ui_components": [
+        "primary_cta",
+        "secondary_cta",
+        "card",
+        "modal",
+        "badge",
+        "counter",
+        "tab",
+        "progress",
+        "disabled_reason",
+        "pending_state"
+      ],
+      "right_to_use": "NO_OWNER_ORIGINAL_ASSET_OR_FONT_LICENCE_EVIDENCE"
+    },
+    {
+      "id": "Garage_Legends",
+      "bible_title": "Workshop Precision",
+      "creative_direction": "Premium workshop tactility, automotive restoration and readable plated metal.",
+      "surface_material": "brushed_enamel",
+      "mascot_role": "mechanic_guide",
+      "world_restoration_identity": "restored_vehicle",
+      "particle_language": "spark",
+      "lighting_finish": "Deep graphite frames, enamel part badges, controlled orange spark highlights",
+      "symbol_silhouettes": [
+        "wrench",
+        "gear",
+        "hex_bolt",
+        "wheel",
+        "piston"
+      ],
+      "original_reference_requirements": [
+        "mechanic_character_reference",
+        "vehicle_family_model_views",
+        "tool_and_part_master_icons",
+        "garage_background_layers",
+        "upgrade_badges",
+        "garage_tile_symbols"
+      ],
+      "required_character_poses": [
+        "idle",
+        "greet",
+        "celebrate",
+        "concerned",
+        "action"
+      ],
+      "master_sheet_slots": [
+        "original_character_turnaround",
+        "original_silhouette_swatch",
+        "component_palette_board",
+        "world_depth_map",
+        "icon_geometry_board"
+      ],
+      "forbidden_visual_patterns": [
+        "Original vehicle shapes must not copy protected manufacturer logos or trademarks.",
+        "Do not confuse item quality with a paid upsell or obscure controls with chrome glare."
+      ],
+      "ui_components": [
+        "primary_cta",
+        "secondary_cta",
+        "card",
+        "modal",
+        "badge",
+        "counter",
+        "tab",
+        "progress",
+        "disabled_reason",
+        "pending_state"
+      ],
+      "right_to_use": "NO_OWNER_ORIGINAL_ASSET_OR_FONT_LICENCE_EVIDENCE"
+    },
+    {
+      "id": "Dino_Islands",
+      "bible_title": "Living Archipelago",
+      "creative_direction": "Friendly discovery with living creatures, sculpted eggs and botanical habitat layers.",
+      "surface_material": "clay_leaf",
+      "mascot_role": "juvenile_dino_guide",
+      "world_restoration_identity": "island_habitat",
+      "particle_language": "leaf",
+      "lighting_finish": "Touchable clay volumes, moss/light green depth, friendly fossiled edges",
+      "symbol_silhouettes": [
+        "egg",
+        "fern",
+        "claw",
+        "fossil",
+        "leaf"
+      ],
+      "original_reference_requirements": [
+        "juvenile_dino_identity_reference",
+        "dinosaur_hatchling_family",
+        "egg_and_fossil_icons",
+        "prehistoric_habitat_layers",
+        "island_map_landmarks",
+        "dino_tile_symbols"
+      ],
+      "required_character_poses": [
+        "idle",
+        "greet",
+        "celebrate",
+        "concerned",
+        "action"
+      ],
+      "master_sheet_slots": [
+        "original_character_turnaround",
+        "original_silhouette_swatch",
+        "component_palette_board",
+        "world_depth_map",
+        "icon_geometry_board"
+      ],
+      "forbidden_visual_patterns": [
+        "Avoid species identity drift across poses and giant scary creature faces in family-facing UI.",
+        "Never use color as the only egg differentiation or cover the tap hitbox with foliage."
+      ],
+      "ui_components": [
+        "primary_cta",
+        "secondary_cta",
+        "card",
+        "modal",
+        "badge",
+        "counter",
+        "tab",
+        "progress",
+        "disabled_reason",
+        "pending_state"
+      ],
+      "right_to_use": "NO_OWNER_ORIGINAL_ASSET_OR_FONT_LICENCE_EVIDENCE"
+    },
+    {
+      "id": "The_Fractured_Realms",
+      "bible_title": "Elemental Threshold",
+      "creative_direction": "Faceted magical worlds with runic silhouettes and restrained luminous portals.",
+      "surface_material": "faceted_stone",
+      "mascot_role": "elemental_guardian",
+      "world_restoration_identity": "realm_portal",
+      "particle_language": "rune",
+      "lighting_finish": "Satin stone + finely controlled violet emission, distinct element shape and rune",
+      "symbol_silhouettes": [
+        "rune_fire",
+        "rune_water",
+        "rune_earth",
+        "rune_air",
+        "portal"
+      ],
+      "original_reference_requirements": [
+        "elemental_guardian_turnaround",
+        "realm_element_glyphs",
+        "portal_original_constructs",
+        "fantasy_landscape_layers",
+        "relic_and_goal_icons",
+        "realm_tile_symbols"
+      ],
+      "required_character_poses": [
+        "idle",
+        "greet",
+        "celebrate",
+        "concerned",
+        "action"
+      ],
+      "master_sheet_slots": [
+        "original_character_turnaround",
+        "original_silhouette_swatch",
+        "component_palette_board",
+        "world_depth_map",
+        "icon_geometry_board"
+      ],
+      "forbidden_visual_patterns": [
+        "Do not imitate recognizable game franchise crests, spell circles, or copyrighted rune alphabets.",
+        "Reduced-motion must retain portal state clarity even with glow effects fully disabled."
+      ],
+      "ui_components": [
+        "primary_cta",
+        "secondary_cta",
+        "card",
+        "modal",
+        "badge",
+        "counter",
+        "tab",
+        "progress",
+        "disabled_reason",
+        "pending_state"
+      ],
+      "right_to_use": "NO_OWNER_ORIGINAL_ASSET_OR_FONT_LICENCE_EVIDENCE"
+    },
+    {
+      "id": "Wonder_Pop",
+      "bible_title": "Gentle Toybox",
+      "creative_direction": "Calm accessible exploration and warm geometry without aggressive reward pressure.",
+      "surface_material": "matte_toy",
+      "mascot_role": "friendly_star_guide",
+      "world_restoration_identity": "toy_garden",
+      "particle_language": "confetti",
+      "lighting_finish": "Soft-plastic matte blocks, expressive stars, tactile high contrast with text labels",
+      "symbol_silhouettes": [
+        "star",
+        "ribbon",
+        "kite",
+        "toy_cube",
+        "smile"
+      ],
+      "original_reference_requirements": [
+        "star_mascot_original_reference",
+        "friendly_toy_friends",
+        "toy_part_pictograms",
+        "toybox_background_layers",
+        "gentle_collection_icons",
+        "wonder_tile_symbols"
+      ],
+      "required_character_poses": [
+        "idle",
+        "greet",
+        "celebrate",
+        "concerned",
+        "action"
+      ],
+      "master_sheet_slots": [
+        "original_character_turnaround",
+        "original_silhouette_swatch",
+        "component_palette_board",
+        "world_depth_map",
+        "icon_geometry_board"
+      ],
+      "forbidden_visual_patterns": [
+        "No child public chat/social or targeted pressure; never use countdown purchase badges or fake scarcity.",
+        "No adult ad/social pressure, flashing strobes, randomized monetization cues or hue-only game objectives."
+      ],
+      "ui_components": [
+        "primary_cta",
+        "secondary_cta",
+        "card",
+        "modal",
+        "badge",
+        "counter",
+        "tab",
+        "progress",
+        "disabled_reason",
+        "pending_state"
+      ],
+      "right_to_use": "NO_OWNER_ORIGINAL_ASSET_OR_FONT_LICENCE_EVIDENCE"
+    }
+  ]
+}
