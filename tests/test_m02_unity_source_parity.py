@@ -27,10 +27,7 @@ class M02UnitySourceParityTests(unittest.TestCase):
                       "ValidateAndParse(", "ValidateOriginalPalette(",
                       "M02 Five-Game Style Bible and Art Identity Studio",
                       "master_sheet_slots", "required_character_poses",
-                      "source_material",):
-            # Source material is optional: use semantic source material field.
-            if token=="source_material":
-                token="surface_material"
+                      "surface_material",):
             with self.subTest(symbol=token):self.assertIn(token,editor)
         self.assertNotIn("SaveAsPrefabAsset",editor)
         self.assertNotIn("AssetDatabase.CreateAsset",editor)
@@ -44,8 +41,7 @@ class M02UnitySourceParityTests(unittest.TestCase):
             self.assertIn(item,validator)
         files=[
             EDITOR/"VufM02StyleBibleStudioWindow.cs.meta",
-            EDITOR/"Tests"/"../X" if False else
-                ROOT/"unity_package"/"Tests"/"Editor"/
+            ROOT/"unity_package"/"Tests"/"Editor"/
                 "VufM02StyleBibleEditModeTests.cs.meta",
             EDITOR/"Resources"/"m02_identity_catalog.v1.json.meta",
         ]
