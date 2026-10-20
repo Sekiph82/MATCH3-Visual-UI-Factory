@@ -718,3 +718,18 @@ Previously verified VUF full Python 478 PASS/9 Win symlink SKIP and Unity
 162/162 PASS were tied to old SHA fc730578, not this new batch.
 Single whole integration Codex QA prompt:
 https://docs.google.com/document/d/1vj3LOFdJVoXw6KmB1eBtrQc5jWRRbDBSojcBpdv6yuU/edit
+
+## 2026-10-20 | M02 original five-theme Style Bible source implementation
+
+**Owner sequence:** resume independent Visual Factory M02→M03→M04–M06→M07–M09 before final three-factory integration. ONLY original root TASKS.md controls 137 frozen IDs. No commercial font, externally sourced art, paid provider, copied copyright logos or new Engine/LFX code.
+
+**Original existing source read/reused before new code:** `factory/visual_director/style_profiles.v1.json` (five draft game palettes, accessible shape languages, Wonder_Pop social/pressure/urgency restrictions) **unchanged**; `factory/visual_director/silhouette_kit.py` (actual original mathematical six-tile prototypes, not human premium art); `factory/visual_director/character_pose_review.py` (existing original owner artist six-PNG reference/5-pose SHA-only review, NOT creative/legal identity approval); `unity_package/Editor/VufScreenCatalog.cs` (loads actual original palette under UPM Editor Resources); `VufResponsiveGeometry.cs` (synthetic device bounds, no actual GPU); `VufTypographyLabWindow.cs` (source text test only); `Tools/validate_repo_structure.py` (Unity GUID uniqueness).
+
+**INTERNAL_REUSE / MINIMAL_ADAPTER, actual new source:**
+- `factory/visual_director/m02_identity_catalog.v1.json`: unique five-game original asset family requirements, symbol/geometric identities, 5 consistent artist poses, source intent for real master sheets, semantic UI common primitives, typography/grid/4 simulated device safe areas/44dp targets, explicit original art/font/owner/device/Engine production booleans FALSE. It has NO licensed original PNG, font or generated final character art.
+- `factory/visual_director/m02_style_bible.py`: original palette SHA-pinned real source compiler with independent high contrast ratios, exact 5 profiles and family-safe Wonder_Pop policy, fail-closed malformed source and forged approvals, only NEW explicit external review folder 5 JSON+checksum export. Does not overwrite owner originals, game source or import fonts.
+- `docs/style_bibles/...`: five detailed owner-review source Style Bibles, not signed art masters; editable typography/layout token guides and required original creator-supplied image lists.
+- `unity_package/Editor/VufM02StyleBibleStudioWindow.cs` and `Editor/Resources/m02_identity_catalog.v1.json`: Unity Editor-only actual five style/contrast swatches, token and original artist requirement review using inherited palette loader; TextScriptImporter/unique .meta GUIDs and no scene/player gameplay mutation.
+- `tests/test_m02_style_bible.py` 12 Python authored, `tests/test_m02_unity_source_parity.py` 3 Python authored and `VufM02StyleBibleEditModeTests.cs` 6 Unity NUnit authored. On current commit THESE TESTS ARE NOT EXECUTED in actual Windows/Unity yet. Historical 490 Python/172 Unity applies ONLY prior VUF SHA 3383fe9; no M02 local PASS claimed.
+
+**Pre-code forward criteria:** https://docs.google.com/document/d/1nCrHF5gfk6rVgreEWA6D4TqTERR5wQOBgTt9Ij0LL_c/edit . **True developer log:** https://docs.google.com/document/d/1wjjAzcDpJ0wbt5ZVhlaXuKKgWcKeYKXl7EWQqtnf51U/edit . **Owner safe Codex local sync prompt:** https://docs.google.com/document/d/1ci5INfPNLQaFoiAVVXetbJ7bp7u4C6RoC8Kcr6hd808/edit . Original M02-001..006,013 remain open for owner original master artwork, font rights, signed art identity and real GUI/device/new full local test. No new milestone IDs.
