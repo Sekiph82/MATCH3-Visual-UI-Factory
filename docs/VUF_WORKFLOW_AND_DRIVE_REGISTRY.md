@@ -42,6 +42,22 @@ semantic UI candidate kit and M04 original/candidate source-pin comparison.
 - Post-GitHub local sync still requires the EXISTING safe ff-only Codex
   prompt: https://docs.google.com/document/d/1ci5INfPNLQaFoiAVVXetbJ7bp7u4C6RoC8Kcr6hd808/edit .
 
+## 2026-10-21 | M05 native SpriteAtlas V2 source importer read-only audit
+
+Added source inspection in `VufSpriteAtlasV2Window.ReadImportedSettings`:
+checks real already-imported Sprite/PNG source GUID, size, pivot, border,
+PPU, mipmap/alpha and read-only iPhone/Android override flags without
+altering `TextureImporter`, source art, or game assets. On multi-sprite
+mode individual slice pivots remain explicitly NOT VERIFIED. Two new
+Unity NUnit and one Python source tests AUTHORED but NOT RUN; original
+M05-M05-004/013 task gates remain OPEN. Forward prospective criterion
+attached before code in
+[existing M05 rubric](https://docs.google.com/document/d/1MAkU5QKy-cZqxjRmyW1q2O9jfl8oJ-eCdKmkHFXz1FQ/edit),
+source history appended in
+[M05 developer log](https://docs.google.com/document/d/1aXqe-dFCdkzFdWzh0p-OZD-nzyQDrbMLFSHBgGpeRSA/edit).
+Source usage: `docs/M05_UNITY_ATLAS_READ_ONLY_IMPORT_AUDIT.md`.
+No local Windows/Unity/real device QA or owner rights approval claimed.
+
 ## Source of truth and roles
 
 - Owner: priorities, creator/original-art/licence signoff, real GUI, device and final release approvals.
