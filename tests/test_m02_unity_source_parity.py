@@ -56,5 +56,23 @@ class M02UnitySourceParityTests(unittest.TestCase):
         self.assertEqual(len(set(guids)),3)
 
 
+    def test_source_grid_reuses_vf08_geometry_and_remains_readonly(self):
+        editor=(EDITOR/"VufM02StyleBibleStudioWindow.cs").read_text("utf-8")
+        tests=(ROOT/"unity_package"/"Tests"/"Editor"/
+               "VufM02StyleBibleEditModeTests.cs").read_text("utf-8")
+        for token in ("BuildSourceGridGuide(", "VufResponsiveGeometry.Device(",
+                      "DrawSourceGridPreview(", "min_touch_dp",
+                      "mode.min_safe_top_dp", "mode.min_safe_bottom_dp",
+                      "ToPreviewRect(", "guide.MinimumTap"):
+            with self.subTest(source=token):
+                self.assertIn(token,editor)
+        for name in ("SourceGridGuidesFitFourPortraitDesignTokens",
+                     "SourceGridGuideRejectsImpossibleTouchGeometry"):
+            self.assertIn(name,tests)
+        self.assertNotIn("AssetDatabase.SaveAssets",editor)
+        self.assertNotIn("PlayerPrefs",editor)
+        self.assertNotIn("GameObject.AddComponent",editor)
+
+
 if __name__=="__main__":
     unittest.main()
