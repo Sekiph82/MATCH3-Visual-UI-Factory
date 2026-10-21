@@ -111,3 +111,37 @@ art states/master SHA/legal consent, manual Editor SpriteAtlas 1×/2×/3×
 pixel/bleeding review, physical device textures/GPU and owner signoff
 have not occurred. The already completed historical M05-015 Codex
 test was tied to its older exact SHA; it cannot certify new sources.
+
+## 2026-10-21 | Codex successful exact-SHA full regression / Engine CRLF source root cause
+
+Verified Codex readback [M03/M05 full QA report](https://docs.google.com/document/d/15hTwJzKMomuDmPx0I3RJhbt2weEWVOC0_RcxgMMkLpk/edit) at **`11d7e6d25664d24ea93a370ba2d0fc200e61b6a2`**:
+Python 3.12.10 **543 total, 534 PASS, 9 Windows symlink SKIP, 0 FAIL/ERROR**;
+actual Unity 6000.6.5f1 EditMode **187/187 PASS**, Atlas V2 **7/7 PASS**.
+These are true Codex-run outcomes at that exact prior SHA and must never be
+carried forward as executed tests for later source commits. Actual multi-slice
+fixture, native interactive GUI, original owner art and devices still OPEN.
+
+Local Engine checkout has `CRLF` worktree source while HEAD blobs are
+canonical `LF`: all FOUR Engine HEAD enum blob hashes equal original VUF pins,
+while byte hashing the checkout returns different blob digests due to EOL.
+This is **transport encoding**, not proof of Engine enum contract drift.
+It is not permission to modify dirty Engine checkout (reported 1 modified and
+3,944 untracked owner paths). We must not lower exact Git blob pin checks.
+
+Narrow VUF-only fix: `m05_engine_kind_intake.py` gains
+`_canonical_checkout_source_eol` and
+`read_pinned_engine_sources_with_receipts`. They accept exact pinned
+bytes or only a *pure CRLF* worktree whose **in-memory CRLF->LF** result
+has the exact pinned Git blob SHA. Mixed newline, bare CR, byte mutation,
+nonmatching pin or source path identity fail closed. Receipts disclose the
+raw checkout blob SHA, canonical pinned Git SHA and mode
+`PURE_CRLF_NORMALIZED_IN_MEMORY`; no working file/Git operations or
+cross-repo writes. Public `read_pinned_engine_sources` retains the
+original dict-only API, and the CLI adds `engine_checkout_eol_receipts`.
+Four more Python regression methods cover exact-LF, pure-CRLF, negative EOL
+and read-only source invariants. **All these additional source changes and
+tests are authored, NOT YET TESTED by owner-local Codex/Unity.**
+
+This EOL evidence does **not** establish actual host registry definition
+IDs, ENG-M12/ENG-M24 gameplay parity, multi-slice Editor behavior,
+licensed artwork, physical device texture rendering or release permission.
