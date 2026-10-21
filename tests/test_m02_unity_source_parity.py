@@ -63,7 +63,8 @@ class M02UnitySourceParityTests(unittest.TestCase):
         for token in ("BuildSourceGridGuide(", "VufResponsiveGeometry.Device(",
                       "DrawSourceGridPreview(", "min_touch_dp",
                       "mode.min_safe_top_dp", "mode.min_safe_bottom_dp",
-                      "ToPreviewRect(", "guide.MinimumTap"):
+                      "ToPreviewRect(", "guide.MinimumTap",
+                      "GetAccessibleSymbolInk(", "usesTextInk"):
             with self.subTest(source=token):
                 self.assertIn(token,editor)
         for name in ("SourceGridGuidesFitFourPortraitDesignTokens",
