@@ -275,6 +275,46 @@ namespace Match3.VisualFactory.Editor
 
         private void OnDisable() { DisposePreview(); }
 
+        // Synthetic Editor diagram only. The native GameObject hierarchy
+        // remains the authoritative source prototype; this is NOT a GameView
+        // capture, font-fit proof, or physical device rendering.
+        private void DrawSourceSchematic(string profileId, bool tablet)
+        {
+            var palette = VufScreenCatalog.LoadStyle(profileId).palettes;
+            var surface = VufScreenCatalog.ParseColor(palette.surface, "surface");
+            var accent = VufScreenCatalog.ParseColor(palette.cta, "cta");
+            var ink = VufScreenCatalog.ParseColor(palette.text, "text");
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField(
+                "Source-only semantic widget wireframe (NOT actual device render)",
+                EditorStyles.boldLabel);
+            var frame = GUILayoutUtility.GetRect(140f, tablet ? 200f : 310f,
+                GUILayout.ExpandWidth(true));
+            EditorGUI.DrawRect(frame, surface);
+            int cols = tablet ? 4 : 2;
+            int rows = (Semantics.Length + cols - 1) / cols;
+            float padding = 12f;
+            float gap = 7f;
+            float w = (frame.width - padding * 2f - gap * (cols - 1)) / cols;
+            float h = (frame.height - padding * 2f - gap * (rows - 1)) / rows;
+            var labelStyle = new GUIStyle(EditorStyles.centeredGreyMiniLabel) {
+                wordWrap = true, alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = ink }
+            };
+            for (int i = 0; i < Semantics.Length; i++)
+            {
+                var r = new Rect(
+                    frame.x + padding + (i % cols) * (w + gap),
+                    frame.y + padding + (i / cols) * (h + gap), w, h);
+                EditorGUI.DrawRect(r, i == 0 ? accent :
+                    new Color(surface.r, surface.g, surface.b, .75f));
+                GUI.Label(r, Semantics[i].Replace('_', ' '), labelStyle);
+            }
+            EditorGUILayout.LabelField(
+                "Draft only: rights/owner art/real buttons/Engine actions NOT approved.",
+                EditorStyles.wordWrappedMiniLabel);
+        }
+
         private void OnGUI()
         {
             EditorGUILayout.LabelField(
@@ -323,6 +363,8 @@ namespace Match3.VisualFactory.Editor
             EditorGUILayout.LabelField(
                 profile.bible_title + " | " + profile.surface_material,
                 EditorStyles.boldLabel);
+            DrawSourceSchematic(Profiles[profileIndex],
+                catalog.common.screen_modes[deviceIndex].id == "portrait_tablet");
             foreach (var key in Semantics)
                 EditorGUILayout.LabelField(
                     key + "   •   EDITABLE uGUI CANDIDATE / NO ENGINE ACTION");
