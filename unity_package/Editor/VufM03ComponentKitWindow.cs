@@ -153,7 +153,16 @@ namespace Match3.VisualFactory.Editor
                 input.common.owner_auth == null ||
                 input.common.owner_auth.all_approved ||
                 input.common.owner_auth.original_art_received ||
+                input.common.owner_auth.font_rights_verified ||
+                input.common.owner_auth.device_visual_qa_verified ||
+                input.common.owner_auth.engine_lfx_gameplay_verified ||
                 input.common.owner_auth.production_release_allowed ||
+                input.common.stage !=
+                    VufM02StyleBibleStudioWindow.ExpectedStage ||
+                input.common.font_license_status !=
+                    "SYSTEM_FALLBACK_ONLY_UNTIL_CREATOR_PROOF" ||
+                input.common.screen_modes == null ||
+                input.common.screen_modes.Length != 4 ||
                 input.profiles == null || input.profiles.Length != Profiles.Length ||
                 Array.IndexOf(Profiles, profileId) < 0 ||
                 Array.IndexOf(VufReviewStateCatalog.States, mockState) < 0 ||
