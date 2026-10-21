@@ -9,8 +9,12 @@ MATCH3_ENGINE repository. Git blob SHA verifies provenance, not an ABI release.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
+import json
 import re
+import stat
+from pathlib import Path
 from collections.abc import Mapping
 
 from factory.visual_director.special_skin_map import PROFILES
@@ -165,3 +169,64 @@ def draft_five_title_role_bindings(original_engine_sources: Mapping[str, bytes])
         "owner_approved": False,
         "release_allowed": False,
     }
+
+
+def _link_or_junction(path: Path) -> bool:
+    if path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction()):
+        return True
+    try:
+        details = path.stat(follow_symlinks=False)
+    except OSError as exc:
+        raise EngineKindError("unable to inspect Engine source path") from exc
+    return bool(getattr(details, "st_file_attributes", 0) &
+                getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+
+
+def read_pinned_engine_sources(runtime_directory: Path) -> dict[str, bytes]:
+    """Read known source files from a separate trusted Engine checkout ONLY."""
+    folder = Path(runtime_directory)
+    if (not folder.is_dir() or _link_or_junction(folder) or
+            folder.name != "Runtime" or
+            folder.parent.name != "com.match3.engine" or
+            folder.parent.parent.name != "Packages"):
+        raise EngineKindError("must select real local Engine Packages/.../Runtime")
+    repo_root = Path(__file__).resolve().parents[2]
+    if folder.resolve().is_relative_to(repo_root):
+        raise EngineKindError("Engine original source must not be copied into VUF")
+    if any(_link_or_junction(p) for p in folder.parents if p.exists()):
+        raise EngineKindError("linked/junction Engine ancestor refused")
+    inputs = {}
+    for full_path in sorted(SOURCE_PINS):
+        source = folder / full_path.rsplit("/", 1)[-1]
+        if source.is_symlink() or not source.is_file() or _link_or_junction(source):
+            raise EngineKindError("missing/untrusted original Engine C# source")
+        before = source.stat()
+        if not 0 < before.st_size <= MAX_BYTES_PER_SOURCE:
+            raise EngineKindError("Engine source has unsafe byte size")
+        data = source.read_bytes()
+        after = source.stat()
+        if (before.st_size != after.st_size or
+                before.st_mtime_ns != after.st_mtime_ns or
+                len(data) != before.st_size):
+            raise EngineKindError("Engine source changed during read-only audit")
+        inputs[full_path] = data
+    return inputs
+
+
+def main(argv=None) -> int:
+    cli = argparse.ArgumentParser(description=__doc__)
+    cli.add_argument("--engine-runtime", required=True, type=Path,
+                     help="External sibling MATCH3_ENGINE Packages/.../Runtime")
+    args = cli.parse_args(argv)
+    try:
+        sources = read_pinned_engine_sources(args.engine_runtime)
+        report = inspect_pinned_engine_kinds(sources)
+        report["five_game_role_candidates"] = draft_five_title_role_bindings(sources)
+        print(json.dumps(report, sort_keys=True, indent=2))
+        return 0
+    except (EngineKindError, OSError) as exc:
+        cli.exit(2, "M05_ENGINE_SOURCE_BLOCKED: " + str(exc) + "\\n")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
