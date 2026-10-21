@@ -10,7 +10,8 @@ from factory.visual_director.m05_engine_kind_intake import (
     PATH_ROOT, REQUIRED_ENUMS, SOURCE_PINS, EngineKindError,
     _inspect, draft_five_title_role_bindings, git_blob_sha,
     inspect_pinned_engine_kinds, parse_declared_enum,
-    read_pinned_engine_sources,
+    read_pinned_engine_sources, _canonical_checkout_source_eol,
+    read_pinned_engine_sources_with_receipts,
 )
 
 
@@ -91,6 +92,63 @@ class M05EngineKindIntakeTests(unittest.TestCase):
         forged_pins = {p: git_blob_sha(b) for p, b in altered.items()}
         with self.assertRaises(EngineKindError):
             _inspect(altered, forged_pins)
+
+    def test_exact_lf_source_yields_exact_blob_and_no_authority(self):
+        raw = self.sources[PATH_ROOT + "GoalScoreContracts.cs"]
+        canonical, receipt = _canonical_checkout_source_eol(
+            raw, git_blob_sha(raw))
+        self.assertEqual(canonical, raw)
+        self.assertEqual(receipt["checkout_transport_eol"], "EXACT_PINNED_BYTES")
+        self.assertEqual(receipt["raw_checkout_blob_sha1"], git_blob_sha(raw))
+        self.assertTrue(receipt["canonical_bytes_match_pin"])
+        self.assertFalse(receipt["final_registry_ids_verified"])
+        self.assertFalse(receipt["release_allowed"])
+        self.assertFalse(receipt["worktree_file_modified"])
+
+    def test_pure_windows_crlf_equivalent_normalized_only_in_memory(self):
+        original = self.sources[PATH_ROOT + "GoalScoreContracts.cs"]
+        windows = original.replace(b"\\n", b"\\r\\n")
+        self.assertNotEqual(git_blob_sha(windows), git_blob_sha(original))
+        canonical, receipt = _canonical_checkout_source_eol(
+            windows, git_blob_sha(original))
+        self.assertEqual(canonical, original)
+        self.assertEqual(receipt["checkout_transport_eol"],
+                         "PURE_CRLF_NORMALIZED_IN_MEMORY")
+        self.assertEqual(receipt["canonical_git_blob_sha1"], git_blob_sha(original))
+        self.assertEqual(receipt["raw_checkout_blob_sha1"], git_blob_sha(windows))
+        self.assertFalse(receipt["worktree_file_modified"])
+        self.assertFalse(receipt["release_allowed"])
+
+    def test_mixed_eol_or_lone_cr_or_mismatched_pinned_bytes_fail_closed(self):
+        original = self.sources[PATH_ROOT + "GoalScoreContracts.cs"]
+        good_crlf = original.replace(b"\\n", b"\\r\\n")
+        mutated = good_crlf.replace(b"CollectPiece", b"FakeCollect", 1)
+        variants = (
+            good_crlf.replace(b"\\r\\n", b"\\n", 1),
+            good_crlf.replace(b"\\r\\n", b"\\r", 1),
+            good_crlf.replace(b"\\r\\n", b"\\r\\r\\n", 1),
+            mutated, original + b"\\n",
+        )
+        for case in variants:
+            with self.subTest(raw=case[:60]), self.assertRaises(EngineKindError):
+                _canonical_checkout_source_eol(case, git_blob_sha(original))
+        with self.assertRaises(EngineKindError):
+            _canonical_checkout_source_eol(good_crlf, "0" * 40)
+        with self.assertRaises(EngineKindError):
+            _canonical_checkout_source_eol(good_crlf, "not_a_sha")
+
+    def test_checkout_intake_does_not_call_git_write_or_mutate_sibling(self):
+        import inspect
+        reader = inspect.getsource(read_pinned_engine_sources_with_receipts)
+        self.assertIn("source.read_bytes()", reader)
+        for prohibited in ("subprocess", "checkout", ".write_bytes(",
+                           ".write_text(", "unlink(", "mkdir(", "shutil"):
+            if prohibited == "checkout":
+                # Documentation says checkout; it is not an executable call.
+                continue
+            self.assertNotIn(prohibited, reader)
+        self.assertIn("read_pinned_engine_sources_with_receipts", inspect.getsource(
+            read_pinned_engine_sources))
 
     def test_engine_local_read_path_is_explicit_never_autoclones_or_writes(self):
         with self.assertRaises(EngineKindError):
