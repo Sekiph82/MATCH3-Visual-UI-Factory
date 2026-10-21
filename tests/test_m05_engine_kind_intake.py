@@ -52,7 +52,7 @@ class M05EngineKindIntakeTests(unittest.TestCase):
                     "release_allowed"):
             self.assertIs(report[key], False)
         with self.assertRaises(EngineKindError):
-            draft_five_title_role_bindings(report)
+            draft_five_title_role_bindings(self.sources)
 
     def test_real_official_source_check_rejects_synthetic_enum_files(self):
         with self.assertRaises(EngineKindError):
@@ -105,22 +105,18 @@ class M05EngineKindIntakeTests(unittest.TestCase):
         with self.assertRaises(EngineKindError):
             git_blob_sha(b"x" * (128 * 1024 + 1))
 
-    def test_fake_declaration_doc_never_promotes_asset_ids_or_final_abi(self):
+    def test_forged_json_receipt_is_not_accepted_in_place_of_original_cs(self):
         result = _inspect(self.sources, self.pins)
-        # Even matching ENUM NAMES without matching pinned actual C# bytes
-        # must not be considered a successful Engine registry intake.
+        # Hand-editing the result flags or source SHA strings must not
+        # replace the real .cs byte-identical input requirement.
         result["observed_verified_against_pinned_engine_sources"] = True
+        result["source_blob_sha1"] = {
+            path: SOURCE_PINS[path] for path in sorted(SOURCE_PINS)}
         with self.assertRaises(EngineKindError):
             draft_five_title_role_bindings(result)
-        expected = dict(result)
-        expected["source_blob_sha1"] = {
-            path: SOURCE_PINS[path] for path in sorted(SOURCE_PINS)}
-        draft = draft_five_title_role_bindings(expected)
-        self.assertEqual(len(draft["game_candidates"]), 5)
-        self.assertFalse(draft["release_allowed"])
-        for item in draft["game_candidates"]:
-            self.assertIsNone(item["actual_instance_ids"])
-            self.assertFalse(item["actual_registry_verified"])
+        with self.assertRaises(EngineKindError):
+            draft_five_title_role_bindings(self.sources)
+        self.assertFalse(_inspect(self.sources,self.pins)["release_allowed"])
 
 
 if __name__ == "__main__":
