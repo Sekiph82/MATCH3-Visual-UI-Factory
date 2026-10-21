@@ -198,8 +198,10 @@ namespace Match3.VisualFactory.Editor
                         sprite.rect.xMax > tex.width + .001f ||
                         sprite.rect.yMax > tex.height + .001f ||
                         sprite.pixelsPerUnit <= 0f ||
-                        !float.IsFinite(sprite.pivot.x) ||
-                        !float.IsFinite(sprite.pivot.y))
+                        float.IsNaN(sprite.pivot.x) ||
+                        float.IsInfinity(sprite.pivot.x) ||
+                        float.IsNaN(sprite.pivot.y) ||
+                        float.IsInfinity(sprite.pivot.y))
                         throw new ArgumentException(
                             "unsafe duplicate/malformed source Sprite slice");
                     slices.Add(new SpriteSliceSnapshot {
