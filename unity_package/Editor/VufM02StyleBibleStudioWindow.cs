@@ -189,6 +189,22 @@ namespace Match3.VisualFactory.Editor
         }
 
 
+        // Draft theme accents may not meet WCAG's 3:1 non-text indicator
+        // contrast. Keep inherited palette unchanged and use the existing
+        // semantic body ink instead. This is NOT a final icon art approval.
+        internal static Color GetAccessibleSymbolInk(string profileId)
+        {
+            var palette = VufScreenCatalog.LoadStyle(profileId).palettes;
+            var accent = VufScreenCatalog.ParseColor(palette.accent,"accent");
+            var surface = VufScreenCatalog.ParseColor(palette.surface,"surface");
+            var text = VufScreenCatalog.ParseColor(palette.text,"text");
+            var ink = Contrast(accent,surface) >= 3f ? accent : text;
+            if (Contrast(ink,surface) < 3f)
+                throw new InvalidOperationException(
+                    "Semantic icon indicator below minimum 3:1 contrast");
+            return ink;
+        }
+
         // The safe-area calculation is INTERNAL_REUSE of the existing VF-08
         // geometry primitive, not a second responsive-layout engine. Values
         // are SOURCE design dp, never measured physical pixels or device QA.
@@ -364,6 +380,17 @@ namespace Match3.VisualFactory.Editor
             ColorSwatch("Primary CTA",palette.cta);
             ColorSwatch("CTA Label",palette.cta_label);
             ColorSwatch("Body Text",palette.text);
+            var symbolInk=GetAccessibleSymbolInk(p.id);
+            var accentInk=VufScreenCatalog.ParseColor(palette.accent,"accent");
+            var previewSurface=VufScreenCatalog.ParseColor(palette.surface,"surface");
+            var usesTextInk=Contrast(accentInk,previewSurface)<3f;
+            ColorSwatch("Symbol Ink",
+                usesTextInk ? palette.text : palette.accent);
+            EditorGUILayout.LabelField(
+                usesTextInk
+                ? "Accessible icon fallback: body ink replaces pale accent."
+                : "Draft accent meets >=3:1 icon contrast.",
+                EditorStyles.wordWrappedMiniLabel);
             EditorGUILayout.LabelField("Measured inherited palette contrasts:");
             var text=VufScreenCatalog.ParseColor(palette.text,"text");
             var surface=VufScreenCatalog.ParseColor(palette.surface,"surface");
@@ -393,7 +420,7 @@ namespace Match3.VisualFactory.Editor
             DrawSourceGridPreview(common, mode,
                 VufScreenCatalog.ParseColor(palette.background,"background"),
                 surface,
-                VufScreenCatalog.ParseColor(palette.accent,"accent"));
+                symbolInk);
             Section("Five independently identifiable symbol silhouettes",
                 p.symbol_silhouettes);
             Section("Original art / icon / environment master requirements",
