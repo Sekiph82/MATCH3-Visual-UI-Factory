@@ -69,6 +69,13 @@ class M03SemanticComponentSourceTests(unittest.TestCase):
         shell = (EDITOR / "VufScreenShellBuilderWindow.cs").read_text("utf-8")
         self.assertIn("VufScreenShellLayoutBridge.Enhance(root, spec, style)", shell)
 
+    def test_factory_dashboard_surfaces_m02_and_m03_without_release_link(self):
+        dashboard = (EDITOR / "VufDashboardWindow.cs").read_text("utf-8")
+        self.assertIn("VufM03ComponentKitWindow.Open();", dashboard)
+        self.assertIn("VufM02StyleBibleStudioWindow.Open();", dashboard)
+        self.assertIn("Publish (NOT READY)", dashboard)
+        self.assertIn("DrawSourceSchematic(", self.code)
+
     def test_editor_only_stable_meta_and_structure_registration(self):
         source = EDITOR / "VufM03ComponentKitWindow.cs"
         tests = TESTS / "VufM03ComponentKitEditModeTests.cs"
