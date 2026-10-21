@@ -22,12 +22,15 @@ authority for the 137 frozen task IDs.
 - The Editor shows a source-only schematic; the actual disposable Canvas is
   never saved or inserted into a production game. Owner original art, font
   rights, real in-game consent, reward, purchase and navigation are missing.
+- The existing `VufDashboardWindow` now links directly to the existing
+  M02 Style Bible inspector and new M03 Semantic Component Kit; no new
+  navigation path for production publishing is enabled.
 - The original 28 Coral contract screens, 140 prior theme-shell variants and
   their single disabled primary action are intentionally **unchanged**.
   New kit is **not** 28 finished/connected game screens and not M03 exit PASS.
 - Authoring code: `unity_package/Editor/VufM03ComponentKitWindow.cs`;
   test source: `VufM03ComponentKitEditModeTests.cs` (4 NUnit methods) and
-  `tests/test_m03_component_kit.py` (5 Python cases). Stable `.meta`
+  `tests/test_m03_component_kit.py` (6 Python cases). Stable `.meta`
   registered under `Tools/validate_repo_structure.py`.
 
 ## M04 immutable source pin + change review
