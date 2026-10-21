@@ -18,6 +18,16 @@ namespace Match3.VisualFactory.Editor
         private string lastCandidate;
         private ImporterSnapshot[] lastInspection;
 
+        internal sealed class SpriteSliceSnapshot
+        {
+            internal string Name;
+            internal Rect RectPixels;
+            internal Vector2 PivotPixels;
+            internal Vector4 BorderPixels;
+            internal float PixelsPerUnit;
+            internal bool HasPhysicalDeviceProof;
+        }
+
         internal sealed class ImporterSnapshot
         {
             internal string SourcePath;
@@ -30,6 +40,7 @@ namespace Match3.VisualFactory.Editor
             internal bool MipMapsEnabled, AlphaTransparency;
             internal bool IOSOverride, AndroidOverride;
             internal bool IndividualSpritePivotsVerified;
+            internal SpriteSliceSnapshot[] Slices;
             internal bool OriginalRightsVerified, RealDeviceTextureVerified;
             internal bool ReleaseAllowed;
         }
@@ -98,12 +109,19 @@ namespace Match3.VisualFactory.Editor
                     EditorGUILayout.LabelField(
                         "iPhone override=" + item.IOSOverride +
                         " / Android override=" + item.AndroidOverride);
+                    EditorGUILayout.LabelField(
+                        "Imported individual Sprite subassets: " + item.Slices.Length);
+                    foreach (var slice in item.Slices)
+                        EditorGUILayout.LabelField(
+                            slice.Name + " | rect=" + slice.RectPixels +
+                            " | pivot=" + slice.PivotPixels +
+                            " | border=" + slice.BorderPixels +
+                            " | ppu=" + slice.PixelsPerUnit.ToString("F1"));
                     EditorGUILayout.HelpBox(
                         item.IndividualSpritePivotsVerified ?
-                        "Single Sprite: imported pivot/border metadata available; " +
-                        "actual per-pixel rendering/device not verified." :
-                        "Multiple Sprite source: individual slice pivots/borders " +
-                        "require separate Sprite inspection; NOT VERIFIED.",
+                        "Actual imported Sprite subasset pivots/borders enumerated " +
+                        "read-only. Render/device still NOT VERIFIED." :
+                        "Source subasset inspection NOT VERIFIED.",
                         MessageType.Warning);
                 }
                 EditorGUILayout.HelpBox(
@@ -163,6 +181,43 @@ namespace Match3.VisualFactory.Editor
                     importer.textureType != TextureImporterType.Sprite)
                     throw new ArgumentException(
                         "Source importer is missing or is not Sprite");
+                // The imported Sprite API, not importer.spritePivot,
+                // owns EACH slice's real existing pivot/border in Multiple mode.
+                // Enumerating subassets is read-only; it never imports them.
+                var slices = new List<SpriteSliceSnapshot>();
+                var spriteNames = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var subasset in AssetDatabase.LoadAllAssetsAtPath(path))
+                {
+                    var sprite = subasset as Sprite;
+                    if (sprite == null) continue;
+                    if (slices.Count >= 2048 ||
+                        String.IsNullOrEmpty(sprite.name) ||
+                        !spriteNames.Add(sprite.name) ||
+                        sprite.rect.width < 1f || sprite.rect.height < 1f ||
+                        sprite.rect.xMin < 0f || sprite.rect.yMin < 0f ||
+                        sprite.rect.xMax > tex.width + .001f ||
+                        sprite.rect.yMax > tex.height + .001f ||
+                        sprite.pixelsPerUnit <= 0f ||
+                        !float.IsFinite(sprite.pivot.x) ||
+                        !float.IsFinite(sprite.pivot.y))
+                        throw new ArgumentException(
+                            "unsafe duplicate/malformed source Sprite slice");
+                    slices.Add(new SpriteSliceSnapshot {
+                        Name = sprite.name,
+                        RectPixels = sprite.rect,
+                        PivotPixels = sprite.pivot,
+                        BorderPixels = sprite.border,
+                        PixelsPerUnit = sprite.pixelsPerUnit,
+                        HasPhysicalDeviceProof = false
+                    });
+                }
+                if (slices.Count == 0)
+                    throw new ArgumentException(
+                        "Sprite importer has no actual imported Sprite subasset");
+                slices.Sort((a,b) => StringComparer.Ordinal.Compare(a.Name,b.Name));
+                if (importer.spriteImportMode == SpriteImportMode.Single &&
+                    slices.Count != 1)
+                    throw new ArgumentException("single-Sprite importer count drift");
                 var ios = importer.GetPlatformTextureSettings("iPhone");
                 var android = importer.GetPlatformTextureSettings("Android");
                 result[i] = new ImporterSnapshot {
@@ -179,8 +234,8 @@ namespace Match3.VisualFactory.Editor
                     AlphaTransparency = importer.alphaIsTransparency,
                     IOSOverride = ios != null && ios.overridden,
                     AndroidOverride = android != null && android.overridden,
-                    IndividualSpritePivotsVerified =
-                        importer.spriteImportMode == SpriteImportMode.Single,
+                    IndividualSpritePivotsVerified = true,
+                    Slices = slices.ToArray(),
                     OriginalRightsVerified = false,
                     RealDeviceTextureVerified = false,
                     ReleaseAllowed = false
