@@ -4,11 +4,13 @@ from __future__ import annotations
 import copy
 import hashlib
 import unittest
+from pathlib import Path
 
 from factory.visual_director.m05_engine_kind_intake import (
     PATH_ROOT, REQUIRED_ENUMS, SOURCE_PINS, EngineKindError,
     _inspect, draft_five_title_role_bindings, git_blob_sha,
     inspect_pinned_engine_kinds, parse_declared_enum,
+    read_pinned_engine_sources,
 )
 
 
@@ -89,6 +91,18 @@ class M05EngineKindIntakeTests(unittest.TestCase):
         forged_pins = {p: git_blob_sha(b) for p, b in altered.items()}
         with self.assertRaises(EngineKindError):
             _inspect(altered, forged_pins)
+
+    def test_engine_local_read_path_is_explicit_never_autoclones_or_writes(self):
+        with self.assertRaises(EngineKindError):
+            read_pinned_engine_sources(Path("not-a-real-engine-directory"))
+        with self.assertRaises(EngineKindError):
+            read_pinned_engine_sources(Path(__file__).resolve().parents[1])
+        import inspect
+        code = inspect.getsource(read_pinned_engine_sources)
+        self.assertNotIn(".write_", code)
+        self.assertNotIn("mkdir(", code)
+        self.assertNotIn("subprocess", code)
+        self.assertNotIn("shutil", code)
 
     def test_git_blob_hash_checks_exact_source_bytes_not_just_semantics(self):
         name = PATH_ROOT + "GoalScoreContracts.cs"
