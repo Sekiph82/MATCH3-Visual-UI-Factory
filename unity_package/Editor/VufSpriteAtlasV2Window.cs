@@ -16,6 +16,24 @@ namespace Match3.VisualFactory.Editor
         private Texture2D[] selected = new Texture2D[6];
         private string error;
         private string lastCandidate;
+        private ImporterSnapshot[] lastInspection;
+
+        internal sealed class ImporterSnapshot
+        {
+            internal string SourcePath;
+            internal string SourceGuid;
+            internal int Width, Height, MaxSourceTextureSize;
+            internal SpriteImportMode SpriteMode;
+            internal Vector2 SourcePivot;
+            internal Vector4 SourceBorder;
+            internal float PixelsPerUnit;
+            internal bool MipMapsEnabled, AlphaTransparency;
+            internal bool IOSOverride, AndroidOverride;
+            internal bool IndividualSpritePivotsVerified;
+            internal bool OriginalRightsVerified, RealDeviceTextureVerified;
+            internal bool ReleaseAllowed;
+        }
+
 
         [MenuItem("Tools/MATCH3/SpriteAtlas V2 Candidate Builder")]
         public static void Open()
@@ -52,6 +70,47 @@ namespace Match3.VisualFactory.Editor
                     error = "Atlas candidate refused: " + exception.Message;
                 }
             }
+            if (GUILayout.Button("Inspect existing PNG Sprite importer settings (READ-ONLY)",
+                    GUILayout.Height(28f)))
+            {
+                try { lastInspection = ReadImportedSettings(selected); error = null; }
+                catch (Exception ex)
+                {
+                    lastInspection = null;
+                    error = "Source importer QA blocked: " + ex.Message;
+                }
+            }
+            if (lastInspection != null)
+            {
+                foreach (var item in lastInspection)
+                {
+                    EditorGUILayout.LabelField(item.SourcePath, EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField(
+                        "GUID " + item.SourceGuid + " | " + item.Width +
+                        "x" + item.Height + " | mode=" + item.SpriteMode);
+                    EditorGUILayout.LabelField(
+                        "Pivot " + item.SourcePivot + " | border " + item.SourceBorder +
+                        " | PPU " + item.PixelsPerUnit.ToString("F1"));
+                    EditorGUILayout.LabelField(
+                        "Mips=" + item.MipMapsEnabled + " / alpha-transparent=" +
+                        item.AlphaTransparency + " / max size=" +
+                        item.MaxSourceTextureSize);
+                    EditorGUILayout.LabelField(
+                        "iPhone override=" + item.IOSOverride +
+                        " / Android override=" + item.AndroidOverride);
+                    EditorGUILayout.HelpBox(
+                        item.IndividualSpritePivotsVerified ?
+                        "Single Sprite: imported pivot/border metadata available; " +
+                        "actual per-pixel rendering/device not verified." :
+                        "Multiple Sprite source: individual slice pivots/borders " +
+                        "require separate Sprite inspection; NOT VERIFIED.",
+                        MessageType.Warning);
+                }
+                EditorGUILayout.HelpBox(
+                    "Source-only READ: no source importer modified. Real 1x/2x/3x, " +
+                    "atlas bleeding, GPU compression and owner art/device acceptance OPEN.",
+                    MessageType.Info);
+            }
             if (!String.IsNullOrEmpty(error))
                 EditorGUILayout.HelpBox(error, MessageType.Error);
             if (!String.IsNullOrEmpty(lastCandidate))
@@ -76,6 +135,58 @@ namespace Match3.VisualFactory.Editor
                     !seen.Add(texture))
                     throw new ArgumentException("null, duplicate or oversized texture");
                 result[i] = texture;
+            }
+            return result;
+        }
+
+        // Read ONLY existing imported source settings. This method must not
+        // call SetPlatformTextureSettings, SaveAndReimport or AssetDatabase
+        // writes. Multiple sprites have per-slice pivots which are explicitly
+        // NOT certified by TextureImporter.spritePivot.
+        internal static ImporterSnapshot[] ReadImportedSettings(Texture2D[] input)
+        {
+            var sources = ValidateDraft(input);
+            var result = new ImporterSnapshot[sources.Length];
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            for (int i=0;i<sources.Length;i++)
+            {
+                var tex = sources[i];
+                var path = AssetDatabase.GetAssetPath(tex);
+                if (String.IsNullOrEmpty(path) ||
+                    !path.StartsWith("Assets/",StringComparison.Ordinal) ||
+                    !path.EndsWith(".png",StringComparison.OrdinalIgnoreCase) ||
+                    !seen.Add(path))
+                    throw new ArgumentException(
+                        "Only distinct already imported PNG Sprite source COPIES may be inspected");
+                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null ||
+                    importer.textureType != TextureImporterType.Sprite)
+                    throw new ArgumentException(
+                        "Source importer is missing or is not Sprite");
+                var ios = importer.GetPlatformTextureSettings("iPhone");
+                var android = importer.GetPlatformTextureSettings("Android");
+                result[i] = new ImporterSnapshot {
+                    SourcePath = path,
+                    SourceGuid = AssetDatabase.AssetPathToGUID(path),
+                    Width = tex.width,
+                    Height = tex.height,
+                    MaxSourceTextureSize = importer.maxTextureSize,
+                    SpriteMode = importer.spriteImportMode,
+                    SourcePivot = importer.spritePivot,
+                    SourceBorder = importer.spriteBorder,
+                    PixelsPerUnit = importer.spritePixelsPerUnit,
+                    MipMapsEnabled = importer.mipmapEnabled,
+                    AlphaTransparency = importer.alphaIsTransparency,
+                    IOSOverride = ios != null && ios.overridden,
+                    AndroidOverride = android != null && android.overridden,
+                    IndividualSpritePivotsVerified =
+                        importer.spriteImportMode == SpriteImportMode.Single,
+                    OriginalRightsVerified = false,
+                    RealDeviceTextureVerified = false,
+                    ReleaseAllowed = false
+                };
+                if (String.IsNullOrEmpty(result[i].SourceGuid))
+                    throw new ArgumentException("source importer GUID unavailable");
             }
             return result;
         }
