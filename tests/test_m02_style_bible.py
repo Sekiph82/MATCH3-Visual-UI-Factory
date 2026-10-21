@@ -49,6 +49,24 @@ class StyleBibleSourceTests(unittest.TestCase):
                 with self.subTest(profile=p["profile_id"],pair=name):
                     self.assertGreaterEqual(ratio,4.5)
 
+    def test_non_text_icon_ink_guarantees_three_to_one(self):
+        bibles=compile_bibles()
+        fallbacks={}
+        for row in bibles["profiles"]:
+            with self.subTest(title=row["profile_id"]):
+                self.assertGreaterEqual(
+                    row["non_text_icon_wcag"]["accessible_symbol_ink_on_surface"],
+                    bibles["common"]["min_large_text_contrast_ratio"])
+                self.assertIn(row["accessible_symbol_ink_hex"],
+                              (row["palette"]["accent"],row["palette"]["text"]))
+                fallbacks[row["profile_id"]]=row["symbol_uses_text_ink_fallback"]
+        self.assertEqual(fallbacks,
+                         {"Coral_Rescue":False,"Garage_Legends":False,
+                          "Dino_Islands":False,"The_Fractured_Realms":False,
+                          "Wonder_Pop":True})
+        # This visual adapter never changes the existing canonical palette.
+        self.assertEqual(STYLE_PATH.read_bytes(),self.style)
+
     def test_four_safe_area_modes_and_accessible_touch_design_tokens(self):
         c = self.bible["common"]
         self.assertEqual(c["min_touch_dp"],44)
