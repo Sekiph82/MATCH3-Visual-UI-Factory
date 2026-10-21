@@ -733,3 +733,41 @@ https://docs.google.com/document/d/1vj3LOFdJVoXw6KmB1eBtrQc5jWRRbDBSojcBpdv6yuU/
 - `tests/test_m02_style_bible.py` 12 Python authored, `tests/test_m02_unity_source_parity.py` 3 Python authored and `VufM02StyleBibleEditModeTests.cs` 6 Unity NUnit authored. On current commit THESE TESTS ARE NOT EXECUTED in actual Windows/Unity yet. Historical 490 Python/172 Unity applies ONLY prior VUF SHA 3383fe9; no M02 local PASS claimed.
 
 **Pre-code forward criteria:** https://docs.google.com/document/d/1nCrHF5gfk6rVgreEWA6D4TqTERR5wQOBgTt9Ij0LL_c/edit . **True developer log:** https://docs.google.com/document/d/1wjjAzcDpJ0wbt5ZVhlaXuKKgWcKeYKXl7EWQqtnf51U/edit . **Owner safe Codex local sync prompt:** https://docs.google.com/document/d/1ci5INfPNLQaFoiAVVXetbJ7bp7u4C6RoC8Kcr6hd808/edit . Original M02-001..006,013 remain open for owner original master artwork, font rights, signed art identity and real GUI/device/new full local test. No new milestone IDs.
+
+## 2026-10-21 | M03 candidate semantic kit, M04 reference comparator
+
+M03 PRE-CODE actual VUF sources inspected: `VufScreenCatalog.cs`,
+`VufScreenShellBuilderWindow.cs`, `VufScreenShellLayoutBridge.cs`,
+`VufReviewStateCatalog.cs`, M02 `VufM02StyleBibleStudioWindow.cs`,
+and M08 `VufInteractiveUiReviewWindow.cs`. The existing one-button
+28-screen shell and Editor-only disposable test-tap contract MUST NOT
+change as a side effect of developing a separate design component kit.
+
+Upstream cross-check: previously pinned Unity-UI-Extensions
+`FlowLayoutGroup.cs`, BSD-3-Clause, commit
+`d47f838ba918bbb9b26f242bd944940a711f525f`, documented upstream
+blob `a949d0c23d27124c3347405972cca7bb7a7a3489` and preserved package
+licence in `unity_package/NOTICE-UnityUIExtensions.md`.
+**REJECTED_REASON (new import)**: donor wrap-layout is already integrated
+into editable Home cards and is not required for a fixed read-only source
+component prototype. Avoid a duplicate copy, runtime layout dependency and
+semantic/gameplay state duplication.
+**INTERNAL_REUSE**: existing M02 identity catalog, M02 draft safe-area
+grid/semantic colour fallback, `VufScreenCatalog`, `VufReviewStateCatalog`,
+Unity built-in uGUI Canvas/Image/Text/Button. No new third-party source or
+external original art copied.
+
+M04 PRE-CODE actual in-repo sources inspected:
+`factory/asset_catalog/catalog.py` (append-only revision/approval ledger),
+`factory/visual_director/character_pose_review.py` (source/poses),
+`factory/qa/m09_pixel_diff.py` (RGBA and receipt check). **INTERNAL_REUSE**:
+M09 `compare` + `verify_receipt_source`, M02 `PROFILES`.
+**REJECTED_REASON (new importer/approval code)**: approval and hash
+logic already exists, and extra self-approval paths would violate owner
+human legal/creative authority. New `m04_original_comparison.py` is a pure,
+fail-closed source review adapter with two-source SHA pins and no asset write.
+
+All Python/NUnit tests for this continuation are AUTHORED, NOT executed on
+current owner Windows/Unity. Original masters, rights, creator authority,
+GUI, devices, and final Engine/LFX pins remain OPEN. This ledger is source
+provenance, NOT an extra task tracker or legal licence grant.
