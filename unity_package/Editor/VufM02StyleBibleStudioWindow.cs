@@ -188,6 +188,112 @@ namespace Match3.VisualFactory.Editor
                     "Actual inherited five-theme draft palette failed AA text contrast");
         }
 
+
+        // The safe-area calculation is INTERNAL_REUSE of the existing VF-08
+        // geometry primitive, not a second responsive-layout engine. Values
+        // are SOURCE design dp, never measured physical pixels or device QA.
+        internal sealed class SourceGridGuide
+        {
+            internal Rect Safe;
+            internal Rect[] Columns;
+            internal Rect MinimumTap;
+        }
+
+        internal static SourceGridGuide BuildSourceGridGuide(Common common, Device mode)
+        {
+            if (common == null || common.grid == null || mode == null ||
+                mode.width_dp < 320 || mode.height_dp < 568 ||
+                common.min_touch_dp < 44 ||
+                mode.min_safe_top_dp < 0 || mode.min_safe_bottom_dp < 0 ||
+                mode.min_safe_top_dp + mode.min_safe_bottom_dp >= mode.height_dp)
+                throw new ArgumentException("Invalid source-only accessible layout");
+            var device = new VufResponsiveGeometry.Device(
+                mode.id, mode.width_dp, mode.height_dp,
+                0, 0, mode.min_safe_bottom_dp, mode.min_safe_top_dp);
+            var safe = device.SafeRect;
+            bool tablet = mode.id == "portrait_tablet";
+            int count = tablet ? common.grid.columns_tablet :
+                common.grid.columns_phone;
+            int margin = tablet ? common.grid.outer_margin_tablet_dp :
+                common.grid.outer_margin_phone_dp;
+            float gutter = common.grid.gutter_dp;
+            if (count < 1 || count > 12 || margin < 12 || gutter < 0)
+                throw new ArgumentException("Invalid source grid tokens");
+            float columnWidth = (safe.width - 2f * margin -
+                (count - 1) * gutter) / count;
+            if (columnWidth < common.min_touch_dp ||
+                safe.height < common.min_touch_dp + 32f)
+                throw new ArgumentException("No full minimum tap target fits source grid");
+            var columns = new Rect[count];
+            for (int i = 0; i < count; i++)
+                columns[i] = new Rect(
+                    safe.xMin + margin + i * (columnWidth + gutter),
+                    safe.yMin, columnWidth, safe.height);
+            float targetSize = common.min_touch_dp;
+            var tap = new Rect(
+                safe.center.x - targetSize / 2f,
+                safe.yMin + 16f, targetSize, targetSize);
+            if (!safe.Contains(tap.min) || !safe.Contains(tap.max))
+                throw new ArgumentException("Source preview tap escapes safe area");
+            return new SourceGridGuide {
+                Safe = safe, Columns = columns, MinimumTap = tap
+            };
+        }
+
+        private static Rect ToPreviewRect(Rect design, Rect board, int height, float scale)
+        {
+            return new Rect(
+                board.x + design.x * scale,
+                board.y + (height - design.yMax) * scale,
+                design.width * scale, design.height * scale);
+        }
+
+        private static void DrawSourceGridPreview(
+            Common common, Device mode, Color background,
+            Color surface, Color accent)
+        {
+            var guide = BuildSourceGridGuide(common, mode);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField(
+                "Source safe-area / column / 44+dp tap schematic",
+                EditorStyles.boldLabel);
+            var frame = GUILayoutUtility.GetRect(
+                100f, 265f, GUILayout.ExpandWidth(true));
+            float scale = Mathf.Min(
+                (frame.width - 32f) / mode.width_dp,
+                235f / mode.height_dp);
+            var board = new Rect(
+                frame.x + (frame.width - mode.width_dp * scale) * 0.5f,
+                frame.y + 4f, mode.width_dp * scale, mode.height_dp * scale);
+            EditorGUI.DrawRect(board, background);
+            var safeRect = ToPreviewRect(
+                guide.Safe, board, mode.height_dp, scale);
+            EditorGUI.DrawRect(safeRect,
+                new Color(surface.r, surface.g, surface.b, 0.92f));
+            var muted = new Color(0f, 0f, 0f, 0.18f);
+            if (mode.min_safe_top_dp > 0)
+                EditorGUI.DrawRect(new Rect(
+                    board.x, board.y, board.width,
+                    mode.min_safe_top_dp * scale), muted);
+            if (mode.min_safe_bottom_dp > 0)
+                EditorGUI.DrawRect(new Rect(
+                    board.x, board.yMax - mode.min_safe_bottom_dp * scale,
+                    board.width, mode.min_safe_bottom_dp * scale), muted);
+            foreach (var column in guide.Columns)
+            {
+                var cell = ToPreviewRect(column, board, mode.height_dp, scale);
+                EditorGUI.DrawRect(cell,
+                    new Color(accent.r, accent.g, accent.b, 0.22f));
+            }
+            EditorGUI.DrawRect(
+                ToPreviewRect(guide.MinimumTap, board, mode.height_dp, scale),
+                accent);
+            EditorGUILayout.LabelField(
+                "Guide only: colored columns + minimum tap square are not " +
+                "actual prefab buttons or measured phone safe areas.",
+                EditorStyles.wordWrappedMiniLabel);
+        }
+
         private void OnEnable() { TryLoad(); }
         private void TryLoad()
         {
@@ -284,6 +390,10 @@ namespace Match3.VisualFactory.Editor
             EditorGUILayout.LabelField("Column width: "+width.ToString("F1")+
                 " dp • Min button "+common.min_touch_dp+
                 " dp (simulated layout only)");
+            DrawSourceGridPreview(common, mode,
+                VufScreenCatalog.ParseColor(palette.background,"background"),
+                surface,
+                VufScreenCatalog.ParseColor(palette.accent,"accent"));
             Section("Five independently identifiable symbol silhouettes",
                 p.symbol_silhouettes);
             Section("Original art / icon / environment master requirements",
