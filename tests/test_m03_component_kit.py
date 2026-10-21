@@ -89,7 +89,8 @@ class M03SemanticComponentSourceTests(unittest.TestCase):
                 if line.startswith("guid: ")
             )
             self.assertEqual(len(guid), 32)
-            self.assertIn(str(file.relative_to(ROOT / "unity_package")), validator)
+            # Validator source stores portable / paths on all host OSes.
+            self.assertIn(file.relative_to(ROOT / "unity_package").as_posix(), validator)
             guids.append(guid)
         self.assertEqual(len(set(guids)), 2)
 
