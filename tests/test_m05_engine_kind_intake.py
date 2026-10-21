@@ -107,7 +107,7 @@ class M05EngineKindIntakeTests(unittest.TestCase):
 
     def test_pure_windows_crlf_equivalent_normalized_only_in_memory(self):
         original = self.sources[PATH_ROOT + "GoalScoreContracts.cs"]
-        windows = original.replace(b"\\n", b"\\r\\n")
+        windows = original.replace(b"\n", b"\r\n")
         self.assertNotEqual(git_blob_sha(windows), git_blob_sha(original))
         canonical, receipt = _canonical_checkout_source_eol(
             windows, git_blob_sha(original))
@@ -121,13 +121,13 @@ class M05EngineKindIntakeTests(unittest.TestCase):
 
     def test_mixed_eol_or_lone_cr_or_mismatched_pinned_bytes_fail_closed(self):
         original = self.sources[PATH_ROOT + "GoalScoreContracts.cs"]
-        good_crlf = original.replace(b"\\n", b"\\r\\n")
+        good_crlf = original.replace(b"\n", b"\r\n")
         mutated = good_crlf.replace(b"CollectPiece", b"FakeCollect", 1)
         variants = (
-            good_crlf.replace(b"\\r\\n", b"\\n", 1),
-            good_crlf.replace(b"\\r\\n", b"\\r", 1),
-            good_crlf.replace(b"\\r\\n", b"\\r\\r\\n", 1),
-            mutated, original + b"\\n",
+            good_crlf.replace(b"\r\n", b"\n", 1),
+            good_crlf.replace(b"\r\n", b"\r", 1),
+            good_crlf.replace(b"\r\n", b"\\r\\r\\n", 1),
+            mutated, original + b"\n",
         )
         for case in variants:
             with self.subTest(raw=case[:60]), self.assertRaises(EngineKindError):
