@@ -141,6 +141,26 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void AccessibleSymbolInkMeetsNonTextContrastInAllFiveThemes()
+        {
+            foreach(var theme in new [] {
+                "Coral_Rescue","Garage_Legends","Dino_Islands",
+                "The_Fractured_Realms","Wonder_Pop"})
+            {
+                var palette=VufScreenCatalog.LoadStyle(theme).palettes;
+                var surface=VufScreenCatalog.ParseColor(palette.surface,"surface");
+                var ink=VufM02StyleBibleStudioWindow.GetAccessibleSymbolInk(theme);
+                Assert.That(
+                    VufM02StyleBibleStudioWindow.Contrast(ink,surface),
+                    Is.GreaterThanOrEqualTo(3f),theme);
+                var expected=VufScreenCatalog.ParseColor(
+                    theme=="Wonder_Pop" ? palette.text : palette.accent,
+                    "accessible_symbol_ink");
+                Assert.That(ink,Is.EqualTo(expected),theme);
+            }
+        }
+
+        [Test]
         public void SourceGridGuideRejectsImpossibleTouchGeometry()
         {
             var data=VufM02StyleBibleStudioWindow.ValidateAndParse(Original());
