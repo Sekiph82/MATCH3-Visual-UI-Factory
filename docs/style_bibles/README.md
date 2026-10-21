@@ -68,11 +68,22 @@ not imported a second time: it solves live content wrapping, not static source
 design-grid overlay; using it here would introduce needless runtime layout
 behavior.
 
+A second source-only accessibility correction explicitly computes
+**non-text semantic icon contrast at >=3:1**. Four draft themes can use
+their original accent over surface, while Wonder Pop's inherited accent
+measures **2.65:1** and must fall back to its existing high-contrast body
+ink. The Python source compiler emits the chosen symbol-ink token, its
+measured contrast and the fallback reason. The Unity Studio uses this
+resolved safe ink in its schematic, with a visible fallback note.
+Inherited `style_profiles.v1.json` remains byte-for-byte unmodified.
+Future approved creator art must still be reviewed manually, including
+the final icon pixel regions.
+
 New checks were AUTHORED (not owner-local executed): 2 Unity EditMode
 geometry/rejection methods in `VufM02StyleBibleEditModeTests.cs` and
-1 Python Editor source-parity test in
-`tests/test_m02_unity_source_parity.py`. This brings the M02
-specific test definitions to **16 Python and 8 Unity**. All prior actual
+1 Python Editor source-parity test, 1 icon fallback source test
+and 1 Unity icon contrast test. This brings the M02
+specific test definitions to **17 Python and 9 Unity**. All prior actual
 test claims remain tied to their original SHA; no current Unity, manual
 GUI/phone or human art/rights validation has been performed.
 
