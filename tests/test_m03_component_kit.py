@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 import unittest
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 from factory.visual_director.m02_style_bible import compile_bibles
 
@@ -90,7 +90,14 @@ class M03SemanticComponentSourceTests(unittest.TestCase):
             )
             self.assertEqual(len(guid), 32)
             # Validator source stores portable / paths on all host OSes.
-            self.assertIn(file.relative_to(ROOT / "unity_package").as_posix(), validator)
+            # A Windows PurePath fixture catches separator drift even when
+            # this regression is run from a Linux/macOS developer machine.
+            source_relative = file.relative_to(ROOT / "unity_package")
+            portable = source_relative.as_posix()
+            self.assertEqual(
+                PureWindowsPath(*source_relative.parts).as_posix(), portable
+            )
+            self.assertIn(portable, validator)
             guids.append(guid)
         self.assertEqual(len(set(guids)), 2)
 
