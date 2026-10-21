@@ -284,6 +284,7 @@ namespace Match3.VisualFactory.Editor
             var surface = VufScreenCatalog.ParseColor(palette.surface, "surface");
             var accent = VufScreenCatalog.ParseColor(palette.cta, "cta");
             var ink = VufScreenCatalog.ParseColor(palette.text, "text");
+            var onCta = VufScreenCatalog.ParseColor(palette.cta_label, "cta_label");
             EditorGUILayout.Space();
             EditorGUILayout.LabelField(
                 "Source-only semantic widget wireframe (NOT actual device render)",
@@ -308,7 +309,9 @@ namespace Match3.VisualFactory.Editor
                     frame.y + padding + (i / cols) * (h + gap), w, h);
                 EditorGUI.DrawRect(r, i == 0 ? accent :
                     new Color(surface.r, surface.g, surface.b, .75f));
-                GUI.Label(r, Semantics[i].Replace('_', ' '), labelStyle);
+                var itemStyle = new GUIStyle(labelStyle);
+                itemStyle.normal.textColor = i == 0 ? onCta : ink;
+                GUI.Label(r, Semantics[i].Replace('_', ' '), itemStyle);
             }
             EditorGUILayout.LabelField(
                 "Draft only: rights/owner art/real buttons/Engine actions NOT approved.",
