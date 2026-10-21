@@ -105,5 +105,61 @@ namespace Match3.VisualFactory.Tests
             Assert.That(result.common.grid.columns_tablet,Is.EqualTo(8));
             Assert.That(result.common.screen_modes.Length,Is.EqualTo(4));
         }
+
+        [Test]
+        public void SourceGridGuidesFitFourPortraitDesignTokens()
+        {
+            var data=VufM02StyleBibleStudioWindow.ValidateAndParse(Original());
+            foreach(var mode in data.common.screen_modes)
+            {
+                var guide=VufM02StyleBibleStudioWindow.BuildSourceGridGuide(
+                    data.common,mode);
+                int expected=mode.id=="portrait_tablet" ? 8 : 4;
+                Assert.That(guide.Columns.Length,Is.EqualTo(expected),mode.id);
+                Assert.That(guide.MinimumTap.width,
+                    Is.GreaterThanOrEqualTo(44f),mode.id);
+                Assert.That(guide.MinimumTap.height,
+                    Is.GreaterThanOrEqualTo(44f),mode.id);
+                Assert.That(guide.Safe.Contains(guide.MinimumTap.min),
+                    Is.True,mode.id);
+                Assert.That(guide.Safe.Contains(guide.MinimumTap.max),
+                    Is.True,mode.id);
+                for(int i=0;i<guide.Columns.Length;i++)
+                {
+                    var cell=guide.Columns[i];
+                    Assert.That(cell.width,
+                        Is.GreaterThanOrEqualTo(44f),mode.id);
+                    Assert.That(cell.xMin,Is.GreaterThanOrEqualTo(
+                        guide.Safe.xMin),mode.id);
+                    Assert.That(cell.xMax,Is.LessThanOrEqualTo(
+                        guide.Safe.xMax+0.001f),mode.id);
+                    if (i>0)
+                        Assert.That(cell.xMin,Is.GreaterThan(
+                            guide.Columns[i-1].xMax),mode.id);
+                }
+            }
+        }
+
+        [Test]
+        public void SourceGridGuideRejectsImpossibleTouchGeometry()
+        {
+            var data=VufM02StyleBibleStudioWindow.ValidateAndParse(Original());
+            var invalid=new VufM02StyleBibleStudioWindow.Device {
+                id="compact_phone",width_dp=320,height_dp=568,
+                min_safe_top_dp=270,min_safe_bottom_dp=270
+            };
+            Assert.Throws<ArgumentException>(() =>
+                VufM02StyleBibleStudioWindow.BuildSourceGridGuide(
+                    data.common,invalid));
+            var narrower=new VufM02StyleBibleStudioWindow.Device {
+                id="compact_phone",width_dp=320,height_dp=568,
+                min_safe_top_dp=0,min_safe_bottom_dp=0
+            };
+            data.common.min_touch_dp=72;
+            Assert.Throws<ArgumentException>(() =>
+                VufM02StyleBibleStudioWindow.BuildSourceGridGuide(
+                    data.common,narrower));
+        }
+
     }
 }
