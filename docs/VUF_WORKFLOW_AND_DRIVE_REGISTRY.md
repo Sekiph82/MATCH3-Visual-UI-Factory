@@ -58,6 +58,30 @@ source history appended in
 Source usage: `docs/M05_UNITY_ATLAS_READ_ONLY_IMPORT_AUDIT.md`.
 No local Windows/Unity/real device QA or owner rights approval claimed.
 
+## M05 feasible source batch completed before next consolidated Codex test | 2026-10-21
+
+After the initial SpriteAtlas V2 importer read-only audit, additional
+source work has now implemented (not run on owner Windows):
+
+- native per-Sprite imported rect/pivot/border/PPU inspection for
+  Single or Multiple Sprite metadata, without importer write;
+- exact full-RGBA 1×/2×/3× scaling and transparent trim / source pivot
+  translation receipt using already present VF04 primitives;
+- exact pinned read-only **original C# Git blob** checks against four
+  actual MATCH3_ENGINE enum declarations, source-only unbound five-game
+  role kind hints, explicit no final obstacle/goal/booster instance IDs;
+- 14 new Python M05 focused test methods and extended Unity tests authored,
+  but **NOT RUN** on new GitHub SHA.
+
+Source notes: `docs/M05_UNITY_ATLAS_READ_ONLY_IMPORT_AUDIT.md`,
+`docs/VUF_DONOR_SOURCE_LEDGER.md`, original root `TASKS.md`.
+No Engine or LFX sibling clone/writes, no GitHub CI, no cost,
+no owner artwork or scene changes. The remaining M05 original tasks
+003/004/010/013 are OPEN for real host registry/real licensed art/
+Unity editor and physical-device acceptance. A single new Codex
+local sync + full Python/Unity test pass should be issued after
+the final code SHA is pinned.
+
 ## Source of truth and roles
 
 - Owner: priorities, creator/original-art/licence signoff, real GUI, device and final release approvals.
