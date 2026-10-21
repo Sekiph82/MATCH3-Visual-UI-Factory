@@ -238,6 +238,15 @@ def compile_bibles(style_source: bytes | None = None,
         }
         if min(contrasts.values()) < common["min_body_contrast_ratio"]:
             raise StyleBibleError("theme fails minimum body/CTA contrast")
+        # Interactive icon outlines and non-text status glyphs require >=3:1.
+        # Never mutate inherited style_profiles: fallback to already-AA
+        # body text ink when a decorative theme accent is too faint.
+        accent_icon_ratio = _ratio(palette["accent"], palette["surface"])
+        safe_ink = (palette["accent"] if accent_icon_ratio >=
+                    common["min_large_text_contrast_ratio"] else palette["text"])
+        safe_icon_ratio = _ratio(safe_ink, palette["surface"])
+        if safe_icon_ratio < common["min_large_text_contrast_ratio"]:
+            raise StyleBibleError("semantic non-text icon ink fails minimum contrast")
         if (not isinstance(style.get("mascot_roles"), list) or
                 len(style["mascot_roles"]) < 1 or
                 not isinstance(style.get("environment_layers"), list) or
@@ -254,6 +263,12 @@ def compile_bibles(style_source: bytes | None = None,
             "title": style["title"],
             "palette": palette,
             "contrasts_wcag": contrasts,
+            "non_text_icon_wcag": {
+                "draft_accent_on_surface": round(accent_icon_ratio, 3),
+                "accessible_symbol_ink_on_surface": round(safe_icon_ratio, 3),
+            },
+            "accessible_symbol_ink_hex": safe_ink,
+            "symbol_uses_text_ink_fallback": safe_ink != palette["accent"],
             "source_art_direction": style["art_direction"],
             "environment_layers": style["environment_layers"],
             "source_mascot_roles": style["mascot_roles"],
