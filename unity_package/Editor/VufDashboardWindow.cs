@@ -47,6 +47,15 @@ namespace Match3.VisualFactory.Editor
                 "No approved artwork or production exports. Upstream integration is gated.",
                 MessageType.Info);
             profile = EditorGUILayout.Popup("Selected game", profile, Profiles);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (GUILayout.Button("M02 Style Bible Studio (draft)",
+                    GUILayout.Height(32)))
+                    VufM02StyleBibleStudioWindow.Open();
+                if (GUILayout.Button("M03 Semantic uGUI Kit (draft)",
+                    GUILayout.Height(32)))
+                    VufM03ComponentKitWindow.Open();
+            }
             if (GUILayout.Button("Five-Game Production Queue (read-only)", GUILayout.Height(32)))
                 VufProductionQueueWindow.Open();
             if (GUILayout.Button("Offline Sprite Pixel QA Report (read-only)", GUILayout.Height(30)))
