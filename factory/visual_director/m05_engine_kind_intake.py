@@ -140,21 +140,11 @@ def inspect_pinned_engine_kinds(files: Mapping[str, bytes]) -> dict:
     return _inspect(files, SOURCE_PINS)
 
 
-def draft_five_title_role_bindings(verified_declarations: dict) -> dict:
-    """Source schema hints, NOT resolved actual asset IDs or player-state data."""
-    if (not isinstance(verified_declarations, dict) or
-            verified_declarations.get("stage") != STAGE or
-            verified_declarations.get("schema_version") != 1 or
-            verified_declarations.get("source_blob_sha1") !=
-                {name: SOURCE_PINS[name] for name in sorted(SOURCE_PINS)} or
-            verified_declarations.get("observed_verified_against_pinned_engine_sources") is not True or
-            any(verified_declarations.get(flag) is not False for flag in (
-                "actual_obstacle_definition_ids_verified",
-                "actual_goal_definition_ids_verified",
-                "actual_booster_instance_ids_verified",
-                "owner_art_mapping_verified",
-                "engine_lfx_final_abi_verified", "release_allowed"))):
-        raise EngineKindError("untrusted Engine source/owner release claims")
+def draft_five_title_role_bindings(original_engine_sources: Mapping[str, bytes]) -> dict:
+    """Require REAL original C# bytes, not a forgeable JSON summary."""
+    verified_declarations = inspect_pinned_engine_kinds(original_engine_sources)
+    if verified_declarations["observed_verified_against_pinned_engine_sources"] is not True:
+        raise EngineKindError("missing authenticated exact Engine source pins")
     # This preserves engine enum kind names only. No hidden sample IDs
     # become actual gameplay definitions, and no goal/booster reward exists.
     return {
