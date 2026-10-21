@@ -788,3 +788,39 @@ pivot/border detail remains explicitly uncertified. Inspector does not
 grant rights, owner art approval, phone GPU status or release authority.
 Two Unity EditMode and one Python tests authored, not executed on current
 GitHub SHA. See `docs/M05_UNITY_ATLAS_READ_ONLY_IMPORT_AUDIT.md`.
+
+## 2026-10-21 | M05 final independent source-only authoring reuse
+
+**INTERNAL_REUSE:** `png_pipeline.decode_png/trim_rgba/scale_nearest`
+for complete RGBA and normalized pivot source receipts at 1×, 2×, 3×.
+No new PNG library, resampler or third-party art. No emitted source or
+originals changed by read-only `audit_pinned_scale_set`.
+
+**SDK_REUSE:** Unity 6000.6 native `AssetDatabase.LoadAllAssetsAtPath`
+and imported `UnityEngine.Sprite.rect/pivot/border/pixelsPerUnit`
+for real existing Sprite subasset geometry, including multiple mode;
+no new SpriteImporter implementation, no mutation or reimport.
+
+**READ_ONLY_VERIFIED_SOURCE DECLARATION PINS:** sibling
+`Sekiph82/MATCH3_ENGINE` at observed main
+`185a6da5da8c7c5eb1d4a0928cf48eefd6d6fb85`, blob SHA-1:
+- `ObstacleLifecycleContracts.cs` `0a882ec44e6ecfcb840971efad187515f44ef9b3`;
+- `GoalScoreContracts.cs` `dbc36103437786a5020b43e1e00d18e27374126b`;
+- `BoosterEconomyContracts.cs` `9d184e0a964c354e9038c1946bd36377d4c1fe23`;
+- `SpecialEffectContracts.cs` `5ad6e1dcd50d707614ecf258207c2f09e3538a3e`.
+
+These are actual upstream enum declaration files read by the connected
+GitHub tool. **REJECTED_REASON:** neither an extracted runtime
+registry of concrete obstacle/goal/booster definition IDs nor
+licensed artist-owned sprite bindings exist in these generic C#
+declarations; do not invent them, hardcode `sample_*`, or claim
+independent ENGINE/LFX release. `m05_engine_kind_intake.py`
+requires byte-identical pinned upstream C# and rejects synthetic
+receipt substitution before constructing only safe five-title
+unbound *kind*-level visual hints. No cross-repository write/clone.
+
+6 new Python scale tests, 8 pinned-Engine-source Python tests and
+the preexisting Unity source test extended to assert per-Sprite
+rect/pivot evidence. These cases have **NOT** been run in owner-local
+Python/Unity at the new SHA. All original art, owner rights and
+physical device approvals remain OPEN.
