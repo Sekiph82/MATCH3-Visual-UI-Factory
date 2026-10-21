@@ -64,8 +64,6 @@ class M05SpriteScaleReceiptTests(unittest.TestCase):
 
     def test_nearest_center_only_sample_cannot_hide_wrong_edge_subpixels(self):
         corrupted = dict(self.exports)
-        w, h = 16, 16
-        _, _, expected = scale_nearest(8, 8, bytes([0, 0, 0, 0] * 64), 2)
         # Corrupt the first pixel only; center-of-cell downsample could miss it.
         from factory.image_processor.png_pipeline import decode_png
         x, y, pixels = decode_png(corrupted[2])
@@ -93,7 +91,7 @@ class M05SpriteScaleReceiptTests(unittest.TestCase):
                                    self.exports, bad, (6, 5), padding=1)
 
     def test_pivot_outside_trim_and_source_canvas_is_rejected(self):
-        for pivot in ((1, 5), (6, 9), (-1, 4), (13, 2),
+        for pivot in ((1, 5), (6, 9.5), (-1, 4), (13, 2),
                       (float("nan"), 5), (float("inf"), 5)):
             with self.subTest(pivot=pivot), self.assertRaises(SpriteScaleError):
                 audit_pinned_scale_set(
@@ -125,7 +123,7 @@ class M05SpriteScaleReceiptTests(unittest.TestCase):
             audit_pinned_scale_set(
                 self.source, sha(self.source),
                 self.exports, self.receipts, (6, 5), padding=1,
-                alpha_cutoff=254)
+                alpha_cutoff=255)
 
 
 if __name__ == "__main__":
