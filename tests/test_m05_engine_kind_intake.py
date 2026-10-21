@@ -126,7 +126,7 @@ class M05EngineKindIntakeTests(unittest.TestCase):
         variants = (
             good_crlf.replace(b"\r\n", b"\n", 1),
             good_crlf.replace(b"\r\n", b"\r", 1),
-            good_crlf.replace(b"\r\n", b"\\r\\r\\n", 1),
+            good_crlf.replace(b"\r\n", b"\r\r\n", 1),
             mutated, original + b"\n",
         )
         for case in variants:
