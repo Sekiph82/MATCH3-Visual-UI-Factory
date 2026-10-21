@@ -16,6 +16,32 @@ Codex safe owner-local sync prompt:
 https://docs.google.com/document/d/1ci5INfPNLQaFoiAVVXetbJ7bp7u4C6RoC8Kcr6hd808/edit
 Local HEAD/origin/main equality is still UNVERIFIED pending real Codex run.
 
+## 2026-10-21 | Current M03–M04 independent source continuation
+
+After owner request to continue all available milestones, the independent
+standalone source path advanced from prior M02 to M03 native Unity Editor
+semantic UI candidate kit and M04 original/candidate source-pin comparison.
+
+- **M03**: 5 draft themes × 4 source design sizes × 10 actual native uGUI
+  candidate roles, isolated from original 28 Coral-screen one-button QA.
+  6 new Python + 4 Unity EditMode test methods AUTHORED, NOT RUN.
+- **M04**: read-only source SHA256 + M09 strict rights-receipt shape + pixel
+  diff/lineage review, all owner/creator/licence approvals always false;
+  6 Python negative/positive source tests AUTHORED, NOT RUN.
+- Canonical implementation notes: `docs/M03_M04_STANDALONE_SOURCE_PROGRESS.md`.
+- Existing forward rubric attached **before these new code changes** to
+  [M03 criteria](https://docs.google.com/document/d/1rKo1vawnYRpjaLGD0iSUT3mVh1aQu0jUhXlg9me_ypM/edit)
+  and [M04 criteria](https://docs.google.com/document/d/1sc98TH-M152G-N6HLHo2Pa-Diiiqk6_o5karuhvEKZw/edit).
+- Forward GitHub exact SHA/new source changes and NOT RUN gates filed in
+  [M03 dev log](https://docs.google.com/document/d/1B2LcSfRdeZvM97vQCMpN6ssF-ZopAtR3PozEfy4BWiM/edit)
+  and [M04 dev log](https://docs.google.com/document/d/1In8hq5qLvSjIFG495mNgjBtqFdyXUN4O3SKD8sPzukc/edit).
+- Original frozen `TASKS.md` milestones remain OPEN pending original
+  acceptance. No owner Windows checkout synchronisation, real Unity GUI,
+  real phone, art/legal owner approval or release verified. Full single
+  milestone Codex QA is not due until feasible source work completes.
+- Post-GitHub local sync still requires the EXISTING safe ff-only Codex
+  prompt: https://docs.google.com/document/d/1ci5INfPNLQaFoiAVVXetbJ7bp7u4C6RoC8Kcr6hd808/edit .
+
 ## Source of truth and roles
 
 - Owner: priorities, creator/original-art/licence signoff, real GUI, device and final release approvals.
