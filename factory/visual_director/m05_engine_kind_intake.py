@@ -182,8 +182,63 @@ def _link_or_junction(path: Path) -> bool:
                 getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
 
 
-def read_pinned_engine_sources(runtime_directory: Path) -> dict[str, bytes]:
-    """Read known source files from a separate trusted Engine checkout ONLY."""
+def _canonical_checkout_source_eol(
+    raw: bytes, pinned_blob_sha: str
+) -> tuple[bytes, dict]:
+    """Accept only exact pinned LF bytes or a pure-CRLF checkout rendering.
+
+    Git hashes canonical blob bytes after checkout EOL conversion.
+    This does NOT relax byte identity: normalized bytes must be exactly
+    the pinned Git blob. Never modify the working-tree file.
+    """
+    if (not isinstance(raw, bytes) or
+            not 0 < len(raw) <= 2 * MAX_BYTES_PER_SOURCE or
+            not isinstance(pinned_blob_sha, str) or
+            re.fullmatch(r"[0-9a-f]{40}", pinned_blob_sha) is None):
+        raise EngineKindError("unsafe Engine source bytes / invalid pinned blob SHA")
+    if len(raw) <= MAX_BYTES_PER_SOURCE:
+        observed = git_blob_sha(raw)
+        if observed == pinned_blob_sha:
+            return raw, {
+                "checkout_transport_eol": "EXACT_PINNED_BYTES",
+                "raw_checkout_blob_sha1": observed,
+                "canonical_git_blob_sha1": pinned_blob_sha,
+                "canonical_bytes_match_pin": True,
+                "worktree_file_modified": False,
+                "final_registry_ids_verified": False,
+                "release_allowed": False,
+            }
+    # Reject mixed CRLF/LF, bare CR, and LF-only but edited source.
+    # Every newline must be CRLF before converting in memory.
+    if (b"\r\n" not in raw or
+            raw.count(b"\r\n") != raw.count(b"\r") or
+            raw.count(b"\r\n") != raw.count(b"\n")):
+        raise EngineKindError("Engine checkout bytes do not match LF pin, not pure CRLF")
+    canonical = raw.replace(b"\r\n", b"\n")
+    if len(canonical) > MAX_BYTES_PER_SOURCE or git_blob_sha(canonical) != pinned_blob_sha:
+        raise EngineKindError("pure CRLF checkout normalization does not match exact pinned Git blob")
+    raw_blob_sha = hashlib.sha1(
+        b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw
+    ).hexdigest()
+    return canonical, {
+        "checkout_transport_eol": "PURE_CRLF_NORMALIZED_IN_MEMORY",
+        "raw_checkout_blob_sha1": raw_blob_sha,
+        "canonical_git_blob_sha1": pinned_blob_sha,
+        "canonical_bytes_match_pin": True,
+        "worktree_file_modified": False,
+        "final_registry_ids_verified": False,
+        "release_allowed": False,
+    }
+
+
+def read_pinned_engine_sources_with_receipts(
+    runtime_directory: Path,
+) -> tuple[dict[str, bytes], dict[str, dict]]:
+    """Read existing separate Engine checkout, accepting only pinned EOL.
+
+    Sources are canonical bytes. Receipts distinguish LF-exact versus
+    CRLF-equivalent checkout files. No Git commands, writes or cloning.
+    """
     folder = Path(runtime_directory)
     if (not folder.is_dir() or _link_or_junction(folder) or
             folder.name != "Runtime" or
@@ -196,21 +251,30 @@ def read_pinned_engine_sources(runtime_directory: Path) -> dict[str, bytes]:
     if any(_link_or_junction(p) for p in folder.parents if p.exists()):
         raise EngineKindError("linked/junction Engine ancestor refused")
     inputs = {}
+    receipts = {}
     for full_path in sorted(SOURCE_PINS):
         source = folder / full_path.rsplit("/", 1)[-1]
         if source.is_symlink() or not source.is_file() or _link_or_junction(source):
             raise EngineKindError("missing/untrusted original Engine C# source")
         before = source.stat()
-        if not 0 < before.st_size <= MAX_BYTES_PER_SOURCE:
+        if not 0 < before.st_size <= 2 * MAX_BYTES_PER_SOURCE:
             raise EngineKindError("Engine source has unsafe byte size")
-        data = source.read_bytes()
+        raw = source.read_bytes()
         after = source.stat()
         if (before.st_size != after.st_size or
                 before.st_mtime_ns != after.st_mtime_ns or
-                len(data) != before.st_size):
+                len(raw) != before.st_size):
             raise EngineKindError("Engine source changed during read-only audit")
-        inputs[full_path] = data
-    return inputs
+        canonical, receipt = _canonical_checkout_source_eol(raw, SOURCE_PINS[full_path])
+        inputs[full_path] = canonical
+        receipts[full_path] = receipt
+    return inputs, receipts
+
+
+def read_pinned_engine_sources(runtime_directory: Path) -> dict[str, bytes]:
+    """Backwards-compatible, source-only API; read no checkout writes."""
+    canonical, _receipts = read_pinned_engine_sources_with_receipts(runtime_directory)
+    return canonical
 
 
 def main(argv=None) -> int:
@@ -219,8 +283,10 @@ def main(argv=None) -> int:
                      help="External sibling MATCH3_ENGINE Packages/.../Runtime")
     args = cli.parse_args(argv)
     try:
-        sources = read_pinned_engine_sources(args.engine_runtime)
+        sources, checkout_receipts = read_pinned_engine_sources_with_receipts(
+            args.engine_runtime)
         report = inspect_pinned_engine_kinds(sources)
+        report["engine_checkout_eol_receipts"] = checkout_receipts
         report["five_game_role_candidates"] = draft_five_title_role_bindings(sources)
         print(json.dumps(report, sort_keys=True, indent=2))
         return 0
