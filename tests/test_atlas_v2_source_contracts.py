@@ -39,6 +39,9 @@ class VufAtlasV2SourceTests(unittest.TestCase):
                       'GetPlatformTextureSettings("iPhone")',
                       'GetPlatformTextureSettings("Android")',
                       "IndividualSpritePivotsVerified",
+                      "AssetDatabase.LoadAllAssetsAtPath(path)",
+                      "sprite.pivot", "sprite.border", "sprite.rect",
+                      "SpriteSliceSnapshot", "HasPhysicalDeviceProof = false",
                       "OriginalRightsVerified = false",
                       "RealDeviceTextureVerified = false"):
             with self.subTest(token=token):
