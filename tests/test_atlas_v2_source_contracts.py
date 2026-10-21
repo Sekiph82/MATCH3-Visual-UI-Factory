@@ -31,6 +31,25 @@ class VufAtlasV2SourceTests(unittest.TestCase):
         self.assertNotIn("UnityWebRequest", self.src)
         self.assertNotIn("includeInBuild = true", self.src)
 
+    def test_readonly_importer_inspection_and_platform_uncertainty(self):
+        src=self.src
+        for token in ("ReadImportedSettings(", "SpriteImportMode.Single",
+                      "importer.spritePivot", "importer.spriteBorder",
+                      "importer.spritePixelsPerUnit", "importer.mipmapEnabled",
+                      'GetPlatformTextureSettings("iPhone")',
+                      'GetPlatformTextureSettings("Android")',
+                      "IndividualSpritePivotsVerified",
+                      "OriginalRightsVerified = false",
+                      "RealDeviceTextureVerified = false"):
+            with self.subTest(token=token):
+                self.assertIn(token,src)
+        self.assertIn("ActualImportedSpriteSnapshotPreservesBytesGuidAndAllImporterSettings",
+                      self.nunit)
+        self.assertIn("UnimportedTextureCannotMasqueradeAsRealImporterEvidence",
+                      self.nunit)
+        self.assertNotIn("SetPlatformTextureSettings(",src)
+        self.assertNotIn("importer.spritePivot =",src)
+
     def test_real_editor_nunit_and_meta_source_defined(self):
         self.assertGreaterEqual(self.nunit.count("[Test]"), 5)
         self.assertIn("CreatesOnlyNewV2CandidateAndPreservesImportedSource",
