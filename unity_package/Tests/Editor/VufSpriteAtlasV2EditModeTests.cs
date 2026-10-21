@@ -124,6 +124,17 @@ namespace Match3.VisualFactory.Tests
                 Assert.That(snapshots[0].SourcePath,Is.EqualTo(path));
                 Assert.That(snapshots[0].SourceGuid,Is.EqualTo(guid));
                 Assert.That(snapshots[0].IndividualSpritePivotsVerified,Is.True);
+                Assert.That(snapshots[0].Slices,Is.Not.Null);
+                Assert.That(snapshots[0].Slices.Length,Is.EqualTo(1));
+                Assert.That(snapshots[0].Slices[0].RectPixels.width,
+                    Is.EqualTo(16f).Within(.001f));
+                Assert.That(snapshots[0].Slices[0].RectPixels.height,
+                    Is.EqualTo(16f).Within(.001f));
+                Assert.That(snapshots[0].Slices[0].PivotPixels.x,
+                    Is.EqualTo(8f).Within(.01f));
+                Assert.That(snapshots[0].Slices[0].PivotPixels.y,
+                    Is.EqualTo(8f).Within(.01f));
+                Assert.That(snapshots[0].Slices[0].HasPhysicalDeviceProof,Is.False);
                 Assert.That(snapshots[0].OriginalRightsVerified,Is.False);
                 Assert.That(snapshots[0].RealDeviceTextureVerified,Is.False);
                 Assert.That(snapshots[0].ReleaseAllowed,Is.False);
