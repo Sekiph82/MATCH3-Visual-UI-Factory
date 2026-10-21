@@ -125,7 +125,7 @@ namespace Match3.VisualFactory.Editor
                 key == "badge" ? "◇ BADGE / MOCK" :
                 key.Replace('_', ' ').ToUpperInvariant() + "\nUNBOUND";
             TextNode(root, "M03_Label_" + key, message,
-                new Vector2(.05f, .12f), new Vector2(.95f, .88f), ink, 13);
+                new Vector2(.05f, .12f), new Vector2(.95f, .88f), ink, 17);
             if (key == "progress")
             {
                 var track = NewRect(root, "M03_ProgressTrack",
@@ -218,9 +218,9 @@ namespace Match3.VisualFactory.Editor
                     new Vector2(1f - margin / (float)mode.width_dp, .98f));
                 TextNode(title, "M03_BannerText",
                     "EDITOR KIT / DRAFT / NO OWNER ART", Vector2.zero,
-                    Vector2.one, body, 15);
+                    Vector2.one, body, 17);
                 float left = margin;
-                float bottomBase = 32f;
+                float bottomBase = 55f;
                 for (int i = 0; i < Semantics.Length; i++)
                 {
                     int col = i % perRow;
@@ -237,8 +237,8 @@ namespace Match3.VisualFactory.Editor
                 }
                 TextNode(safe, "M03_AlwaysVisibleRightsAndBindingGate",
                     "SOURCE MOCK / NO REAL PURCHASE, REWARD, CONSENT OR NAVIGATION",
-                    new Vector2(.04f, .005f), new Vector2(.96f, .055f),
-                    body, 11);
+                    new Vector2(.04f, .005f), new Vector2(.96f, .08f),
+                    body, 14);
                 foreach (var control in root.GetComponentsInChildren<Button>(true))
                     if (control.interactable ||
                         control.onClick.GetPersistentEventCount() != 0)
