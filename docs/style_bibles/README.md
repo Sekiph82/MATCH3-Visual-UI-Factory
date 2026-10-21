@@ -51,6 +51,31 @@ No source art, font file, licensed identity, approval, game-level event or
 phone screenshot is generated or replaced. The exporter cannot overwrite
 an existing destination or write within the Git repository.
 
+## M02 source geometry review preview (2026-10-21)
+
+The existing M02 Unity Editor Style Bible Studio now renders a real **Editor
+schematic** of the four source device grids rather than only displaying
+column-width labels. It uses the existing VF-08
+`VufResponsiveGeometry.Device.SafeRect` calculation (INTERNAL_REUSE)
+with the M02 design-dp safe-area tokens and draws 4 or 8 columns, top/bottom
+safe-band shading and the minimum 44dp+ tap-target square.
+
+This is **not** a screenshot of the final Unity game, a true phone safe-area
+readout, a usable menu, or finished UI. It does not modify scenes, prefabs,
+source PNGs, designer masters, buttons, user files or gameplay. The existing
+BSD-3-Clause UI Extensions `FlowLayoutGroup` donor was checked for reuse but
+not imported a second time: it solves live content wrapping, not static source
+design-grid overlay; using it here would introduce needless runtime layout
+behavior.
+
+New checks were AUTHORED (not owner-local executed): 2 Unity EditMode
+geometry/rejection methods in `VufM02StyleBibleEditModeTests.cs` and
+1 Python Editor source-parity test in
+`tests/test_m02_unity_source_parity.py`. This brings the M02
+specific test definitions to **16 Python and 8 Unity**. All prior actual
+test claims remain tied to their original SHA; no current Unity, manual
+GUI/phone or human art/rights validation has been performed.
+
 ## Review and missing owner originals
 
 For EACH title, actual original creator-supplied character/reference masters
