@@ -89,11 +89,11 @@
 
 ### VUF-M03 | Layered screen and UI component factory
 
-- [ ] VUF-M03-001 Component generator for CTA, cards, modals, badges, counters, tabs, progress bars and disabled/pending/claimed feedback.
-- [ ] VUF-M03-002 Layered interactive templates, modal/ceremony/mode variants for all 28 Coral Rescue experiences in the inventory, with reusable consent/account/booster/surface components for all five themed games; no flattened unclickable full-screen images.
+- [ ] VUF-M03-001 Component generator for CTA, cards, modals, badges, counters, tabs, progress bars and disabled/pending/claimed feedback. **2026-10-21 NEW SOURCE PROGRESS / NOT RUN:** Editor-only `VufM03ComponentKitWindow.cs` builds a disposable genuine uGUI 10-component review kit (primary/secondary CTA, card, modal, badge, counter, tab, progress, disabled/pending/claimed MOCK states), 5 draft styles × 4 M02 source device guides, separate text/Images and 3 fully disabled Button components; pre-existing 28 shell builder intentionally unchanged. 4 Unity NUnit and 5 Python regression cases AUTHORED (not run); human art/device/GUI and real runtime actions OPEN. Docs `docs/M03_M04_STANDALONE_SOURCE_PROGRESS.md`.
+- [ ] VUF-M03-002 Layered interactive templates, modal/ceremony/mode variants for all 28 Coral Rescue experiences in the inventory, with reusable consent/account/booster/surface components for all five themed games; no flattened unclickable full-screen images. **2026-10-21 PARTIAL SOURCE:** Shared native uGUI semantic kit is implemented separately and reusable across 5 styles; full integrated 28-screen components, real consent/account/booster/runtime interactions and owner GUI remain OPEN. NO 28 final screens claimed.
 - [x] VUF-M03-003 Runtime text/icon placement stays separate from artwork and supports EN/TR plus pseudo-long localized strings.
-- [ ] VUF-M03-004 Safe-area, tall phone, compact phone and tablet layout with usable touch targets and no cropped background text.
-- [ ] VUF-M03-005 Five-title theme swap never changes the semantic UI route graph or player state.
+- [ ] VUF-M03-004 Safe-area, tall phone, compact phone and tablet layout with usable touch targets and no cropped background text. **2026-10-21 SOURCE ONLY:** Component kit accepts the exact M02 320/393/430/768 design-dp guides and creates 44dp+ draft widget geometry with explicit safe-area band. Physical phone/pad safe-area, actual text fit and touch acceptance NOT RUN.
+- [ ] VUF-M03-005 Five-title theme swap never changes the semantic UI route graph or player state. **2026-10-21 SOURCE ONLY:** Canonical 10 semantic UI roles are validated equal for all 5 inherited M02 identity profiles (duplicate/reordered role fails); draft skin/theme swapping cannot add game actions in the isolated kit. This is NOT real Engine game route/player-state invariance.
 - [x] VUF-M03-006 R06/R17: 7 uGUI page archetype + 8 durumlar/disabled actions (`VufUiComposerWindow.cs`, `VufReviewStateCatalog.cs`).
 - [x] VUF-M03-007 R35–R42: uGUI editable components, Home flow/radial, gradient/mirror/raycast, reduced motion donor reuse (`VufPageComposition.cs`, donor ledger).
 - [x] VUF-M03-008 R08/R32/R35/R36: 28 shell, editable Home/Gameplay/World concept staging ve 5 motif (`VufScreenShellBuilderWindow.cs`, `VufConceptStageBuilderWindow.cs`).
@@ -103,21 +103,21 @@
 - [x] VUF-M03-012 R06/R15/R18: SafeAreaFitter, 5 synthetic responsive wireframe + typography QA; gercek telefon/tablet testi eksik.
 - [x] VUF-M03-013 Codex: offline toplu PNG alımı ve beş sentetik cihaz responsive UI kontrollerinin yerel regresyonunu çalıştır. Python 144 PASS/7 SKIP; Unity 16/16 PASS (SHA 9dcca802; Drive 02_CODEX_LOGS/C005).
 - [x] VUF-M03-014 Codex: 28 Coral ekranına 8 durum × 3 taslak metin görünümü kaynak/Unity testi yap. Python 165 PASS/7 SKIP; Unity 21/21 PASS (SHA f698449; Drive 02_CODEX_LOGS/C007).
-- [ ] VUF-M03-015 Codex: M03 kapsamındaki 28 ekranın gerçek buton/modal/booster/consent bağları ve beş temalı Unity GUI etkileşimleri tamamlanınca tek gerçek milestone testi yap; salt sahte UI shell testi ile kapatma.
+- [ ] VUF-M03-015 Codex: M03 kapsamındaki 28 ekranın gerçek buton/modal/booster/consent bağları ve beş temalı Unity GUI etkileşimleri tamamlanınca tek gerçek milestone testi yap; salt sahte UI shell testi ile kapatma. **2026-10-21 source tests added: 5 Python and 4 Unity M03 component-kit cases AUTHORED ONLY, NOT RUN. One full final milestone Codex test remains required; owner-local SHA sync unverified.
 
 **Exit:** Source-layered template packages for every screen and state family.
 
 ### VUF-M04 | AI artwork provider and human-review pipeline
 
 - [x] VUF-M04-001 ChatGPT-assisted concept/master intake and optional approved image-provider adapter; clean no-API/manual path.
-- [ ] VUF-M04-002 Source reference/character identity lock, palette/style continuity and explicit image originality review.
-- [ ] VUF-M04-003 Review loop: generate -> candidate -> compare -> owner approve/reject -> immutable approved master; no self-approval.
+- [ ] VUF-M04-002 Source reference/character identity lock, palette/style continuity and explicit image originality review. **2026-10-21 SOURCE ONLY:** `m04_original_comparison.py` now checks exact original reference+candidate SHA256, M09 provenance receipt shape and profile-specific asset IDs, RGBA/alpha diff, deterministic source lineage. This is no human creator identity/master font/image origin/rights review. Original masters and owner decisions OPEN.
+- [ ] VUF-M04-003 Review loop: generate -> candidate -> compare -> owner approve/reject -> immutable approved master; no self-approval. **2026-10-21 READ-ONLY COMPARISON STAGE:** Reuses existing M09 `compare`/`verify_receipt_source` and M04 append-only `AssetCatalog` authority without generating an approval: source diff and SHA comparison report remains `M04_SOURCE_REVIEW_UNAPPROVED`, all human/rights flags false. Real owner compare/approve/reject and immutable approved creator master receipt OPEN.
 - [x] VUF-M04-004 Stable asset lineage, image dimension/alpha/hash metadata, deduplication and licence provenance.
 - [x] VUF-M04-005 Fail-closed paid-provider approval budget; no automatic credential capture or GitHub-stored tokens.
 - [x] VUF-M04-006 R14/R28: No-cost manuel/batch candidate PNG import ve 15 konsept PNG onizleme; harici AI-provider entegrasyonu iddia edilmez (`offline_batch.py`, `concept_showcase.py`).
 - [x] VUF-M04-007 R09/R11/R34: SQLite immutable revision/rollback + queue + 5×3 owner karsilastirma sheet; gercek owner yaratıcı approve UI eksik (`catalog.py`, `contact_sheet.py`).
 - [x] VUF-M04-008 R04/R07: hash/alpha/PNG/source receipt ve immutable lineage (`catalog.py`, `verify_candidates.py`).
-- [ ] VUF-M04-009 Codex: eksiksiz orijinal/lisanslı sanat ve onay akışı tamamlanınca aday karşılaştırması, immutable master, manipüle edilmiş hak/onay fişi negatifleri ve kaynak SHA bütünlüğünü toplu doğrula; owner kararı ayrı kalır.
+- [ ] VUF-M04-009 Codex: eksiksiz orijinal/lisanslı sanat ve onay akışı tamamlanınca aday karşılaştırması, immutable master, manipüle edilmiş hak/onay fişi negatifleri ve kaynak SHA bütünlüğünü toplu doğrula; owner kararı ayrı kalır. **2026-10-21 NEW M04 source QA: `tests/test_m04_original_comparison.py` six human-approval-forgery, SHA, provenance, binary diff/cross-title/dimension tests AUTHORED ONLY / NOT RUN; full CodeX original-art/owner rights gate stays OPEN. No milestone release.
 
 **Exit:** Reproducible art transformations and provenance, without pretending that generative images are bit-for-bit deterministic.
 
