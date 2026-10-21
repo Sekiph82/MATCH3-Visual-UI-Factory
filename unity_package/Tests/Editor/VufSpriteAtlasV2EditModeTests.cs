@@ -75,6 +75,71 @@ namespace Match3.VisualFactory.Tests
         }
 
         [Test]
+        public void UnimportedTextureCannotMasqueradeAsRealImporterEvidence()
+        {
+            var texture=new Texture2D(16,16,TextureFormat.RGBA32,false);
+            try
+            {
+                Assert.Throws<ArgumentException>(() =>
+                    VufSpriteAtlasV2Window.ReadImportedSettings(
+                        new [] {texture}));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(texture); }
+        }
+
+        [Test]
+        public void ActualImportedSpriteSnapshotPreservesBytesGuidAndAllImporterSettings()
+        {
+            string name="__VUF_M05_READONLY_"+Guid.NewGuid().ToString("N");
+            string folder="Assets/"+name;
+            Assert.That(AssetDatabase.IsValidFolder(folder),Is.False);
+            AssetDatabase.CreateFolder("Assets",name);
+            try
+            {
+                string path=folder+"/source.png";
+                var initial=new Texture2D(16,16,TextureFormat.RGBA32,false);
+                try
+                {
+                    var pixels=new Color[16*16];
+                    for(int i=0;i<pixels.Length;i++) pixels[i]=Color.cyan;
+                    initial.SetPixels(pixels);
+                    initial.Apply();
+                    File.WriteAllBytes(path,initial.EncodeToPNG());
+                }
+                finally { UnityEngine.Object.DestroyImmediate(initial); }
+                AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceUpdate);
+                var importer=AssetImporter.GetAtPath(path) as TextureImporter;
+                Assert.That(importer,Is.Not.Null);
+                importer.textureType=TextureImporterType.Sprite;
+                importer.spriteImportMode=SpriteImportMode.Single;
+                importer.SaveAndReimport();
+                var imported=AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                Assert.That(imported,Is.Not.Null);
+                var bytes=File.ReadAllBytes(path);
+                var guid=AssetDatabase.AssetPathToGUID(path);
+                var settings=EditorJsonUtility.ToJson(importer);
+                var snapshots=VufSpriteAtlasV2Window.ReadImportedSettings(
+                    new [] { imported });
+                Assert.That(snapshots.Length,Is.EqualTo(1));
+                Assert.That(snapshots[0].SourcePath,Is.EqualTo(path));
+                Assert.That(snapshots[0].SourceGuid,Is.EqualTo(guid));
+                Assert.That(snapshots[0].IndividualSpritePivotsVerified,Is.True);
+                Assert.That(snapshots[0].OriginalRightsVerified,Is.False);
+                Assert.That(snapshots[0].RealDeviceTextureVerified,Is.False);
+                Assert.That(snapshots[0].ReleaseAllowed,Is.False);
+                Assert.That(EditorJsonUtility.ToJson(importer),
+                    Is.EqualTo(settings));
+                Assert.That(File.ReadAllBytes(path),Is.EqualTo(bytes));
+                Assert.That(AssetDatabase.AssetPathToGUID(path),Is.EqualTo(guid));
+            }
+            finally
+            {
+                AssetDatabase.DeleteAsset(folder);
+                AssetDatabase.Refresh();
+            }
+        }
+
+        [Test]
         public void CreatesOnlyNewV2CandidateAndPreservesImportedSource()
         {
             string folderName = "__VUF_M05_015_" + Guid.NewGuid().ToString("N");
