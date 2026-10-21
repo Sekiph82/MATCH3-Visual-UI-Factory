@@ -771,3 +771,20 @@ All Python/NUnit tests for this continuation are AUTHORED, NOT executed on
 current owner Windows/Unity. Original masters, rights, creator authority,
 GUI, devices, and final Engine/LFX pins remain OPEN. This ledger is source
 provenance, NOT an extra task tracker or legal licence grant.
+
+## 2026-10-21 | M05 read-only original imported Sprite inspection
+
+**SDK_REUSE**, not third-party code copy: official built-in Unity 6000.6
+`SpriteAtlasAsset`, `SpriteAtlasImporter`, `TextureImporter` properties,
+`AssetDatabase.GetAssetPath` and `AssetDatabase.AssetPathToGUID`.
+Original `VufSpriteAtlasV2Window.ValidateDraft` source reused. The Unity
+Editor module was inspected with its existing native atlas test source
+before change; no replacement atlas packing/pivot algorithm, third-party
+assets or UnityCsReference licensed source adopted.
+
+Read-only `ReadImportedSettings` intentionally never calls importer
+mutation or `SaveAndReimport`. `SpriteImportMode.Multiple` per-sprite
+pivot/border detail remains explicitly uncertified. Inspector does not
+grant rights, owner art approval, phone GPU status or release authority.
+Two Unity EditMode and one Python tests authored, not executed on current
+GitHub SHA. See `docs/M05_UNITY_ATLAS_READ_ONLY_IMPORT_AUDIT.md`.
