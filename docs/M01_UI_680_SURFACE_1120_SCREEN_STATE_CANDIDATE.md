@@ -76,3 +76,49 @@ and icon/reward/consent bindings, genuine game-specific source assets,
 Engine/LFX end-to-end accepted test receipt, Unity native consumer
 screens and all owner signoffs. Do not check their root TASKS.md boxes
 based on deterministic synthetic matrix alone.
+
+## M01 typed Engine M3P1 source preview, without inventing runtime event authority
+
+`factory/ui_composer/m01_view_event_bindings.py` reuses the existing
+`factory/integration/cross_factory_contract.read_m3p1` canonical wire
+parser and existing M07
+`factory/vfx_builder/view_event_timeline.build_timeline` rather than
+forking a match-3 animation engine. Each exactly formatted M3P1 wire
+has a SHA-256 and strict profile/count/sequence/presentation-key/board
+coordinate checks via the upstream VUF parser. The preview uses a
+strict ≤128-event budget:
+
+- Typed Engine presentation kind **1** maps to draft `tile_match`,
+  and kind **6** maps to draft `tile_spawn`, with the existing
+  deterministic seeded M07 inert visual timeline.
+- Kinds **2, 3, 4** refer to special triggers but the wire does **not**
+  authenticate their actual special enum variant; kind **5** refers
+  to a combo but does **not** authenticate its exact special pair.
+  They are explicitly `UNBOUND`. No fabricated effects or authority.
+- Kind **0**, swap, has no matching authored VUF animation and stays
+  `UNBOUND`.
+- Goal progress, obstacle damage and booster activation families
+  remain separate explicitly unbound slots until validated genuine
+  runtime instance IDs and the authentic Engine presentation event
+  origin are available.
+
+Reduced-motion/mute/cue/time/frame/interrupt/replay preview values
+are inherited from M07 only. Nothing dispatches an event to Unity,
+plays audio/haptics, changes a live board, awards boosters, makes a
+purchase, writes save data or authorizes release. A wire checksum
+does **not** authenticate that a real game executed the events.
+
+`tests/test_m01_view_event_bindings.py` adds **8** authored Python
+checks including a real-format synthetic M3P1 wire, five profile
+invariance, motion reduction, unbound special/combo/goal/booster,
+modified checksum/identity, event budget and forged rights/replay.
+The fixtures are synthetic and these tests are **NOT RUN** in an
+actual owner-local session yet.
+
+At this M01 source milestone: 18 new Python tests authored in total
+(10 matrix + 8 M3P1 visual), **NO NEW UNITY/NATIVE TESTS RUN**.
+The M01 real Unity consumer, game action bindings, 17-surface
+cross-repository authenticated SDK parity, and owner GUI/device
+acceptance remain OPEN. Do not confuse the prior successful Codex
+M05 full Python 547/Unity old 187 suites with validation of these
+later M01 source changes.
