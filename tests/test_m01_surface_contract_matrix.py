@@ -40,6 +40,11 @@ class M01CanonicalSurfaceSourceTests(unittest.TestCase):
         self.assertEqual(len(ENGINE_ACTION_KINDS), 4)
         self.assertEqual(self.matrix["surface_state_count_per_profile"], 136)
         self.assertEqual(len(self.matrix["matrix"]), 680)
+        self.assertEqual(self.matrix["screen_state_count_per_profile"], 224)
+        self.assertEqual(len(self.matrix["screen_states"]), 1120)
+        self.assertEqual(len({(m["profile_id"], m["screen_id"],
+                              m["engine_player_state_kind"])
+                              for m in self.matrix["screen_states"]}), 1120)
         self.assertEqual(len({(m["profile_id"], m["engine_surface_kind"],
                               m["engine_player_state_kind"])
                               for m in self.matrix["matrix"]}), 680)
@@ -47,6 +52,25 @@ class M01CanonicalSurfaceSourceTests(unittest.TestCase):
                          set(ENGINE_SURFACES))
         self.assertEqual(set(self.matrix["engine_player_state_kinds"]),
                          set(ENGINE_STATES))
+
+    def test_full_1120_screen_state_rows_have_safe_localized_action_fallback(self):
+        for row in self.matrix["screen_states"]:
+            self.assertTrue(row["dynamic_text_key"].startswith("ui."))
+            self.assertTrue(row["dynamic_icon_key"].endswith(".icon"))
+            self.assertTrue(row["locale_fallback_text"])
+            self.assertTrue(row["disabled_reason_fallback"])
+            self.assertTrue(row["visible_disabled_reason_key"].startswith("ui.disabled."))
+            self.assertTrue(row["screen_view_only"])
+            self.assertFalse(row["action_enabled"])
+            self.assertFalse(row["owner_design_approved"])
+            self.assertFalse(row["release_allowed"])
+            self.assertIsNone(row["actual_engine_route"])
+            self.assertIsNone(row["actual_engine_action_id"])
+            self.assertIsNone(row["actual_game_binding"])
+        policy = {row["screen_key"] for row in self.matrix["screen_states"]
+                  if row["policy_feature_off"]}
+        self.assertEqual(policy, {"events_hub", "season_pass", "tournament",
+                                  "friends", "leaderboard"})
 
     def test_engine_surface_candidates_do_not_forge_gameplay_binds(self):
         for row in self.matrix["matrix"]:
@@ -130,6 +154,8 @@ class M01CanonicalSurfaceSourceTests(unittest.TestCase):
             (("matrix", 1, "engine_surface_kind"), "NotOfficial"),
             (("matrix", 0, "candidate_coral_screen_ids"), []),
             (("screens", 0, "action_enabled"), True),
+            (("screen_states", 0, "action_enabled"), True),
+            (("screen_states", 0, "actual_engine_route"), "home"),
             (("screens", 0, "feature_gate"), "PRODUCTION_ON"),
             (("matrix_sha256",), "0" * 64),
         ):
