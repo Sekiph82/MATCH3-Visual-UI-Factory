@@ -101,7 +101,7 @@ class M01VisualEventSourceTests(unittest.TestCase):
             (self.wire + b"x", "Coral_Rescue"),
             (self.wire, "Garage_Legends"),
             (wire(kinds=(9,)), "Coral_Rescue"),
-            (wire(kinds=(1,))[:-1] + b"0", "Coral_Rescue"),
+            (wire(kinds=(1,))[:-1] + b"!", "Coral_Rescue"),
         ):
             with self.subTest(bad=bad[:20]), self.assertRaises(M01EventError):
                 build_event_preview(bad, profile)
