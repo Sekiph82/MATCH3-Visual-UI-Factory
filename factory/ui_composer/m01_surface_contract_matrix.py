@@ -168,6 +168,36 @@ def _build(source: bytes) -> dict:
             "screen_real_binding_available": False,
             "owner_review_required": True,
         })
+    screen_states = []
+    for profile in ids:
+        for screen in master:
+            for state in ENGINE_STATES:
+                screen_states.append({
+                    "profile_id": profile,
+                    "screen_id": screen["screen_id"],
+                    "screen_key": screen["screen_key"],
+                    "engine_surface_kind": screen["candidate_engine_surface_kind"],
+                    "engine_player_state_kind": state,
+                    "candidate_overlay_kind": screen["candidate_overlay_kind"],
+                    "feature_gate": screen["feature_gate"],
+                    "policy_feature_off": screen["policy_feature_off"],
+                    "dynamic_text_key": screen["text_key"] + "." + state.lower(),
+                    "dynamic_icon_key": screen["icon_key"],
+                    "locale_fallback_text": screen["title_fallback"] +
+                                            "_" + state.upper(),
+                    "visible_disabled_reason_key":
+                        "ui.disabled." + screen["screen_key"],
+                    "disabled_reason_fallback":
+                        screen["disabled_reason_fallback"],
+                    "source_preview_action_id": screen["action_preview_id"],
+                    "actual_engine_action_id": None,
+                    "actual_engine_route": None,
+                    "actual_game_binding": None,
+                    "action_enabled": False,
+                    "screen_view_only": True,
+                    "owner_design_approved": False,
+                    "release_allowed": False,
+                })
     surface_bindings = {}
     for kind in ENGINE_SURFACES:
         refs = [r["screen_id"] for r in master
@@ -209,8 +239,10 @@ def _build(source: bytes) -> dict:
         "engine_action_kinds": list(ENGINE_ACTION_KINDS),
         "profile_ids": list(ids),
         "screens": master,
+        "screen_states": screen_states,
         "matrix": matrix,
         "surface_state_count_per_profile": len(ENGINE_SURFACES)*len(ENGINE_STATES),
+        "screen_state_count_per_profile": 28*len(ENGINE_STATES),
         "screen_count_source_coral": 28,
         **{flag: False for flag in AUTH_FALSE},
     }
@@ -245,6 +277,7 @@ def main() -> int:
         "surfaces": len(matrix["engine_ui_surface_kinds"]),
         "states": len(matrix["engine_player_state_kinds"]),
         "matrix_rows": len(matrix["matrix"]),
+        "screen_state_rows": len(matrix["screen_states"]),
         "original_screens": len(matrix["screens"]),
         "real_engine_ui_bound": matrix["real_engine_sdk_surface_verified"],
         "release_allowed": matrix["release_allowed"],
