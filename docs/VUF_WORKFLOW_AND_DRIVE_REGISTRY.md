@@ -2,6 +2,18 @@
 
 > This is a WORKFLOW/FILE NAVIGATION document, NOT a second task tracker. Root `TASKS.md` is the sole task authority (137 frozen VUF-MXX-NNN IDs). All retrospective audit files listed below were created on 2026-10-20 and are NOT backdated historic approvals.
 
+> **ACTIVE ROLE OVERRIDE (2026-11-10):** Claude Code is now the sole
+> software executor, task selector, test/audit coordinator and editor of the
+> ORIGINAL `TASKS.md`. This supersedes historical ChatGPT-versus-Codex role
+> assignments below; all numbered IDs/acceptance/evidence rules stay intact.
+> See `CLAUDE.md`, `AGENTS.md`, and `docs/CLAUDE_FULL_BACKLOG_HANDOFF.md`.
+> Drive folder name `02_CODEX_LOGS` remains historical, but new Claude
+> actual execution logs belong there when the authorized Drive connector is
+> available. Missing Drive access MUST be disclosed, not invented.
+> Claude's internal QA subagent does not replace independent human
+> art/legal/device/owner acceptance. GitHub Actions remain prohibited.
+>
+
 ## 2026-10-20 | Current M02 source checkpoint
 
 Forward M02 audit criteria filed before new source code:

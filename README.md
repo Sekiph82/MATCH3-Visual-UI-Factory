@@ -1,8 +1,23 @@
 # MATCH3 Visual & UI Factory
 
-**Five Match3 games, one shared Unity visual production system.** Current state: **VUF-M00 foundation under active development, not audited or production-ready.**
+**Five Match3 games, one shared Unity visual production system.** Project remains **under development, not owner/Engine/device release-approved**. On 2026-11-10 the owner assigned all 53 remaining tasks to **Claude Code** for autonomous software implementation/testing, not for forged human signoff.
 
 Games: `Coral_Rescue`, `Garage_Legends`, `Dino_Islands`, `The_Fractured_Realms`, `Wonder_Pop`.
+
+## Claude Code takeover | 2026-11-10
+
+All **53 original unchecked** tasks (out of 137 frozen VUF IDs; 84 marked
+complete) are delegated to Claude Code. Start in the existing Windows VUF
+checkout, safely fast-forward after inspecting owner changes, authenticate
+GitHub via your existing `gh` login, run `claude`, then invoke
+`/finish-vuf-backlog`. The standing instructions live in `CLAUDE.md`,
+`AGENTS.md`, `docs/CLAUDE_FULL_BACKLOG_HANDOFF.md` and
+`.claude/settings.json`. The Claude skill continues technically feasible
+work across milestones and updates **only root TASKS.md**, not a new tracker.
+Human copyright/owner/physical-device/real Engine-LFX release gates remain
+open until their actual evidence exists. No GitHub Actions, paid services or
+owner disk deletion. GitHub account/App write access cannot be provisioned
+by merely committing this repository config.
 
 ## What works at source level today
 

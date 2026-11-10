@@ -35,3 +35,10 @@ Assets/VufCandidates/
 
 # Explicit owner imported TEST_ONLY candidates never enter Git or players
 Assets/Editor/VUF_ReviewImports/
+
+# Claude Code project settings: share settings.json, NEVER personal overrides or auth
+.claude/settings.local.json
+.claude/.credentials*
+.claude/.mcp.json
+.claude/tasks/
+_claude_evidence/
