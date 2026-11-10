@@ -87,10 +87,12 @@ def _unique(pairs):
 def _catalog(source: bytes) -> dict:
     if not isinstance(source, bytes) or not 0 < len(source) <= MAX_CATALOG_BYTES:
         raise M01MatrixError("missing/oversize canonical Coral source")
-    if _blob_sha(source) != CANONICAL_CATALOG_GIT_BLOB:
+    # Normalize Windows CRLF to LF in-memory; the pinned git blob SHA is for LF content.
+    normalized = source.replace(b"\r\n", b"\n")
+    if _blob_sha(normalized) != CANONICAL_CATALOG_GIT_BLOB:
         raise M01MatrixError("Coral 28-screen source blob has drifted")
     try:
-        doc = json.loads(source.decode("utf-8", errors="strict"),
+        doc = json.loads(normalized.decode("utf-8", errors="strict"),
                          object_pairs_hook=_unique)
     except (ValueError, UnicodeError) as exc:
         raise M01MatrixError("malformed/duplicate canonical Coral source") from exc

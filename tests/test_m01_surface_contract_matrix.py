@@ -21,7 +21,9 @@ class M01CanonicalSurfaceSourceTests(unittest.TestCase):
         cls.matrix = build_m01_matrix(cls.source)
 
     def test_exact_original_coral_screen_schema_git_blob_pinned(self):
-        self.assertEqual(_blob_sha(self.source), CANONICAL_CATALOG_GIT_BLOB)
+        # Normalize CRLF to LF (Windows checkout); pinned SHA is for LF git blob.
+        self.assertEqual(_blob_sha(self.source.replace(b"\r\n", b"\n")),
+                         CANONICAL_CATALOG_GIT_BLOB)
         self.assertEqual(self.matrix["source_catalog_blob_sha1"],
                          CANONICAL_CATALOG_GIT_BLOB)
         self.assertEqual(len(self.matrix["screens"]), 28)

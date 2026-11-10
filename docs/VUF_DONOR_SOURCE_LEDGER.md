@@ -824,3 +824,17 @@ the preexisting Unity source test extended to assert per-Sprite
 rect/pivot evidence. These cases have **NOT** been run in owner-local
 Python/Unity at the new SHA. All original art, owner rights and
 physical device approvals remain OPEN.
+
+## 2026-10-22 | M12 FormuLab autonomous queue and project dashboard reference
+
+Read-only reference checkout: `C:\Users\sekip\.codex\worktrees\fvl05-main\FormuLab`, observed `HEAD` `e7347350fd19d6b15772a39b34b830b99069203d`. Its `package.json` declares MIT and the committed `LICENSE` contains the MIT license. The task-queue, validator, App Server client, dashboard server, HTML, JS, and CSS Git blobs were read and individually pinned at that commit:
+
+- `scripts/codex/task-queue.mjs` `f0a399ef8e6f903ac006f9ebfd8badbee98c9073`
+- `scripts/codex/validate-task-state.mjs` `91843603b68fbbebcc1888991c8fb9dee470192f`
+- `scripts/codex/app-server-client.mjs` `f69d9f411d1203439b619088ba8c4c3959c05af6`
+- `scripts/codex/dashboard-server.mjs` `9a015ff04d05c0e15af23c721d1a9bb7e89c8b4f`
+- `scripts/codex/dashboard/index.html` `46d9eb0bb8cc03d8534fc5c34e1582295d6a987e`
+- `scripts/codex/dashboard/dashboard.js` `8434db1a454ecc483e570d531b5b4ee83534434a`
+- `scripts/codex/dashboard/dashboard.css` `696e69130dea37db3dc486ec58b4e35412f98b98`
+
+**REFERENCE_ONLY / REJECTED_REASON for direct source import:** the FormuLab queue hard-requires its own tracked Git branch, commits and pushes task claims, and uses a different ledger schema. Those operations do not match this owner's local-only publication boundary or VUF task IDs. The App Server list API shape, project-filtered activity model, append-only answer inbox, and truthful Kanban semantics are design references only; VUF code is implemented locally against the VUF canonical task schema. No FormuLab source files, dependencies, or runtime code are copied. The FormuLab checkout's concurrent dirty `TASKS.md`, job metadata, and owner work remain untouched.
