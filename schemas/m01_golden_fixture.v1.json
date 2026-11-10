@@ -1,0 +1,79 @@
+{
+  "absent_engine_surfaces": [
+    "Booster",
+    "Consent",
+    "Settings",
+    "Store"
+  ],
+  "action_kind_namespace": [
+    "Navigate",
+    "Command",
+    "Back",
+    "Close"
+  ],
+  "auth_flags": {
+    "consent_granted": false,
+    "engine_actions_bound": false,
+    "live_player_state_verified": false,
+    "owner_art_approved": false,
+    "purchases_enabled": false,
+    "real_device_verified": false,
+    "real_engine_sdk_surface_verified": false,
+    "release_allowed": false,
+    "rewards_granted": false,
+    "runtime_navigation_enabled": false
+  },
+  "fixture_sha256": "e090dbea1f3bce646a8db0cab325528ad30b9edf3f02c0f52405ea771c4d5d3c",
+  "fixture_stage": "M01_GOLDEN_FIXTURE_PROTOTYPE_ONLY_SOURCE_CANDIDATE_NOT_ENGINE_BINDING",
+  "matrix_rows": 680,
+  "matrix_sha256": "a709ee437e6e57d6e2f93377d6f6efb2a75f0f8d90543726f7a7c59eb77f6cef",
+  "player_state_kinds": [
+    "Ready",
+    "Loading",
+    "Offline",
+    "Error",
+    "Owned",
+    "Claimed",
+    "Disabled",
+    "Pending"
+  ],
+  "policy_off_screens": [
+    "events_hub",
+    "friends",
+    "leaderboard",
+    "season_pass",
+    "tournament"
+  ],
+  "profile_count": 5,
+  "profile_ids": [
+    "Coral_Rescue",
+    "Garage_Legends",
+    "Dino_Islands",
+    "The_Fractured_Realms",
+    "Wonder_Pop"
+  ],
+  "screen_state_count_per_profile": 224,
+  "screen_state_rows": 1120,
+  "source_screen_count": 28,
+  "stage": "M01_UI_SYMBOLIC_SOURCE_CANDIDATE_NOT_ENGINE_BINDING",
+  "surface_kinds": [
+    "Home",
+    "WorldMap",
+    "Hud",
+    "Results",
+    "Pause",
+    "Settings",
+    "Shop",
+    "DailyRewards",
+    "Tasks",
+    "Fail",
+    "Life",
+    "Booster",
+    "Collection",
+    "Achievements",
+    "Store",
+    "Account",
+    "Consent"
+  ],
+  "surface_state_count_per_profile": 136
+}
