@@ -276,7 +276,7 @@ None.
 
 ### VUF-M12 | Local autonomous queue and project activity dashboard
 
-- [~] VUF-M12-001 Implement the owner-authorized local queue, answer inbox, task metadata, and existing Codex dashboard integration
+- [~] VUF-M12-001 Implement the owner-authorized local queue, answer inbox, task metadata, and existing Codex dashboard integration **[CLAUDE_AUTO]**
   - `TASKS.md` remains the sole task authority; project selection and dashboard visibility never control execution.
   - Add a local Codex heartbeat only after the queue is implemented and validated. Keep GitHub publication disabled unless a selected task explicitly authorizes it.
   - Forward criteria: https://docs.google.com/document/d/1oqO5xrSUtlUulXCVFQfW5ZXOG9aSTFdqT5_f8XJmkII/edit
