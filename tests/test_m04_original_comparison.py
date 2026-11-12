@@ -119,6 +119,34 @@ class M04OriginalSourceReviewTests(unittest.TestCase):
         with self.assertRaises(OriginalReviewError):
             parse_review_contract(duplicate)
 
+    def test_same_value_duplicate_key_rejected_by_duplicate_guard_only(self):
+        # last-wins would still be False, so only duplicate detection can reject.
+        duplicate = encoded(self.m).replace(
+            b'"creator_verified": false',
+            b'"creator_verified": false, "creator_verified": false'
+        )
+        with self.assertRaises(OriginalReviewError) as ctx:
+            parse_review_contract(duplicate)
+        # parse wraps hook errors as "invalid M04 review JSON"; check the cause.
+        self.assertIn("duplicate", str(ctx.exception.__cause__))
+
+    def test_provenance_only_cross_family_asset_or_profile_rejected(self):
+        cases = (
+            # only provenance.asset_id moved to another art family -> M04 guard
+            ({"asset_id": "Coral_Rescue.tile.other"}, "another art family"),
+            # self-consistent receipt of another title -> M04 guard
+            ({"asset_id": "Wonder_Pop.mascot.pose_idle",
+              "profile_id": "Wonder_Pop"}, "another art family"),
+            # only provenance.profile_id changed -> M09 receipt self-consistency
+            ({"profile_id": "Wonder_Pop"}, "cross-title source attribution"),
+        )
+        for patch, message in cases:
+            m = copy.deepcopy(self.m)
+            m["provenance"].update(patch)
+            with self.subTest(patch=patch), self.assertRaisesRegex(
+                    OriginalReviewError, message):
+                inspect_original_candidate(self.a, self.b, encoded(m))
+
     def test_creator_receipt_must_match_image_and_candidate_dimensions(self):
         m = copy.deepcopy(self.m)
         m["provenance"]["source_sha256"] = "0" * 64
