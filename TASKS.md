@@ -292,3 +292,11 @@ None.
 - Existing frozen independent PASS results remain unchanged; revised future acceptance criteria require provenance and owner approval where specified.
 
 **CURRENT_OWNER:** CODEX (the owner explicitly delegated autonomous execution and TASKS.md/AGENTS.md lifecycle writes on 2026-10-22). Only this file's one-level VUF-MXX-NNN rows are canonical tasks. Record real source and test progress on the applicable row; keep final GUI/device/rights/Engine-LFX acceptance separate.
+
+
+## Codex ImageGen V3 integration (owner directive; open)
+
+- [ ] **IMG-V3-01 — Repository integration:** Implement local Codex provider adapter, dynamic style/inventory readers, batch queue bridge, existing SHA-256 catalog intake, modular UI states, Unity sprite import and visual regression. Preserve owner approval and existing history; test all five profiles.
+- [ ] **IMG-V3-02 — Provider and safety:** Use global `codex-imagegen` local Windows CLI with owner's authenticated ChatGPT session only. No paid API fallback, no GitHub Actions, no secret logging. Detect unavailable CLI/auth/quota and stop safely. Use one shared persistent queue, bounded retries, exact request hashes, atomic outputs, explicit project routing and short Claude summaries. Never overwrite approved assets.
+- [ ] **IMG-V3-03 — Verification:** Read existing project contracts first; implement with tests for wrong-project routing, duplicate assets, failures and interrupted runs. Run real local Codex smoke test and application visual QA with screenshots; report exact SHA, test results and remaining blockers. Do not mark READY without required approval or claim live tests from mocks.
+- [ ] **IMG-V3-04 — Handoff:** Update this tracker after every cycle; commit/push verified changes and synchronize local checkout. Continue independent tasks autonomously; record genuine owner/credential/hardware blockers, no fabricated PASS.
